@@ -1,0 +1,31 @@
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import cookieParser from "cookie-parser";
+import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
+import connectMongoDB from "./config/mongoDB.js";
+import userRoutes from "./routes/userRoutes.js";
+
+// MongoDB setup
+connectMongoDB();
+
+const app = express();
+
+// Server setup
+const port = process.env.port || 6000;
+app.listen(port, () => console.log(`Server started and is listening on port: ${port}`));
+
+// Add middleware to access body data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Add middleware to parse the cookie
+app.use(cookieParser());
+
+app.use("/api/users", userRoutes);
+
+app.get("/", (request, response) => response.send("Server is ready"));
+
+// Custom error middleware handler
+app.use(notFound);
+app.use(errorHandler);
