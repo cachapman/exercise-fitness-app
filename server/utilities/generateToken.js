@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
 // Generate JWT with new user variable (can declare it with anything)
-const generateToken = (response, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+const generateToken = (response, keyId) => {
+  const token = jwt.sign({ keyId }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 

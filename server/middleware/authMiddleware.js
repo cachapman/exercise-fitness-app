@@ -14,7 +14,8 @@ const protectRoute = asyncHandler(async (request, response, next) => {
      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
      // Get user information from generated token
-     request.user = await User.findById(decoded.UserId).select("-password");
+     // decoded.keyId must match same variable in generateToken.js
+     request.user = await User.findById(decoded.keyId).select("-password");
 
      next();
     } catch (error) {
