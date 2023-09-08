@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, FloatingLabel, Row } from "react-bootstrap";
 import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { FaUser } from "react-icons/fa";
@@ -17,6 +17,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [fitnessGoals, setFitnessGoals] = useState('');
 
   const [register, { isLoading }] = useRegisterMutation();
 
@@ -42,7 +43,7 @@ const Register = () => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const response = await register({ name, email, password }).unwrap();
+        const response = await register({ name, email, password, fitnessGoals }).unwrap();
         dispatch(setCredentials({...response}));
         navigate("/");
       } catch (err) {
@@ -53,51 +54,64 @@ const Register = () => {
 
   return (
     <FormContainer>
-      <h1>
-        <FaUser /> Register
-      </h1>
-      <p>Please enter all the required fields.</p>
-      <p>Sign up today!</p>
+      <div className="justify-content-md-center">
+        <div className="p-2">
+          <h1>
+            <FaUser /> Register
+          </h1>
+        </div>
+        <div className="p-2">
+          <h3>Sign up today for member access!</h3>
+        </div>
+        <div className="p-2">
+          <h6>Please enter all the required fields.</h6>
+        </div>
+      </div>
       <Form onSubmit={onSubmit}>
-        <Form.Group className="my-2" controlId="name">
-          <Form.Label>Username:</Form.Label>
+        <FloatingLabel className="my-2" controlId="floatingInput" label="Username">
           <Form.Control 
             type="text"
             value={name}
-            placeholder="Create Username"
+            placeholder="Username"
             onChange={(event) => setName(event.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </FloatingLabel>
         
-        <Form.Group className="my-2" controlId="email">
-          <Form.Label>Email Address:</Form.Label>
+        <FloatingLabel className="my-2" controlId="email" label="Email Address">
           <Form.Control 
             type="email"
             value={email}
-            placeholder="Enter Email Address"
+            placeholder="Email Address"
             onChange={(event) => setEmail(event.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </FloatingLabel>
 
-        <Form.Group className="my-2" controlId="password">
-          <Form.Label>Password:</Form.Label>
+        <FloatingLabel className="my-2" controlId="password" label="Password">
           <Form.Control 
             type="password"
             value={password}
-            placeholder="Create Password"
+            placeholder="Password"
             onChange={(event) => setPassword(event.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </FloatingLabel>
         
-        <Form.Group className="my-2" controlId="passwordConfirm">
-          <Form.Label>Confirm Password:</Form.Label>
+        <FloatingLabel className="my-2" controlId="passwordConfirm" label="Confirm Password">
           <Form.Control 
             type="password"
             value={passwordConfirm}
             placeholder="Confirm Password"
             onChange={(event) => setPasswordConfirm(event.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </FloatingLabel>
+
+        <FloatingLabel className="my-2" controlId="fitnessGoals" label="What are your fitness goals?">
+          <Form.Control 
+            type="text"
+            value={fitnessGoals}
+            placeholder="What are your fitness goals?"
+            onChange={(event) => setFitnessGoals(event.target.value)}
+          ></Form.Control>
+        </FloatingLabel>
 
         { isLoading && <Loader /> }
 

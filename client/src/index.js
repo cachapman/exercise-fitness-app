@@ -20,6 +20,8 @@ const router = createBrowserRouter(
         {/* Private Protected User Routes Below */}
       <Route path='' element={<ProtectedUserRoute />}>
         <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/search_exercisedb" element={<SearchExerciseDB />} /> */}
+        {/* <Route path="/favorites" element={<Favorite />} /> */}
       </Route>
     </Route>
   )

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaSignInAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, FloatingLabel, Row } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
@@ -48,40 +48,47 @@ const Login = () => {
 
   return (
     <FormContainer>
-      <h1>
-        <FaSignInAlt /> Login
-      </h1>
-      <p>Welcome back!</p>
-      <p>Log in with Username or Email to access your account.</p>
+      <div className="justify-content-md-center">
+        <div className="p-2">
+          <h1>
+            <FaSignInAlt /> Login
+          </h1>
+        </div>
+        <div className="p-2">
+          <h3>Welcome back!</h3>
+        </div>
+        <div className="p-2">
+          <h5>Log in with Username or Email to access your account.</h5>
+        </div>
+      </div>
       <Form onSubmit={onSubmit}>
-      <Form.Group className="my-2" controlId="name">
-          <Form.Label>Username:</Form.Label>
+        <FloatingLabel className="my-2" controlId="name" label="Username">
           <Form.Control 
             type="text"
             value={name}
-            placeholder="Enter Username"
+            placeholder="Username"
             onChange={(event) => setName(event.target.value)}
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="my-2" controlId="email">
-          <Form.Label>Email Address:</Form.Label>
+        </FloatingLabel>
+          
+        <FloatingLabel className="my-2" controlId="email" label="Email Address">
           <Form.Control 
             type="email"
             value={email}
-            placeholder="Enter Email Address"
+            placeholder="Email Address"
             onChange={(event) => setEmail(event.target.value)}
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="my-2" controlId="password">
-          <Form.Label>Password:</Form.Label>
+        </FloatingLabel>
+
+        <FloatingLabel className="my-2" controlId="password" label="Password">
           <Form.Control 
             type="password"
             value={password}
-            placeholder="Enter Password"
+            placeholder="Password"
             onChange={(event) => setPassword(event.target.value)}
           ></Form.Control>
-        </Form.Group>
-
+        </FloatingLabel>
+      
         { isLoading && <Loader /> }
 
         <div className="d-grid gap-2">

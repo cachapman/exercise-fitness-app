@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt,FaUser, FaUserCheck } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { useLogoutMutation } from "../slices/usersApiSlice";
@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="lg" fixed="top" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>My Exercise Fitness App</Navbar.Brand>
