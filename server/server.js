@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
@@ -24,7 +25,17 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 
-app.get("/", (request, response) => response.send("Server is ready"));
+// If in production mode 
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "client/build")));
+
+  app.get("*", (request, response) => response.sendFile(path.resolve(__dirname, "client", "build", "index.html")));
+} else {
+  // If not in production mode
+  app.get("/", (request, response) => response.send("Server is ready"));
+};
+
 
 // Custom error middleware handler
 app.use(notFound);
