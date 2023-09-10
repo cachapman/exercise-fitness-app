@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="/register" element={<Register />} />
         {/* Private Protected User Routes Below */}
       <Route path='' element={<ProtectedUserRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/search_exercisedb" element={<SearchExerciseDB />} /> */}
         {/* <Route path="/favorites" element={<Favorite />} /> */}

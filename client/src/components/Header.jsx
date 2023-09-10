@@ -5,6 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { clearCredentials } from "../slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import Logo from "../assets/images/dumbbell-health-logo.png";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -29,7 +30,11 @@ const Header = () => {
       <Navbar bg="dark" variant="dark" expand="lg" fixed="top" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>My Exercise Fitness App</Navbar.Brand>
+            <Navbar.Brand>
+            <img src={Logo} alt="logo" 
+              style={{width: "48px", height: "48px", margin: "0 20px"}}/>
+              My Exercise Fitness App
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

@@ -21,10 +21,10 @@ const Login = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  // Navigates to home page if login successful
+  // Navigates to dashboard page if login successful
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }, [navigate, userInfo]);
 
@@ -40,73 +40,75 @@ const Login = () => {
     try {
       const response = await login({ name, email, password }).unwrap();
       dispatch(setCredentials({...response}));
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   }
 
   return (
-    <FormContainer>
-      <div className="justify-content-md-center">
-        <div className="p-2">
-          <h1>
-            <FaSignInAlt /> Login
-          </h1>
+    <div className="py-3 mt-3">
+      <FormContainer>
+        <div className="justify-content-md-center">
+          <div className="p-2">
+            <h1>
+              <FaSignInAlt /> Login
+            </h1>
+          </div>
+          <div className="p-2">
+            <h3>Welcome back!</h3>
+          </div>
+          <div className="p-2">
+            <h5>Log in with Username or Email to access your account.</h5>
+          </div>
         </div>
-        <div className="p-2">
-          <h3>Welcome back!</h3>
-        </div>
-        <div className="p-2">
-          <h5>Log in with Username or Email to access your account.</h5>
-        </div>
-      </div>
-      <Form onSubmit={onSubmit}>
-        <FloatingLabel className="my-2" controlId="name" label="Username">
-          <Form.Control 
-            type="text"
-            value={name}
-            placeholder="Username"
-            onChange={(event) => setName(event.target.value)}
-          ></Form.Control>
-        </FloatingLabel>
-          
-        <FloatingLabel className="my-2" controlId="email" label="Email Address">
-          <Form.Control 
-            type="email"
-            value={email}
-            placeholder="Email Address"
-            onChange={(event) => setEmail(event.target.value)}
-          ></Form.Control>
-        </FloatingLabel>
+        <Form onSubmit={onSubmit}>
+          <FloatingLabel className="my-2" controlId="name" label="Username">
+            <Form.Control 
+              type="text"
+              value={name}
+              placeholder="Username"
+              onChange={(event) => setName(event.target.value)}
+            ></Form.Control>
+          </FloatingLabel>
+            
+          <FloatingLabel className="my-2" controlId="email" label="Email Address">
+            <Form.Control 
+              type="email"
+              value={email}
+              placeholder="Email Address"
+              onChange={(event) => setEmail(event.target.value)}
+            ></Form.Control>
+          </FloatingLabel>
 
-        <FloatingLabel className="my-2" controlId="password" label="Password">
-          <Form.Control 
-            type="password"
-            value={password}
-            placeholder="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          ></Form.Control>
-        </FloatingLabel>
-      
-        { isLoading && <Loader /> }
+          <FloatingLabel className="my-2" controlId="password" label="Password">
+            <Form.Control 
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+            ></Form.Control>
+          </FloatingLabel>
+        
+          { isLoading && <Loader /> }
 
-        <div className="d-grid gap-2">
-          <Button type="submit" variant="primary" size="lg">
-            Submit
-          </Button>
-          <Button type="submit" onClick={handleBackButton} variant="secondary" size="lg">
-            Back to Home
-          </Button>
-        </div>
+          <div className="d-grid gap-2">
+            <Button type="submit" variant="primary" size="lg">
+              Submit
+            </Button>
+            <Button type="submit" onClick={handleBackButton} variant="secondary" size="lg">
+              Back to Home
+            </Button>
+          </div>
 
-        <Row className="py-3">
-          <Col>
-            New User? <Link to="/register">Click here to Register</Link>
-          </Col>
-        </Row>
-      </Form>
-    </FormContainer>
+          <Row className="py-3">
+            <Col>
+              New User? <Link to="/register">Click here to Register</Link>
+            </Col>
+          </Row>
+        </Form>
+      </FormContainer>
+    </div>
   );
 };
 
