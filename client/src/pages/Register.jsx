@@ -53,86 +53,88 @@ const Register = () => {
   };
 
   return (
-    <div className="py-3 mt-3">
-      <FormContainer>
-        <div className="justify-content-md-center">
-          <div className="p-2">
-            <h1>
-              <FaUser /> Register
-            </h1>
+    <>
+      <div className="py-3 mt-3">
+        <FormContainer>
+          <div className="justify-content-md-center">
+            <div className="p-2">
+              <h1>
+                <FaUser /> Register
+              </h1>
+            </div>
+            <div className="p-2">
+              <h3>Sign up today for member access!</h3>
+            </div>
+            <div className="p-2">
+              <h6>Please enter all the required fields.</h6>
+            </div>
           </div>
-          <div className="p-2">
-            <h3>Sign up today for member access!</h3>
-          </div>
-          <div className="p-2">
-            <h6>Please enter all the required fields.</h6>
-          </div>
-        </div>
-        <Form onSubmit={onSubmit}>
-          <FloatingLabel className="my-2" controlId="floatingInput" label="Username">
-            <Form.Control 
-              type="text"
-              value={name}
-              placeholder="Username"
-              onChange={(event) => setName(event.target.value)}
-            ></Form.Control>
-          </FloatingLabel>
-          
-          <FloatingLabel className="my-2" controlId="email" label="Email Address">
-            <Form.Control 
-              type="email"
-              value={email}
-              placeholder="Email Address"
-              onChange={(event) => setEmail(event.target.value)}
-            ></Form.Control>
-          </FloatingLabel>
+          <Form onSubmit={onSubmit}>
+            <FloatingLabel className="my-2" controlId="floatingInput" label="Username">
+              <Form.Control 
+                type="text"
+                value={name}
+                placeholder="Username"
+                onChange={(event) => setName(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
+            
+            <FloatingLabel className="my-2" controlId="email" label="Email Address">
+              <Form.Control 
+                type="email"
+                value={email}
+                placeholder="Email Address"
+                onChange={(event) => setEmail(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
 
-          <FloatingLabel className="my-2" controlId="password" label="Password">
-            <Form.Control 
-              type="password"
-              value={password}
-              placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
-            ></Form.Control>
-          </FloatingLabel>
-          
-          <FloatingLabel className="my-2" controlId="passwordConfirm" label="Confirm Password">
-            <Form.Control 
-              type="password"
-              value={passwordConfirm}
-              placeholder="Confirm Password"
-              onChange={(event) => setPasswordConfirm(event.target.value)}
-            ></Form.Control>
-          </FloatingLabel>
+            <FloatingLabel className="my-2" controlId="password" label="Password">
+              <Form.Control 
+                type="password"
+                value={password}
+                placeholder="Password"
+                onChange={(event) => setPassword(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
+            
+            <FloatingLabel className="my-2" controlId="passwordConfirm" label="Confirm Password">
+              <Form.Control 
+                type="password"
+                value={passwordConfirm}
+                placeholder="Confirm Password"
+                onChange={(event) => setPasswordConfirm(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
 
-          <FloatingLabel className="my-2" controlId="fitnessGoals" label="What are your fitness goals?">
-            <Form.Control 
-              type="text"
-              value={fitnessGoals}
-              placeholder="What are your fitness goals?"
-              onChange={(event) => setFitnessGoals(event.target.value)}
-            ></Form.Control>
-          </FloatingLabel>
+            <FloatingLabel className="my-2" controlId="fitnessGoals" label="What are your fitness goals?">
+              <Form.Control 
+                type="text"
+                value={fitnessGoals}
+                placeholder="What are your fitness goals?"
+                onChange={(event) => setFitnessGoals(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
 
-          { isLoading && <Loader /> }
+            { isLoading && <Loader /> }
 
-          <div className="d-grid gap-2">
-            <Button type="submit" variant="primary" size="lg">
-              Submit
-            </Button>
-            <Button type="submit" onClick={handleBackButton} variant="secondary" size="lg">
-              Back to Home
-            </Button>
-          </div>
+            <div className="d-grid gap-2">
+              <Button type="submit" variant="primary" size="lg">
+                Submit
+              </Button>
+              <Button type="submit" onClick={handleBackButton} variant="secondary" size="lg">
+                Back to Home
+              </Button>
+            </div>
 
-          <Row className="py-3">
-            <Col>
-              Already have an account? <Link to="/login">Click here to Login</Link>
-            </Col>
-          </Row>
-        </Form>
-      </FormContainer>
-    </div>
+            <Row className="py-3">
+              <Col>
+                Already have an account? <Link to="/login">Click here to Login</Link>
+              </Col>
+            </Row>
+          </Form>
+        </FormContainer>
+      </div>
+    </>
   );
 };
 

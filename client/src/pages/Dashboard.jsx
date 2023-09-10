@@ -2,9 +2,11 @@
 
 const Dashboard = () => {
   return (
-    <div className="py-3 mt-3">
-      Dashboard
-    </div>
+    <>
+      <div className="py-3 mt-3">
+        Dashboard
+      </div>
+    </>
   )
 };
 
