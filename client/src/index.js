@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
+import ExercisesDashboard from "./pages/ExercisesDashboard";
+import ExerciseDetail from "./pages/ExerciseDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,8 +22,10 @@ const router = createBrowserRouter(
       <Route path="/register" element={<Register />} />
         {/* Private Protected User Routes Below */}
       <Route path='' element={<ProtectedUserRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/exercise" element={<ExercisesDashboard />} />
+        <Route path="/exercise/:id" element={<ExerciseDetail />} />
         {/* <Route path="/search_exercisedb" element={<SearchExerciseDB />} /> */}
         {/* <Route path="/favorites" element={<Favorite />} /> */}
       </Route>

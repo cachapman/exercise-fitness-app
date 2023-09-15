@@ -29,9 +29,9 @@ const Profile = () => {
     setFitnessGoals(userInfo.fitnessGoals)
   }, [userInfo.name, userInfo.email, userInfo.fitnessGoals]);
 
-  // Nagivates to home page when clicked without updating Profile
+  // Nagivates to dashboard page when clicked without updating Profile
   const handleBackButton = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
 
   // Dispatch user information to complete update action when form is submitted

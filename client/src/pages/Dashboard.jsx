@@ -1,11 +1,13 @@
-
+import { Box } from "@mui/material";
+import DashboardHero from "../components/DashboardHero";
 
 const Dashboard = () => {
+
   return (
     <>
-      <div className="py-3 mt-3">
-        Dashboard
-      </div>
+      <Box>
+        <DashboardHero />
+      </Box>
     </>
   )
 };

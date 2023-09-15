@@ -29,7 +29,7 @@ const Header = () => {
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" fixed="top" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
+          <LinkContainer to="/dashboard">
             <Navbar.Brand>
             <img src={Logo} alt="logo" 
               style={{width: "48px", height: "48px", margin: "0 20px"}}/>

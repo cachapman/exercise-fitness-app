@@ -7,7 +7,7 @@ const ProtectedUserRoute = () => {
 
   // If authorized user, continue to Outlet; otherwise redirect to login
   return (
-    userInfo ? <Outlet /> : <Navigate to="/login" replace />
+    userInfo ? <Outlet /> : <Navigate to="/" replace />
   )
 };
 
