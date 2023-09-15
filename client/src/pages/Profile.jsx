@@ -65,7 +65,7 @@ const Profile = () => {
               </h1>
             </div>
             <div className="p-2">
-              <h6>Change your username, email address, password, or fitness goals.</h6>
+              <h6>Change your username, email address, or password.</h6>
             </div>
           </div>
           <Form onSubmit={onSubmit}>
