@@ -20,12 +20,8 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Password required"],
   },
-  fitnessGoals: {
-    type: String,
-    required: [false, "What are your fitness goals?"],
-  },
-  favoriteExercises: [{ 
-    type: Schema.Types.ObjectId, ref: "ExercisePlanner" 
+  SavedExercise: [{ 
+    type: Schema.Types.ObjectId, ref: "SavedExercise" 
   }],
 }, { timestamps: true });
 

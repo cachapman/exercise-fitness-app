@@ -1,15 +1,35 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const ExercisePlannerSchema = new Schema({
-    name: String,
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-  }, 
-  { 
-    timestamps: true,
-  }
+// Save exercise information from API
+const SavedExerciseSchema = new Schema({
+    exerciseId: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    bodyPart: {
+      type: String,
+      required: true,
+    },
+    targetMuscle: {
+      type: String,
+      required: true,
+    },
+    equipmentNeeded: {
+      type: String,
+      required: true,
+    },
+    exerciseImageGif: {
+      type: String,
+      required: true,
+    },
+  },
 );
 
-const ExercisePlanner = mongoose.model("ExercisePlanner", ExercisePlannerSchema);
+const SavedExercise = mongoose.model("SavedExercise", SavedExerciseSchema);
 
-export default ExercisePlanner;
+export default SavedExercise;
