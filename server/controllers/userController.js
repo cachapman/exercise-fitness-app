@@ -30,7 +30,7 @@ const authUser = asyncHandler(async (request, response) => {
 // @route         POST /api/users
 // @access        Public - can access URL without logging in
 const registerUser = asyncHandler(async (request, response) => {
-  const { name, email, password, fitnessGoals } = request.body;
+  const { name, email, password } = request.body;
 
   if( !name || !email || !password ) {
     response.status(400)
@@ -51,7 +51,6 @@ const registerUser = asyncHandler(async (request, response) => {
     name,
     email,
     password,
-    fitnessGoals,
   });
 
   // Generate JWT-cookie along with response
@@ -62,7 +61,6 @@ const registerUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      fitnessGoals: user.fitnessGoals,
     })
   } else {
     response.status(401);

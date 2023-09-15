@@ -17,7 +17,6 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [fitnessGoals, setFitnessGoals] = useState('');
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -26,8 +25,7 @@ const Profile = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-    setFitnessGoals(userInfo.fitnessGoals)
-  }, [userInfo.name, userInfo.email, userInfo.fitnessGoals]);
+  }, [userInfo.name, userInfo.email]);
 
   // Nagivates to dashboard page when clicked without updating Profile
   const handleBackButton = () => {
@@ -47,7 +45,6 @@ const Profile = () => {
           name,
           email,
           password,
-          fitnessGoals,
         }).unwrap();
         dispatch(setCredentials({ ...response }));
         toast.success("Profile information updated successfully");
@@ -105,15 +102,6 @@ const Profile = () => {
                 value={passwordConfirm}
                 placeholder="Confirm New Password"
                 onChange={(event) => setPasswordConfirm(event.target.value)}
-              ></Form.Control>
-            </FloatingLabel>
-
-            <FloatingLabel className="my-2" controlId="fitnessGoals" label="What are your new fitness goals?">
-              <Form.Control 
-                type="text"
-                value={fitnessGoals}
-                placeholder="What are your fitness goals?"
-                onChange={(event) => setFitnessGoals(event.target.value)}
               ></Form.Control>
             </FloatingLabel>
 
