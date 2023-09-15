@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// This is simply to set user credentials to local storage and remove them to logout
+
 const initialState = {
   userInfo: localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null 
 };

@@ -29,7 +29,7 @@ const Detail = ({ exerciseDetail }) => {
           {name}
         </Typography>
         <Typography variant="h6">
-          is a great exercise using the {equipment} to strengthen your {bodyPart}! Some of the muscles worked include your {target}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed!
+          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {target}.
         </Typography>
         {extraExerciseDetail.map((item) => (
           <Stack key={item.name} direction="row" gap="24px" alignItems="center">

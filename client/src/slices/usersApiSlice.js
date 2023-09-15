@@ -2,6 +2,8 @@ import { apiSlice } from "./apiSlice";
 
 const API_URL = "/api/users";
 
+// Mutation means it is NOT going to make a GET request
+// This is for the backend server stuff
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Login User

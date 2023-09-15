@@ -6,7 +6,7 @@ import ExerciseCard from "./ExerciseCard";
 import Loader from "../components/Loader";
 
 const Exercises = ({ exercises, setExercises, bodyPart }) => {
-  // console.log(exercises); check data return from search bar
+  console.log(exercises); // check data return from search bar
 
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(10);
