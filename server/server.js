@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import connectMongoDB from "./config/mongoDB.js";
 import userRoutes from "./routes/userRoutes.js";
+import exerciseRoutes from "./routes/exerciseRoutes.js";
 
 // MongoDB setup
 connectMongoDB();
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
+app.use("/saved_exercises", exerciseRoutes);
 
 // If in production mode 
 if (process.env.NODE_ENV === "production") {

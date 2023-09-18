@@ -20,8 +20,8 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Password required"],
   },
-  SavedExercise: [{ 
-    type: Schema.Types.ObjectId, ref: "SavedExercise" 
+  SavedExerciseList: [{ 
+    type: Schema.Types.ObjectId, ref: "SavedExerciseList" 
   }],
 }, { timestamps: true });
 

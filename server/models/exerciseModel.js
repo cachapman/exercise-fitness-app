@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-// Save exercise information from API
-const SavedExerciseSchema = new Schema({
+const SavedExerciseListSchema = new Schema({
     exerciseId: {
       type: String,
       required: true,
@@ -27,9 +26,12 @@ const SavedExerciseSchema = new Schema({
       type: String,
       required: true,
     },
+    user: [{ 
+      type: Schema.Types.ObjectId, ref: "User" 
+    }],
   },
 );
 
-const SavedExercise = mongoose.model("SavedExercise", SavedExerciseSchema);
+const SavedExerciseList = mongoose.model("SavedExerciseList", SavedExerciseListSchema);
 
-export default SavedExercise;
+export default SavedExerciseList;

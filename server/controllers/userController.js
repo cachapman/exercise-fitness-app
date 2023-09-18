@@ -19,7 +19,7 @@ const authUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-    })
+    });
   } else {
     response.status(401);
     throw new Error("Invalid credentials.");
@@ -33,8 +33,8 @@ const registerUser = asyncHandler(async (request, response) => {
   const { name, email, password } = request.body;
 
   if( !name || !email || !password ) {
-    response.status(400)
-    throw new Error("Please enter all required information.")
+    response.status(400);
+    throw new Error("Please enter all required information.");
   }
 
   // Check if user exists
@@ -42,8 +42,8 @@ const registerUser = asyncHandler(async (request, response) => {
   const userEmailExists = await User.findOne({ email });
 
   if(usernameExists || userEmailExists) {
-    response.status(400)
-    throw new Error("Username and / or Email already registered.")
+    response.status(400);
+    throw new Error("Username and / or Email already registered.");
   }
 
   // Create a new user 
@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-    })
+    });
   } else {
     response.status(401);
     throw new Error("Invalid user data.");
