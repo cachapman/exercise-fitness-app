@@ -12,7 +12,7 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
 
   const { userInfo } = useSelector((state) => state.auth);
   console.log(userInfo);
-
+  
   return (
     <>
       <Box>
@@ -20,14 +20,14 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           setExercises={setExercises} 
           bodyPart={bodyPart} 
           setBodyPart={setBodyPart}
-        />
+          />
         <HorizontalExerciseScrollbar
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           bodyPart={bodyPart}
           setBodyPart={setBodyPart}
           setExercises={setExercises}
-        />
+          />
         <Exercises
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -37,7 +37,8 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           user={userInfo}
           workout={workout}
           setWorkout={setWorkout}
-        />
+          />
+          console.log(user);
       </Box>
     </>
   )
