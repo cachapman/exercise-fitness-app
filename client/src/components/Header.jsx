@@ -49,11 +49,13 @@ const Header = () => {
                       <FaSignOutAlt /> Logout
                     </NavDropdown.Item>
                   </NavDropdown> 
-                  <span className="navbar-text ml-2">
+                  <span className="mx-auto">
                   <LinkContainer to="/workoutdashboard">
-                    <Navbar.Text>
-                      Start Workout
-                    </Navbar.Text>
+                    <Nav.Link>
+                      <Navbar.Text>
+                        Start Workout
+                      </Navbar.Text>
+                    </Nav.Link>
                   </LinkContainer>
                   </span>
                 </>
