@@ -1,9 +1,7 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { ToggleButton, Typography } from "@mui/material";
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import '@fontsource/roboto/700.css';
-import LeftArrowIcon from "@mui/icons-material/ArrowBack";
-import RightArrowIcon from "@mui/icons-material/ArrowForward";
 import "../index.scss";
 import All from "../assets/gifs/all-workout.gif";
 import Cardio from "../assets/gifs/cardio.gif";
@@ -16,26 +14,6 @@ import LowerArms from "../assets/gifs/doubleDB.gif";
 import Waist from "../assets/gifs/crunch.gif";
 import UpperLegs from "../assets/gifs/deadlift.gif";
 import LowerLegs from "../assets/gifs/jumprope.gif";
-
-const LeftArrow = () => {
-  const { scrollPrev } = useContext(VisibilityContext);
-
-  return (
-    <Typography onClick={() => scrollPrev()} className="left-arrow">
-      <LeftArrowIcon fontSize="large" />
-    </Typography>
-  );
-};
-
-const RightArrow = () => {
-  const { scrollNext } = useContext(VisibilityContext);
-
-  return (
-    <Typography onClick={() => scrollNext()} className="right-arrow">
-      <RightArrowIcon fontSize="large" />
-    </Typography>
-  );
-};
 
 const HorizontalExerciseScrollbar = ({ setBodyPart }) => {
   const bodyPartList = ["all", "cardio", "chest", "back", "shoulders", "neck", "upper arms", "lower arms", "waist", "upper legs","lower legs"];
@@ -81,8 +59,6 @@ const HorizontalExerciseScrollbar = ({ setBodyPart }) => {
 
   return (
     <ScrollMenu 
-      LeftArrow={LeftArrow} 
-      RightArrow={RightArrow}
       value={selected}
       onChange={handleSelected}
     >
