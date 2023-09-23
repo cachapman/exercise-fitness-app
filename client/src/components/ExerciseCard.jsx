@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,7 +7,7 @@ import "../index.scss";
 import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
 
-const ExerciseCard = ({ exercise, user, setWorkout }) => {
+const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
 
   const [clicked, setClicked] = useState(false);
 
@@ -15,6 +15,7 @@ const ExerciseCard = ({ exercise, user, setWorkout }) => {
     userId: user.userId,
     exercise: exercise,
   };
+  // Verify correct data return in console
   console.log(exerciseCardData);
   console.log(user);
   console.log(user.userId);
@@ -24,46 +25,50 @@ const ExerciseCard = ({ exercise, user, setWorkout }) => {
     userId: user.userId,
     exerciseId: exercise.id,
   };
+  // Verify correct data return in console
   console.log(exerciseCardParams);
 
-  const [saveExercise] = useSaveExercisesMutation();
-  const [deleteExercise] = useDeleteSavedExercisesMutation();
+  const { mutate: saveExerciseMutation } = useSaveExercisesMutation();
+  const { mutate: deleteExerciseMutation } = useDeleteSavedExercisesMutation();
   
   const handleClick = async (exerciseCardData) => {
     if (clicked) {
-      try {
-        // Delete the saved exercise
-        await deleteExercise(exerciseCardData);
-        setClicked(false);
-        // Verify the exerciseCardData return when clicked
+      // Call the delete mutation to remove the exercise from the user's saved exercises
+      await deleteExerciseMutation(exerciseCardParams, {
+        onSuccess: (response) => {
+          setWorkout(response.workout);
+          setClicked(false);
+        },
+        onError: (err) => {
+          toast.error(err?.exerciseCardParams?.message || err.error);
+        },
+      });
+      // Verify the exerciseCardData return when clicked is false
         console.log("Clicked successful... exerciseCardData deleted:");
         console.log(exerciseCardData);
-      } catch (err) {
-        toast.error(err?.exerciseCardData?.message || err.error);
-      }
-    } else {
-      try {
-        // Save the exercise
-        await saveExercise(exerciseCardData);
-        setClicked(true);
-        // Verify the exerciseCardData return when clicked
+      } else {
+        // Call the save mutation to add the exercise to the user's saved exercises
+        await saveExerciseMutation(exerciseCardData, {
+          onSuccess: (response) => {
+            setWorkout(response.workout);
+            setClicked(true);
+          },
+          onError: (err) => {
+            toast.error(err?.exerciseCardData?.message || err.error);
+          },
+        });
+        // Verify the exerciseCardData return when clicked is true
         console.log("Clicked successful... exerciseCardData saved:");
         console.log(exerciseCardData);
-      } catch (err) {
-        toast.error(err?.exerciseCardData?.message || err.error);
       }
-    }
-  };
+    };
+  
+    const inWorkout = workout?.find(element => element.exerciseid === exercise.id);
 
-  // const inWorkout = workout.some((element) => element.exerciseid === exercise.id);
-
-  // useEffect(() => {
-  //   if (inWorkout) {
-  //     setClicked(true);
-  //   } else {
-  //     setClicked(false);
-  //   }
-  // }, [workout, exercise, inWorkout]);
+    useEffect(() => {
+      // Set the initial click state based on whether the exercise is in the workout
+      setClicked(!!inWorkout);
+    }, [workout, exercise, inWorkout]);
 
   return (
     <Box className="exercise-card">
