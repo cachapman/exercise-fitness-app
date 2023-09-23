@@ -1,12 +1,13 @@
 import express from "express";
-import { saveExercise, getSavedExercise, deleteSavedExercise } from "../controllers/exerciseController.js";
+import { saveExercises, updateSavedExercises, fetchSavedExercises, deleteSavedExercises } from "../controllers/exerciseController.js";
 import { protectRoute } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Logged in users can add, view, delete saved exercise list
-router.post("/saved_exercise/:id", protectRoute, saveExercise);
-router.get("saved_exercise/:id", protectRoute, getSavedExercise)
-router.delete("saved_exercise/:id", protectRoute, deleteSavedExercise)
+// Logged in users can add, update, view, delete saved exercise list
+router.post("/workoutdashboard", protectRoute, saveExercises);
+router.put("/workoutdashboard", protectRoute, updateSavedExercises);
+router.get("/workoutdashboard", protectRoute, fetchSavedExercises);
+router.delete("/workoutdashboard", protectRoute, deleteSavedExercises);
 
 export default router;

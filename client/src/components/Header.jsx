@@ -33,7 +33,7 @@ const Header = () => {
             <Navbar.Brand>
             <img src={Logo} alt="logo" 
               style={{width: "48px", height: "48px", margin: "0 20px"}}/>
-              My Exercise Fitness App
+              My Exercise Planner Fitness App
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -49,6 +49,13 @@ const Header = () => {
                       <FaSignOutAlt /> Logout
                     </NavDropdown.Item>
                   </NavDropdown> 
+                  <span className="navbar-text ml-2">
+                  <LinkContainer to="/workoutdashboard">
+                    <Navbar.Text>
+                      Start Workout
+                    </Navbar.Text>
+                  </LinkContainer>
+                  </span>
                 </>
               ) : (
                 <>

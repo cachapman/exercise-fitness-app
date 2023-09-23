@@ -16,9 +16,10 @@ const authUser = asyncHandler(async (request, response) => {
     generateToken(response, user._id);
 
     response.status(201).json({
-      _id: user._id,
+      userId: user._id,
       name: user.name,
       email: user.email,
+      SavedExerciseList: [],
     });
   } else {
     response.status(401);
@@ -51,6 +52,7 @@ const registerUser = asyncHandler(async (request, response) => {
     name,
     email,
     password,
+    SavedExerciseList: [],
   });
 
   // Generate JWT-cookie along with response
@@ -61,6 +63,7 @@ const registerUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      SavedExerciseList: [],
     });
   } else {
     response.status(401);
@@ -91,7 +94,8 @@ const getUserProfile = asyncHandler(async (request, response) => {
     response.status(200).json({
       _id: request.user._id,
       name: request.user.name,
-      email: request.user.email
+      email: request.user.email,
+      SavedExerciseList: [],
     });
 
     // Test return data to confirm in console

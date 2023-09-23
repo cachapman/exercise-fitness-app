@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const SavedExerciseListSchema = new Schema({
+const SavedExerciseSchema = new Schema({
     exerciseId: {
       type: String,
       required: true,
@@ -14,16 +14,24 @@ const SavedExerciseListSchema = new Schema({
       type: String,
       required: true,
     },
-    targetMuscle: {
+    target: {
       type: String,
       required: true,
     },
-    equipmentNeeded: {
+    secondaryMuscles: {
+      type: Array,
+      required: true,
+    },
+    equipment: {
       type: String,
       required: true,
     },
-    exerciseImageGif: {
+    gifUrl: {
       type: String,
+      required: true,
+    },
+    instructions: {
+      type: Array,
       required: true,
     },
     user: [{ 
@@ -32,6 +40,6 @@ const SavedExerciseListSchema = new Schema({
   },
 );
 
-const SavedExerciseList = mongoose.model("SavedExerciseList", SavedExerciseListSchema);
+const SavedExerciseList = mongoose.model("SavedExerciseList", SavedExerciseSchema);
 
 export default SavedExerciseList;

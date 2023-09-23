@@ -1,27 +1,24 @@
-import React from "react";
 import { useEffect, useState } from "react";
-import { Box, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Pagination, Stack } from "@mui/material";
 import { exerciseOptions, fetchData } from "../slices/exerciseSlice";
 import ExerciseCard from "./ExerciseCard";
-import Loader from "../components/Loader";
 
-const Exercises = ({ exercises, setExercises, bodyPart }) => {
-  console.log(exercises); // check data return from search bar
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [exercisesPerPage] = useState(10);
+const Exercises = ({ bodyPart, currentPage, setCurrentPage, exercises, setExercises, user, workout, setWorkout }) => {
+  
+  const [exercisesPerPage] = useState(12);
   
   useEffect(() => {
     const fetchExercisesData = async () => {
       let exercisesData = [];
       
       if(bodyPart === "all") {
-        exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercises", exerciseOptions);
+        exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercise?limit=1500", exerciseOptions);
       } else {
-        exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`, exerciseOptions);
+        exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=1500`, exerciseOptions);
       }
       
       setExercises(exercisesData);
+      console.log(exercisesData);
     }
     
     fetchExercisesData();
@@ -32,36 +29,33 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = Array.isArray(exercises) ? exercises.slice(indexOfFirstExercise, indexOfLastExercise) : [];
 
+  console.log(currentExercises);
   const paginate = (event, value) => {
     setCurrentPage(value);
 
-    window.scrollTo({ top: 750, left: 100, behavior: "smooth" });
+    // Scroll to the top of the exercises container
+    window.scrollTo({ top: document.getElementById("show-exercises").offsetTop, behavior: "smooth" });
   };
-  
-  if (!currentExercises.length) return <Loader />;
 
   return (
-    <Box id="exercises" 
+    <Box id="show-exercises" 
       sx={{mt: { lg: "50px" }}}
       mt="25px"
       p="20px"
     >
-      <Typography variant="h3" sx={{ fontSize: { lg: '44px', xs: '30px' } }} mb="46px">
-        Your Search Results
-      </Typography>
       <Stack direction="row" sx={{ gap: { lg: "110px", xs: "50px"}}} flexWrap="wrap" justifyContent="center">
         {currentExercises.map((exercise, index) => (
-          <ExerciseCard key={index} exercise={exercise} />
+          <ExerciseCard key={index} exercise={exercise} user={user} workout={workout} setWorkout={setWorkout} />
         ))}
       </Stack>
       <Stack mt="100px" paddingBottom="100px" alignItems="center">
-        {exercises.length > 10 && (
+        {exercises.length > 12 && (
           <Pagination 
             color="standard" 
             shape="rounded"
             defaultPage={1}
             count={Math.ceil(exercises.length / exercisesPerPage)}
-            page={currentPage}
+            currentpage={currentPage}
             onChange={paginate}
             size="large"
           />

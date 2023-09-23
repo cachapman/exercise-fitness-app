@@ -37,6 +37,37 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    // Save exercise to Login User Saved Exercise List
+    saveExercises: builder.mutation({
+      query: (data) => ({
+        url: `${API_URL}/workoutdashboard`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    // Update saved exercise from Login User Saved Exercise List
+    updateSavedExercises: builder.mutation({
+      query: (data) => ({
+        url: `${API_URL}/workoutdashboard`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+    // Fetch saved exercise from Login User Saved Exercise List
+    fetchSavedExercises: builder.query({
+      query: (data) => ({
+        url: `${API_URL}/workoutdashboard`,
+        method: "GET",
+      }),
+    }),
+    // Delete saved exercise from Login User Saved Exercise List
+    deleteSavedExercises: builder.mutation({
+      query: (exerciseId) => ({
+        url: `${API_URL}/workoutdashboard`,
+        method: "DELETE",
+        body: exerciseId,
+      }),
+    }),
   }),
 });
 
@@ -44,5 +75,9 @@ export const {
   useLoginMutation, 
   useLogoutMutation, 
   useRegisterMutation, 
-  useUpdateUserProfileMutation, 
+  useUpdateUserProfileMutation,
+  useSaveExercisesMutation,
+  useUpdateSavedExercisesMutation,
+  useFetchSavedExercisesQuery,
+  useDeleteSavedExercisesMutation,
 } = usersApiSlice;
