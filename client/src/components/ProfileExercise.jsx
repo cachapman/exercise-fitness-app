@@ -41,39 +41,43 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
     }
   }, [counter, counterRep, totalSets, totalReps, workout]);
 
-  const [updateSavedExercisesMutation] = useUpdateSavedExercisesMutation();
-  const [deleteSavedExercisesMutation] = useDeleteSavedExercisesMutation();
+  const { mutate: updateExerciseMutation } = useUpdateSavedExercisesMutation();
+  const { mutate: deleteExerciseMutation } = useDeleteSavedExercisesMutation();
 
   const updateExercise = async () => {
-    const data = {
+    const workoutData = {
       userId: userId,
       exerciseId: exerciseId,
       totalSets: counter,
       totalReps: counterRep,
     };
+    // Verify correct data return in console
+    console.log(workoutData);
 
     try { 
       // Call the mutation to update the saved exercise
-      const response = await updateSavedExercisesMutation(data).unwrap();
+      const response = await updateExerciseMutation(workoutData).unwrap();
       setWorkout(response.workout);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.workoutData?.message || err.error);
     }
   };
 
   const deleteExercise = async () => {
-    const params = {
+    const workoutParams = {
       userId: userId,
-      exerciseId: exerciseId
+      exerciseId: exerciseId,
     };
+    // Verify correct data return in console
+    console.log(workoutParams);
 
     try {
       // Call the mutation to delete the saved exercise
-      const response = await deleteSavedExercisesMutation(params).unwrap();
+      const response = await deleteExerciseMutation(workoutParams).unwrap();
       setProgress(previous => previous - 1);
       setWorkout(response.workout);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.workoutParams?.message || err.error);
     }
   };
 
