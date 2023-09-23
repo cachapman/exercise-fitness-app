@@ -7,16 +7,24 @@ import "../index.scss";
 import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
 
-const ExerciseCard = ({ exercise, userInfo, setWorkout }) => {
+const ExerciseCard = ({ exercise, user, setWorkout }) => {
 
   const [clicked, setClicked] = useState(false);
 
   const exerciseCardData = {
-    userId: userInfo.userId,
-    exercise: exercise
+    userId: user.userId,
+    exercise: exercise,
   };
   console.log(exerciseCardData);
-  console.log(userInfo);
+  console.log(user);
+  console.log(user.userId);
+  console.log(exercise);
+
+  const exerciseCardParams = {
+    userId: user.userId,
+    exerciseId: exercise.id,
+  };
+  console.log(exerciseCardParams);
 
   const [saveExercise] = useSaveExercisesMutation();
   const [deleteExercise] = useDeleteSavedExercisesMutation();
@@ -69,7 +77,7 @@ const ExerciseCard = ({ exercise, userInfo, setWorkout }) => {
         <Button disabled sx={{ ml: "21px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
           {exercise.equipment}
         </Button>
-          {userInfo &&
+          {user &&
             (clicked ?
               <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
                 <CheckIcon fontSize="large" />

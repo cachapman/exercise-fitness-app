@@ -15,7 +15,7 @@ import Waist from "../assets/gifs/crunch.gif";
 import UpperLegs from "../assets/gifs/deadlift.gif";
 import LowerLegs from "../assets/gifs/jumprope.gif";
 
-const HorizontalExerciseScrollbar = ({ setBodyPart }) => {
+const HorizontalExerciseScrollbar = ({ setBodyPart, setCurrentPage }) => {
   const bodyPartList = ["all", "cardio", "chest", "back", "shoulders", "neck", "upper arms", "lower arms", "waist", "upper legs","lower legs"];
   const [selected, setSelected] = useState("all");
   
@@ -48,6 +48,7 @@ const HorizontalExerciseScrollbar = ({ setBodyPart }) => {
   
         onClick={() => {
           setBodyPart(oneBodyPart);
+          setCurrentPage(1);
         }}
       >
         <Typography fontSize="26px" fontWeight="700" color="#FFF" textTransform="uppercase" align="center">

@@ -22,11 +22,8 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           setBodyPart={setBodyPart}
           />
         <HorizontalExerciseScrollbar
-          currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          bodyPart={bodyPart}
           setBodyPart={setBodyPart}
-          setExercises={setExercises}
           />
         <Exercises
           currentPage={currentPage}
