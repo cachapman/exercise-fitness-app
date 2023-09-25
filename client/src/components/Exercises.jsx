@@ -18,7 +18,7 @@ const Exercises = ({ bodyPart, currentPage, setCurrentPage, exercises, setExerci
       }
       
       setExercises(exercisesData);
-      console.log(exercisesData);
+      console.log("exercisesData from Exercises.jsx line 20: ", exercisesData);
     }
     
     fetchExercisesData();
@@ -29,7 +29,7 @@ const Exercises = ({ bodyPart, currentPage, setCurrentPage, exercises, setExerci
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = Array.isArray(exercises) ? exercises.slice(indexOfFirstExercise, indexOfLastExercise) : [];
 
-  console.log(currentExercises);
+  console.log("currentExercises from Exercises.jsx line 30: ", currentExercises);
   const paginate = (event, value) => {
     setCurrentPage(value);
 

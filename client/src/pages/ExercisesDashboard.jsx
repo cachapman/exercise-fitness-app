@@ -11,7 +11,7 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
+  console.log("userInfo from ExercisesDashboard.jsx line 13: ", userInfo);
   
   return (
     <>
@@ -35,7 +35,6 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           workout={workout}
           setWorkout={setWorkout}
           />
-          console.log(user);
       </Box>
     </>
   )

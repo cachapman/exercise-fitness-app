@@ -16,17 +16,17 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
     exercise: exercise,
   };
   // Verify correct data return in console
-  console.log(exerciseCardData);
-  console.log(user);
-  console.log(user.userId);
-  console.log(exercise);
+  console.log("exerciseCardData from ExerciseCard.jsx line 14: ", exerciseCardData);
+  console.log("user from ExerciseCard.jsx line 10: ", user);
+  console.log("user.userId from ExerciseCard.jsx line 15: ", user.userId);
+  console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
 
   const exerciseCardParams = {
     userId: user.userId,
     exerciseId: exercise.id,
   };
   // Verify correct data return in console
-  console.log(exerciseCardParams);
+  console.log("exerciseCardParams from ExerciseCard.jsx line 24: ", exerciseCardParams);
 
   const [saveExercise] = useSaveExercisesMutation();
   const [deleteExercise] = useDeleteSavedExercisesMutation();

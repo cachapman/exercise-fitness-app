@@ -31,14 +31,15 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       );
 
       // Check console to see the list of exercise data return
-      console.log(exercisesData); 
+      console.log("exercisesData from SearchExercises.jsx line 24: ", exercisesData); 
+      console.log("searchedExercisesTerm from SearchExercises.jsx line 26: ", searchedExercisesTerm);
       window.scrollTo({ top: 750, left: 100, behavior: "smooth" });
       setSearch('');
       setExercises(searchedExercisesTerm);
     }
   };
 
-  console.log(search.trim());
+  console.log("search.trim() from SearchExercises.jsx line 23: ", search.trim());
 
   const handleKeyDown = event => {
     if (event.key === "Enter") {
