@@ -5,7 +5,7 @@ import { exerciseOptions, fetchData } from "../slices/exerciseSlice";
 import Detail from "../components/Detail";
 import SimilarExercises from "../components/SimilarExercises";
 
-const ExerciseDetailToDisplay = () => {
+const ExerciseDetailPage = () => {
   const [exerciseDetailToDisplay, setExerciseDetailToDisplay] = useState({});
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
   const [targetBodyPartExercises, setTargetBodyPartExercises] = useState([]);
@@ -40,4 +40,4 @@ const ExerciseDetailToDisplay = () => {
   )
 };
 
-export default ExerciseDetailToDisplay;
+export default ExerciseDetailPage;

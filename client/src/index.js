@@ -12,7 +12,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ExercisesDashboard from "./pages/ExercisesDashboard";
-import ExerciseDetailToDisplay from "./pages/ExerciseDetailToDisplay";
+import ExerciseDetailPage from "./pages/ExerciseDetailPage";
 import WorkoutDashboard from "./pages/WorkoutDashboard";
 
 const router = createBrowserRouter(
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/exercise" element={<ExercisesDashboard />} />
-        <Route path="/exercise/:id" element={<ExerciseDetailToDisplay />} />
+        <Route path="/exercise/:id" element={<ExerciseDetailPage />} />
         <Route path="/workoutdashboard" element={<WorkoutDashboard />} />
       </Route>
     </Route>
