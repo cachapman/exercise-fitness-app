@@ -3,10 +3,10 @@ import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
 import TargetImageIcon from "../assets/icons/body-target.png";
 import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
 
-const Detail = ({ exerciseDetail }) => {
-  const { bodyPart, gifUrl, name, target, secondaryMuscles, equipment, instructions } = exerciseDetail;
+const Detail = ({ exerciseDetailToDisplay }) => {
+  const { bodyPart, gifUrl, name, target, secondaryMuscles, equipment, instructions } = exerciseDetailToDisplay;
 
-  const extraExerciseDetail = [
+  const extraExerciseDetailToDisplay = [
     {
       icon: BodyPartImageIcon,
       name: bodyPart,
@@ -36,7 +36,7 @@ const Detail = ({ exerciseDetail }) => {
           <br />
           {instructions.join(' ')}
         </Typography>
-        {extraExerciseDetail.map((iconList) => (
+        {extraExerciseDetailToDisplay.map((iconList) => (
           <Stack key={iconList.name} direction="row" gap="24px" alignItems="center">
             <Button disabled sx={{ background: "#fff2db", borderRadius: "50%", width: "100px", height: "100px" }}>
               <img src={iconList.icon} alt={bodyPart} style={{ width: "50px", height: "50px" }} />

@@ -5,9 +5,10 @@ import { exerciseOptions, fetchData } from "../slices/exerciseSlice";
 import Detail from "../components/Detail";
 import SimilarExercises from "../components/SimilarExercises";
 
-const ExerciseDetail = () => {
-  const [exerciseDetail, setExerciseDetail] = useState({});
+const ExerciseDetailToDisplay = () => {
+  const [exerciseDetailToDisplay, setExerciseDetailToDisplay] = useState({});
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
+  const [targetBodyPartExercises, setTargetBodyPartExercises] = useState([]);
   const [equipmentExercises, setEquipmentExercises] = useState([]);
   const { id } = useParams();
 
@@ -16,10 +17,13 @@ const ExerciseDetail = () => {
       const exerciseDbUrl = "https://exercisedb.p.rapidapi.com/exercises";
 
       const exerciseDetailData = await fetchData(`${exerciseDbUrl}/exercise/${id}`, exerciseOptions);
-      setExerciseDetail(exerciseDetailData);
+      setExerciseDetailToDisplay(exerciseDetailData);
 
       const targetMuscleExercisesData = await fetchData(`${exerciseDbUrl}/target/${exerciseDetailData.target}`, exerciseOptions);
       setTargetMuscleExercises(targetMuscleExercisesData);
+
+      const targetBodyPartExercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${exerciseDetailData.target}`, exerciseOptions);
+      setTargetBodyPartExercises(targetBodyPartExercisesData);
 
       const equipmentExercisesData = await fetchData(`${exerciseDbUrl}/equipment/${exerciseDetailData.equipment}`, exerciseOptions);
       setEquipmentExercises(equipmentExercisesData);
@@ -30,10 +34,10 @@ const ExerciseDetail = () => {
 
   return (
     <Box paddingTop="50px">
-      <Detail exerciseDetail={exerciseDetail} />
-      <SimilarExercises targetMuscleExercises={targetMuscleExercises} equipmentExercises={equipmentExercises} />
+      <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} />
+      <SimilarExercises targetMuscleExercises={targetMuscleExercises} targetBodyPartExercises={targetBodyPartExercises} equipmentExercises={equipmentExercises} />
     </Box>
   )
 };
 
-export default ExerciseDetail;
+export default ExerciseDetailToDisplay;
