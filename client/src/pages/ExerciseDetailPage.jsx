@@ -22,7 +22,7 @@ const ExerciseDetailPage = () => {
       const targetMuscleExercisesData = await fetchData(`${exerciseDbUrl}/target/${exerciseDetailData.target}`, exerciseOptions);
       setTargetMuscleExercises(targetMuscleExercisesData);
 
-      const targetBodyPartExercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${exerciseDetailData.target}`, exerciseOptions);
+      const targetBodyPartExercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${exerciseDetailData.bodyPart}`, exerciseOptions);
       setTargetBodyPartExercises(targetBodyPartExercisesData);
 
       const equipmentExercisesData = await fetchData(`${exerciseDbUrl}/equipment/${exerciseDetailData.equipment}`, exerciseOptions);

@@ -8,6 +8,7 @@ import Exercises from "../components/Exercises";
 const ExercisesDashboard = ({ workout, setWorkout }) => {
   const [bodyPart, setBodyPart] = useState(["all"]);
   const [exercises, setExercises] = useState([]);
+  const [equipment, setEquipment] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -31,6 +32,9 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           exercises={exercises} 
           setExercises={setExercises} 
           bodyPart={bodyPart} 
+          setBodyPart={setBodyPart}
+          equipment={equipment}
+          setEquipment={setEquipment}
           user={userInfo}
           workout={workout}
           setWorkout={setWorkout}

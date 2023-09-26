@@ -3,19 +3,30 @@ import { Box, Pagination, Stack } from "@mui/material";
 import { exerciseOptions, fetchData } from "../slices/exerciseSlice";
 import ExerciseCard from "./ExerciseCard";
 
-const Exercises = ({ bodyPart, currentPage, setCurrentPage, exercises, setExercises, user, workout, setWorkout }) => {
+const Exercises = ({ 
+  bodyPart, 
+  currentPage, 
+  setCurrentPage, 
+  equipment, 
+  setEquipment, 
+  exercises, 
+  setExercises, 
+  user, 
+  workout, 
+  setWorkout }) => {
   
   const [exercisesPerPage] = useState(12);
   
   useEffect(() => {
     const fetchExercisesData = async () => {
       let exercisesData = [];
+      const exerciseDbUrl = "https://exercisedb.p.rapidapi.com/exercises";
       
       if(bodyPart === "all") {
-        exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercise?limit=1500", exerciseOptions);
+        exercisesData = await fetchData(`${exerciseDbUrl}?limit=1500`, exerciseOptions);
       } else {
-        exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=1500`, exerciseOptions);
-      }
+        exercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${bodyPart}?limit=1500`, exerciseOptions);
+      } 
       
       setExercises(exercisesData);
       console.log("exercisesData from Exercises.jsx line 20: ", exercisesData);
