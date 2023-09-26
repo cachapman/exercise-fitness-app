@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import SavedExerciseList from "../models/exerciseModel.js";
 
 // @description   User can save an exercise to saved exercise list
-// @route         POST /api/users/workoutdashboard
+// @route         POST /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
 const saveExercises = asyncHandler (async (request, response) => {
 
@@ -11,22 +11,22 @@ const saveExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(request.user._id);
 
   if (user) {
-    const id = request.params._id;
+    const userId = request.params._id;
 
     // Second security measure to check user is saving exercise to their account
-    if (request.user._id == id) {
+    if (request.user._id == userId) {
       const exerciseId = request.body.exercise.exerciseId;
       const name = request.body.exercise.name;
       const bodyPart = request.body.exercise.bodyPart;
       const target = request.body.exercise.target;
-      const secondaryMuscles = request.exercise.secondaryMuscles;
+      const secondaryMuscles = request.body.exercise.secondaryMuscles;
       const equipment = request.body.exercise.equipment;
       const gifUrl = request.body.exercise.gifUrl;
       const instructions = request.body.exercise.instructions;
 
       const saveExerciseExist = await SavedExerciseList.findOne({
-        user: id,
-        exerciseId: request.body.exerciseId,
+        user: userId,
+        exerciseId: exerciseId,
       });
 
       if (saveExerciseExist === null) {
@@ -39,7 +39,7 @@ const saveExercises = asyncHandler (async (request, response) => {
           equipment: equipment,
           gifUrl: gifUrl,
           instructions: instructions,
-          user: id,
+          user: userId,
         });
 
         newSaveExercise.save().then(
@@ -68,12 +68,12 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(request.user._id);
 
   if (user) {
-    const id = request.params._id;
+    const userId = request.params._id;
 
-    if (request.user._id == id) {
+    if (request.user._id == userId) {
       const { totalSets, totalReps } = request.body.exercise;
 
-      const filter = { user: id };
+      const filter = { user: userId };
       const update = {};
 
       if (totalSets !== undefined) {
@@ -86,7 +86,7 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
 
       await SavedExerciseList.updateOne(filter, { $set: update });
 
-      const savedExercise = await SavedExerciseList.find({ user: id });
+      const savedExercise = await SavedExerciseList.find({ user: userId });
       
       response.status(200).json({ savedExercise });
       }  else {
@@ -106,10 +106,10 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(request.user._id);
 
   if (user) {
-    const id = request.params._id;
+    const userId = request.params._id;
 
-    if (request.user._id == id) {
-      const savedExercises = await SavedExerciseList.find({ user: id }).sort({ exerciseId: 1 });
+    if (request.user._id == userId) {
+      const savedExercises = await SavedExerciseList.find({ user: userId }).sort({ exerciseId: 1 });
       
       response.status(200).json({ savedExercises });
       }  else {
@@ -129,8 +129,8 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(request.user._id);
 
   if (user) {
-    const id = request.params._id;
-    const list = await SavedExerciseList.findOne({ user: id })
+    const userId = request.params._id;
+    const list = await SavedExerciseList.findOne({ user: userId })
 
     if (request.user._id == list.user) {
       await SavedExerciseList.findByIdAndDelete({ exerciseId });

@@ -29,12 +29,12 @@ const Detail = ({ exerciseDetailToDisplay }) => {
           {name}
         </Typography>
         <Typography variant="h6">
-          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {secondaryMuscles.join(', ')} and {target}.
+          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {secondaryMuscles ? secondaryMuscles.join(', ') : ''} and {target}.
         </Typography>
         <Typography variant="h6">
           Exercise instructions:
           <br />
-          {instructions.join(' ')}
+          {instructions ? instructions.join(' ') : ''}
         </Typography>
         {extraExerciseDetailToDisplay.map((iconList) => (
           <Stack key={iconList.name} direction="row" gap="24px" alignItems="center">
