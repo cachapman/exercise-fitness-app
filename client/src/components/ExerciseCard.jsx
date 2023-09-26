@@ -12,7 +12,7 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
   const [clicked, setClicked] = useState(false);
 
   const exerciseCardData = {
-    userId: user.userId,
+    userId: user?.userId,
     exercise: exercise,
   };
   // Verify correct data return in console
@@ -22,7 +22,7 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
   console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
 
   const exerciseCardParams = {
-    userId: user.userId,
+    userId: user?.userId,
     exerciseId: exercise.id,
   };
   // Verify correct data return in console
