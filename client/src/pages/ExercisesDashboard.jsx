@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
-import SearchExercises from "../components/SearchExercises";
+import SearchExercisesBar from "../components/SearchExercisesBar";
 import HorizontalExerciseScrollbar from "../components/HorizontalExerciseScrollbar";
 import Exercises from "../components/Exercises";
 
@@ -16,7 +16,7 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
   return (
     <>
       <Box>
-        <SearchExercises 
+        <SearchExercisesBar 
           setExercises={setExercises} 
           bodyPart={bodyPart} 
           setBodyPart={setBodyPart}
