@@ -1,21 +1,24 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import SavedExerciseList from "../models/exerciseModel.js";
+import { useImperativeHandle } from "react";
 
 // @description   User can save an exercise to saved exercise list
 // @route         POST /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
 const saveExercises = asyncHandler (async (request, response) => {
 
+
+
   // Check for user credentials with logic in userModel
-  const user = await User.findById(request.user._id);
+  let userId= request.user._id
+  const user = await User.findById(userId);
+
 
   if (user) {
-    const userId = request.params._id;
 
     // Second security measure to check user is saving exercise to their account
-    if (request.user._id == userId) {
-      const exerciseId = request.body.exercise.exerciseId;
+      const exerciseId = request.body.exercise.id;
       const name = request.body.exercise.name;
       const bodyPart = request.body.exercise.bodyPart;
       const target = request.body.exercise.target;
@@ -51,10 +54,7 @@ const saveExercises = asyncHandler (async (request, response) => {
         response.status(400);
         throw new Error("Exercise is already saved");
       }
-    } else {
-      response.status(403);
-      throw new Error("Forbidden Access");
-    } 
+    
   } else {
     response.status(401);
     throw new Error("Unauthorized Access");
@@ -105,9 +105,10 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
 const fetchSavedExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(request.user._id);
 
-  if (user) {
-    const userId = request.params._id;
 
+
+  if (user) {
+    const userId = request.param('_id');
     if (request.user._id == userId) {
       const savedExercises = await SavedExerciseList.find({ user: userId }).sort({ exerciseId: 1 });
       

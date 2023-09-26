@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.use("/api/users/workoutdashboard", exerciseRoutes);
+app.use("/api/users", exerciseRoutes);
 
 // If in production mode 
 if (process.env.NODE_ENV === "production") {
