@@ -70,10 +70,13 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
         <img src={exercise.gifUrl} alt={exercise.name} loading="lazy" />
       </Link>
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <Button disabled sx={{ ml: "21px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+        <Button className="exercise-card-btn" sx={{ ml: "21px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+          {exercise.target}
+        </Button>
+        <Button className="exercise-card-btn" sx={{ ml: "21px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.bodyPart}
         </Button>
-        <Button disabled sx={{ ml: "21px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
+        <Button className="exercise-card-btn" sx={{ ml: "21px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
           {exercise.equipment}
         </Button>
           {user &&

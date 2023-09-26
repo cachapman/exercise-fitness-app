@@ -67,6 +67,10 @@ body {
   align-items: center;
 }
 
+.exercise-card-btn {
+  pointer-events: none;
+}
+
 @media screen and (max-width: 1200px) {
   .detail-image {
     width: 300px;
