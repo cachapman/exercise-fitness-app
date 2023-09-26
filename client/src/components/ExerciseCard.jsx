@@ -18,7 +18,7 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
   // Verify correct data return in console
   console.log("exerciseCardData from ExerciseCard.jsx line 14: ", exerciseCardData);
   console.log("user from ExerciseCard.jsx line 10: ", user);
-  console.log("user.userId from ExerciseCard.jsx line 15: ", user.userId);
+  console.log("user.userId from ExerciseCard.jsx line 15: ", user?.userId);
   console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
 
   const exerciseCardParams = {
