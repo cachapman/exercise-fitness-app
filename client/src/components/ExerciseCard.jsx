@@ -8,9 +8,9 @@ import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../sl
 import { toast } from "react-toastify";
 
 const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
-
+  
   const [clicked, setClicked] = useState(false);
-
+  
   const exerciseCardData = {
     userId: user?.userId,
     exercise: exercise,
