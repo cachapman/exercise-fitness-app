@@ -9,9 +9,9 @@ const Detail = ({ exerciseDetailToDisplay }) => {
     gifUrl, 
     name, 
     target, 
-    // secondaryMuscles, 
+    secondaryMuscles, 
     equipment, 
-    // instructions,
+    instructions,
    } = exerciseDetailToDisplay;
 
   const extraExerciseDetailToDisplay = [
@@ -30,20 +30,21 @@ const Detail = ({ exerciseDetailToDisplay }) => {
   ];
 
   return (
-    <Stack gap="60px" sx={{flexDirection: { lg: "row" }, p: "20px", alignItems: "center"}}>
+    <Stack gap="60px" sx={{flexDirection: { lg: "row" }, pt: "25px", alignItems: "center"}}>
       <img src={gifUrl} alt={name} loading="lazy" className="detail-image" />
       <Stack sx={{ gap: { lg: "35", xs: "20px "}}}>
         <Typography variant="h3" textTransform="capitalize">
           {name}
         </Typography>
         <Typography variant="h6">
-          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {/* {secondaryMuscles ? secondaryMuscles.join(', ') : ''} and */} {target}.
+          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {secondaryMuscles ? secondaryMuscles.join(', ') : ''}, and {target}.
         </Typography>
-        {/* <Typography variant="h6">
+        <Typography variant="h4">
           Exercise instructions:
-          <br />
+        </Typography>
+        <Typography variant="h6">
           {instructions ? instructions.join(' ') : ''}
-        </Typography> */}
+        </Typography>
         {extraExerciseDetailToDisplay.map((iconList) => (
           <Stack key={iconList.name} direction="row" gap="24px" alignItems="center">
             <Button disabled sx={{ background: "#fff2db", borderRadius: "50%", width: "100px", height: "100px" }}>

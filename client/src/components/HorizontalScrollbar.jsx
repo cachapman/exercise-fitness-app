@@ -11,7 +11,8 @@ const HorizontalScrollbar = ({ data, bodyPart, setBodyPart, isBodyParts }) => {
             key={item.id || item}
             moreInfo={item.id || item}
             title={item.id || item}
-            m="0 40px"
+            m="0 30px"
+            pt="15px"
           >
             {isBodyParts ? <BodyPart item={item} bodyPart={bodyPart} setBodyPart={setBodyPart}/>
               : <ExerciseCard exercise={item} />}
