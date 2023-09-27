@@ -32,6 +32,8 @@ const ExerciseDetailPage = () => {
     fetchExercisesData();
   }, [id]);
 
+  if (!exerciseDetailToDisplay) return <div>No Exercise Data to Display, please try search again.</div>
+
   return (
     <Box paddingTop="50px">
       <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} />
