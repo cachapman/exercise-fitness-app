@@ -40,6 +40,8 @@ body {
   border-top: 4px solid #ff2625;
   border-bottom-left-radius: 20px;
   text-decoration: none;
+  cursor: pointer;
+  pointer-events: all;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -63,6 +65,9 @@ body {
   margin-top: 5px;
   padding-bottom: 5px;
   text-transform: capitalize;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: all;
   height: 82px;
   align-items: center;
 }
