@@ -37,7 +37,7 @@ const SimilarExercises = ({ exercise, user, targetMuscleExercises, targetBodyPar
           <HorizontalScrollbar data={targetMuscleExercises} />
           : <Loader />}
       </Stack>
-      <Typography variant="h3" mt="65px">
+      <Typography variant="h3" mt="75px">
         Here are some similar Target Body Part exercises:
       </Typography>
       <Stack direction="row" sx={{ p: "2", position: "relative" }}>
@@ -45,7 +45,7 @@ const SimilarExercises = ({ exercise, user, targetMuscleExercises, targetBodyPar
           <HorizontalScrollbar data={targetBodyPartExercises} />
           : <Loader />}
       </Stack>
-      <Typography variant="h3" mt="65px">
+      <Typography variant="h3" mt="75px">
         Here are some similar Equipment exercises:
       </Typography>
       <Stack direction="row" sx={{ p: "2", position: "relative" }}>
