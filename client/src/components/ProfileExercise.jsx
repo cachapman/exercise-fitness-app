@@ -52,7 +52,7 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
       totalReps: counterRep,
     };
     // Verify correct data return in console
-    console.log("workoutData from ProfileExercise.jsx line 48: ", workoutData);
+    // console.log("workoutData from ProfileExercise.jsx line 48: ", workoutData);
 
     try { 
       // Call the mutation to update the saved exercise
@@ -69,7 +69,7 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
       exerciseId: exerciseId,
     };
     // Verify correct data return in console
-    console.log("workoutParams from ProfileExercise.jsx line 67: ", workoutParams);
+    // console.log("workoutParams from ProfileExercise.jsx line 67: ", workoutParams);
 
     try {
       // Call the mutation to delete the saved exercise

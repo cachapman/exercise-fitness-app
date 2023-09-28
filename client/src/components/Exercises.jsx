@@ -6,9 +6,7 @@ import ExerciseCard from "./ExerciseCard";
 const Exercises = ({ 
   bodyPart, 
   currentPage, 
-  setCurrentPage, 
-  equipment, 
-  setEquipment, 
+  setCurrentPage,
   exercises, 
   setExercises, 
   user, 
@@ -29,7 +27,7 @@ const Exercises = ({
       } 
       
       setExercises(exercisesData);
-      console.log("exercisesData from Exercises.jsx line 20: ", exercisesData);
+      // console.log("exercisesData from Exercises.jsx line 20: ", exercisesData);
     }
     
     fetchExercisesData();
@@ -40,7 +38,7 @@ const Exercises = ({
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = Array.isArray(exercises) ? exercises.slice(indexOfFirstExercise, indexOfLastExercise) : [];
 
-  console.log("currentExercises from Exercises.jsx line 30: ", currentExercises);
+  // console.log("currentExercises from Exercises.jsx line 30: ", currentExercises);
   const paginate = (event, value) => {
     setCurrentPage(value);
 
