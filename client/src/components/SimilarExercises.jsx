@@ -2,27 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import HorizontalScrollbar from "./HorizontalScrollbar";
 import Loader from "../components/Loader";
 
-const SimilarExercises = ({ exercise, user, targetMuscleExercises, targetBodyPartExercises, equipmentExercises }) => {
-  const currentExerciseCardData = {
-    userId: user?.userId,
-    exercise: exercise,
-  };
-  // Verify correct data return in console
-  console.log("exerciseCardData from SimilarExercises.jsx line 6: ", currentExerciseCardData);
-  console.log("user from SimilarExercises.jsx line 5: ", user);
-  console.log("user.userId from SimilarExercises.jsx line 7: ", user?.userId);
-  console.log("exercise from SimilarExercises.jsx line 8: ", exercise);
-
-  const currentExerciseCardParams = {
-    userId: user?.userId,
-    exerciseId: exercise,
-  };
-  // Verify correct data return in console
-  console.log("exerciseCardParams from SimilarExercises.jsx line 16: ", currentExerciseCardParams);
-  console.log("user from SimilarExercises.jsx line 10: ", user);
-  console.log("user.userId from SimilarExercises.jsx line 17: ", user?.userId);
-  console.log("exercise from SimilarExercises.jsx line 18: ", exercise);
-
+const SimilarExercises = ({ targetMuscleExercises, targetBodyPartExercises, equipmentExercises }) => {
   if ({ targetMuscleExercises, targetBodyPartExercises, equipmentExercises }) {
     window.scrollTo({ top: 0, left: 100, behavior: "smooth" });
   };
