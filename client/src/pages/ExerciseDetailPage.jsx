@@ -32,12 +32,21 @@ const ExerciseDetailPage = () => {
     fetchExercisesData();
   }, [id]);
 
+  // Filter out "id" from the arrays to not display the current exercise in the similar exercises options
+  const filteredTargetMuscleExercises = targetMuscleExercises.filter(exercise => exercise.id !== id);
+  const filteredTargetBodyPartExercises = targetBodyPartExercises.filter(exercise => exercise.id !== id);
+  const filteredEquipmentExercises = equipmentExercises.filter(exercise => exercise.id !== id);
+
+  // Verify correct data return in console
+  // console.log("id from ExerciseDetailPage.jsx line 33: ", id);
+  // console.log("id from ExerciseDetailPage.jsx line 36: ", id);
+
   if (!exerciseDetailToDisplay) return <div>No Exercise Data to Display, please try search again.</div>
 
   return (
     <Box paddingTop="50px">
       <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} />
-      <SimilarExercises targetMuscleExercises={targetMuscleExercises} targetBodyPartExercises={targetBodyPartExercises} equipmentExercises={equipmentExercises} />
+      <SimilarExercises targetMuscleExercises={filteredTargetMuscleExercises} targetBodyPartExercises={filteredTargetBodyPartExercises} equipmentExercises={filteredEquipmentExercises} />
     </Box>
   )
 };
