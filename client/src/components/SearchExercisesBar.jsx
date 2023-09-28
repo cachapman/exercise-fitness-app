@@ -20,8 +20,8 @@ const SearchExercisesBar = ({ setExercises }) => {
       );
 
       // Check console to see the list of exercise data return
-      console.log("exercisesData from SearchExercisesBar.jsx line 24: ", exercisesData); 
-      console.log("searchedExercisesTerm from SearchExercisesBar.jsx line 26: ", searchedExercisesTerm);
+      // console.log("exercisesData from SearchExercisesBar.jsx line 24: ", exercisesData); 
+      // console.log("searchedExercisesTerm from SearchExercisesBar.jsx line 26: ", searchedExercisesTerm);
 
       window.scrollTo({ top: 750, left: 100, behavior: "smooth" });
       setSearch('');
@@ -29,7 +29,7 @@ const SearchExercisesBar = ({ setExercises }) => {
     }
   };
 
-  console.log("search.trim() from SearchExercisesBar.jsx line 23: ", search.trim());
+  // console.log("search.trim() from SearchExercisesBar.jsx line 23: ", search.trim());
 
   const handleKeyDown = event => {
     if (event.key === "Enter") {

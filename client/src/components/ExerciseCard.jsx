@@ -14,19 +14,14 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
   const exerciseCardData = {
     userId: user?.userId,
     exercise: exercise,
-  };
-  // Verify correct data return in console
-  console.log("exerciseCardData from ExerciseCard.jsx line 14: ", exerciseCardData);
-  console.log("user from ExerciseCard.jsx line 10: ", user);
-  console.log("user.userId from ExerciseCard.jsx line 15: ", user?.userId);
-  console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
-
-  const exerciseCardParams = {
-    userId: user?.userId,
     exerciseId: exercise.id,
   };
   // Verify correct data return in console
-  console.log("exerciseCardParams from ExerciseCard.jsx line 24: ", exerciseCardParams);
+  // console.log("exerciseCardData from ExerciseCard.jsx line 14: ", exerciseCardData);
+  // console.log("user from ExerciseCard.jsx line 10: ", user);
+  // console.log("user.userId from ExerciseCard.jsx line 15: ", user?.userId);
+  // console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
+  console.log("exercise.id from ExerciseCard.jsx line 17: ", exercise.id);
 
   const [saveExercise] = useSaveExercisesMutation();
   const [deleteExercise] = useDeleteSavedExercisesMutation();
@@ -38,8 +33,8 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
         await deleteExercise(exerciseCardData);
         setClicked(false);
         // Verify the exerciseCardData return when clicked
-        console.log("Clicked successful... exerciseCardData deleted:");
-        console.log(exerciseCardData);
+        // console.log("Clicked successful... exerciseCardData deleted:");
+        // console.log(exerciseCardData);
       } catch (err) {
         toast.error(err?.exerciseCardData?.message || err.error);
       }
@@ -49,8 +44,8 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
         await saveExercise(exerciseCardData);
         setClicked(true);
         // Verify the exerciseCardData return when clicked
-        console.log("Clicked successful... exerciseCardData saved:");
-        console.log(exerciseCardData);
+        // console.log("Clicked successful... exerciseCardData saved:");
+        // console.log(exerciseCardData);
       } catch (err) {
         toast.error(err?.exerciseCardData?.message || err.error);
       }
