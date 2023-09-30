@@ -1,16 +1,23 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Button, Stack, Tooltip, Typography } from "@mui/material";
 import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
 import TargetImageIcon from "../assets/icons/body-target.png";
 import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
+import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
+import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/Check";
+import { toast } from "react-toastify";
 
-const Detail = ({ exerciseDetailToDisplay }) => {
+const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
   const { 
     bodyPart, 
-    gifUrl, 
+    equipment, 
+    gifUrl,
+    id, 
     name, 
     target, 
     secondaryMuscles, 
-    equipment, 
     instructions,
    } = exerciseDetailToDisplay;
 
@@ -29,10 +36,76 @@ const Detail = ({ exerciseDetailToDisplay }) => {
     },
   ];
 
+    // Get logged in authorized user information
+    const { userInfo } = useSelector((state) => state.auth);
+    const user = userInfo;
+  
+    const [clicked, setClicked] = useState(false);
+  
+    const initialExerciseCardData = {
+      userId: user.userId,
+      exercise: exercise,
+      exerciseId: id,
+    };
+    // Verify correct data return in console
+    console.log("exerciseCardData from Detail.jsx line 44: ", initialExerciseCardData);
+    console.log("user from Detail.jsx line 40: ", userInfo);
+    console.log("user from Detail.jsx line 40: ", user);
+    console.log("user.userId from Detail.jsx line 45: ", user.userId);
+    console.log("exercise from Detail.jsx line 46: ", exercise);
+    console.log("exercise.id from Detail.jsx line 47: ", id);
+  
+    // Use a state variable to track exerciseCardData and update it
+    const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
+  
+    const [saveExercise] = useSaveExercisesMutation();
+    const [deleteExercise] = useDeleteSavedExercisesMutation();
+    
+    // Define the function to handle the click event
+    const handleClick = async (exerciseCardData) => {
+      if (clicked) {
+        try {
+          // Delete the saved exercise
+          await deleteExercise(exerciseCardData);
+          setClicked(false);
+          // Verify the exerciseCardData return when clicked
+          console.log("Clicked successful... exerciseCardData deleted:");
+          console.log(exerciseCardData);
+        } catch (err) {
+          toast.error(err?.exerciseCardData?.message || err.error);
+        }
+      } else {
+        try {
+          // Save the exercise
+          await saveExercise(exerciseCardData);
+          setClicked(true);
+          // Verify the exerciseCardData return when clicked
+          console.log("Clicked successful... exerciseCardData saved:");
+          console.log(exerciseCardData);
+        } catch (err) {
+          toast.error(err?.exerciseCardData?.message || err.error);
+        }
+      }
+    };
+    
+    const inWorkout = Array.isArray(workout) ? workout.find(element => element.exerciseid === id) : null;
+  
+    useEffect(() => {
+      // Set the initial click state based on whether the exercise is in the workout
+      setClicked(!!inWorkout);
+  
+      // Update exerciseCardData whenever the user or exercise props change
+      setExerciseCardData({
+        userId: user.userId,
+        exercise: exercise,
+        exerciseId: exercise.id,
+      });
+    }, [workout, exercise, inWorkout, user]);
+
   return (
     <Stack gap="60px" sx={{flexDirection: { lg: "row" }, pt: "25px", alignItems: "center"}}>
       <img src={gifUrl} alt={name} loading="lazy" className="detail-image" />
-      <Stack sx={{ gap: { lg: "35", xs: "20px "}}}>
+      <Stack sx={{ gap: { lg: "35px", xs: "20px" }}}>
         <Typography variant="h3" textTransform="capitalize">
           {name}
         </Typography>
@@ -53,6 +126,19 @@ const Detail = ({ exerciseDetailToDisplay }) => {
             <Typography variant="h5" textTransform="capitalize">
               {iconList.name}
             </Typography>
+            {user &&
+            (clicked ?
+              <Tooltip title="Click to REMOVE exercise from workout list">
+                <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
+                  <CheckIcon fontSize="large" />
+                </Button>
+              </Tooltip> :
+
+              <Tooltip title="Click to ADD exercise to workout list">
+                <Button onClick={() => {handleClick(exerciseCardData); }} className="exercise-card-add-btn" >
+                  <AddIcon fontSize="large" />
+                </Button>
+              </Tooltip>)}
           </Stack>
         ))}
       </Stack>

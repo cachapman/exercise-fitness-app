@@ -4,10 +4,15 @@ import { useSelector } from "react-redux";
 const ProtectedUserRoute = () => {
   // Get logged in authorized user information
   const { userInfo } = useSelector((state) => state.auth);
+  const user = userInfo;
+
+  // Verify correct data return in console
+  console.log("user in ProtectedUserRoute.jsx line 7: ", user);
+  console.log("userInfo in ProtectedUserRoute.jsx line 7: ", userInfo);
 
   // If authorized user, continue to Outlet; otherwise redirect to login
   return (
-    userInfo ? <Outlet /> : <Navigate to="/" replace />
+    user ? <Outlet /> : <Navigate to="/" replace />
   )
 };
 
