@@ -27,6 +27,9 @@ const ExerciseDetailPage = () => {
 
       const equipmentExercisesData = await fetchData(`${exerciseDbUrl}/equipment/${exerciseDetailData.equipment}`, exerciseOptions);
       setEquipmentExercises(equipmentExercisesData);
+
+      // Verify correct data return in console
+      console.log("exerciseDetailData from ExerciseDetailPage.jsx line 19: ", exerciseDetailData);
     }
 
     fetchExercisesData();
@@ -41,11 +44,11 @@ const ExerciseDetailPage = () => {
   // console.log("id from ExerciseDetailPage.jsx line 33: ", id);
   // console.log("id from ExerciseDetailPage.jsx line 36: ", id);
 
-  if (!exerciseDetailToDisplay) return <div>No Exercise Data to Display, please try search again.</div>
+  if (!exerciseDetailToDisplay) return <div>Loading... No Exercise Data to Display, please try search again.</div>
 
   return (
     <Box paddingTop="50px">
-      <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} />
+      <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} exercise={{ id }} />
       <SimilarExercises targetMuscleExercises={filteredTargetMuscleExercises} targetBodyPartExercises={filteredTargetBodyPartExercises} equipmentExercises={filteredEquipmentExercises} />
     </Box>
   )

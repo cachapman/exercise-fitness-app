@@ -6,16 +6,12 @@ import HorizontalExerciseScrollbar from "../components/HorizontalExerciseScrollb
 import Exercises from "../components/Exercises";
 
 const ExercisesDashboard = ({ workout, setWorkout }) => {
-  const { userInfo } = useSelector((state) => state.auth);
-  const [user, setUser] = useState([userInfo]);
+  const user = useSelector((state) => state.auth.userInfo);
   const [bodyPart, setBodyPart] = useState(["all"]);
   const [exercises, setExercises] = useState([]);
-  const [equipment, setEquipment] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("userInfo from ExercisesDashboard.jsx line 9: ", userInfo);
-  console.log("user from ExercisesDashboard.jsx line 39: ", user);
-  console.log("setUser from ExercisesDashboard.jsx line 40: ", setUser);
+  console.log("user from ExercisesDashboard.jsx line 37: ", user);
   
   return (
     <>
@@ -34,10 +30,7 @@ const ExercisesDashboard = ({ workout, setWorkout }) => {
           setExercises={setExercises} 
           bodyPart={bodyPart} 
           setBodyPart={setBodyPart}
-          equipment={equipment}
-          setEquipment={setEquipment}
           user={user}
-          setUser={setUser}
           workout={workout}
           setWorkout={setWorkout}
           />

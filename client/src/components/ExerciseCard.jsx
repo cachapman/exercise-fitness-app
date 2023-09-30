@@ -1,31 +1,40 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import "../index.scss";
 import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
 
-const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
-  
+const ExerciseCard = ({ exercise, workout, setWorkout }) => {
+  // Get logged in authorized user information
+  const { userInfo } = useSelector((state) => state.auth);
+  const user = userInfo;
+
   const [clicked, setClicked] = useState(false);
-  
-  const exerciseCardData = {
-    userId: user?.userId,
+
+  const initialExerciseCardData = {
+    userId: user.userId,
     exercise: exercise,
     exerciseId: exercise.id,
   };
   // Verify correct data return in console
-  // console.log("exerciseCardData from ExerciseCard.jsx line 14: ", exerciseCardData);
-  // console.log("user from ExerciseCard.jsx line 10: ", user);
-  // console.log("user.userId from ExerciseCard.jsx line 15: ", user?.userId);
-  // console.log("exercise from ExerciseCard.jsx line 16: ", exercise);
-  console.log("exercise.id from ExerciseCard.jsx line 17: ", exercise.id);
+  console.log("exerciseCardData from ExerciseCard.jsx line 18: ", initialExerciseCardData);
+  console.log("user from ExerciseCard.jsx line 13: ", userInfo);
+  console.log("user from ExerciseCard.jsx line 14: ", user);
+  console.log("user.userId from ExerciseCard.jsx line 19: ", user.userId);
+  console.log("exercise from ExerciseCard.jsx line 20: ", exercise);
+  console.log("exercise.id from ExerciseCard.jsx line 21: ", exercise.id);
+
+  // Use a state variable to track exerciseCardData and update it
+  const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
 
   const [saveExercise] = useSaveExercisesMutation();
   const [deleteExercise] = useDeleteSavedExercisesMutation();
   
+  // Define the function to handle the click event
   const handleClick = async (exerciseCardData) => {
     if (clicked) {
       try {
@@ -57,7 +66,14 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
   useEffect(() => {
     // Set the initial click state based on whether the exercise is in the workout
     setClicked(!!inWorkout);
-  }, [workout, exercise, inWorkout]);
+
+    // Update exerciseCardData whenever the user or exercise props change
+    setExerciseCardData({
+      userId: user.userId,
+      exercise: exercise,
+      exerciseId: exercise.id,
+    });
+  }, [workout, exercise, inWorkout, user]);
 
   return (
     <Box className="exercise-card">
@@ -76,13 +92,17 @@ const ExerciseCard = ({ exercise, user, workout, setWorkout }) => {
         </Button>
           {user &&
             (clicked ?
-              <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
-                <CheckIcon fontSize="large" />
-              </Button> :
+              <Tooltip title="Click to REMOVE exercise from workout list">
+                <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
+                  <CheckIcon fontSize="large" />
+                </Button>
+              </Tooltip> :
 
-              <Button onClick={() => {handleClick(exerciseCardData); }} className="exercise-card-add-btn" >
-                <AddIcon fontSize="large" />
-              </Button>)
+              <Tooltip title="Click to ADD exercise to workout list">
+                <Button onClick={() => {handleClick(exerciseCardData); }} className="exercise-card-add-btn" >
+                  <AddIcon fontSize="large" />
+                </Button>
+              </Tooltip>)
           }
       </Stack>
       <Link className="exercise-card-name" to={`/exercise/${exercise.id}`}>
