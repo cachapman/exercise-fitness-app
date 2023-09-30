@@ -58,6 +58,7 @@ const saveExercises = asyncHandler (async (request, response) => {
 // @route         PUT /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const updateSavedExercises = asyncHandler (async (request, response) => {
+
   // Check for user credentials with logic in userModel
   let userId = request.user._id;
   const user = await User.findById(userId);
@@ -91,7 +92,10 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
 // @route         GET /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const fetchSavedExercises = asyncHandler (async (request, response) => {
-  const user = await User.findById(request.user._id);
+
+  // Check for user credentials with logic in userModel
+  let userId = request.user._id;
+  const user = await User.findById(userId);
 
   if (user) {
     const userId = request.params("_id");
@@ -114,7 +118,10 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 // @route         DELETE /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercises = asyncHandler (async (request, response) => {
-  const user = await User.findById(request.user._id);
+  
+  // Check for user credentials with logic in userModel
+  let userId = request.user._id;
+  const user = await User.findById(userId);
 
   if (user) {
     const userId = request.params("_id");

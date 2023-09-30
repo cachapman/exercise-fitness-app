@@ -45,15 +45,13 @@ const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
     const initialExerciseCardData = {
       userId: user.userId,
       exercise: exercise,
-      exerciseId: id,
     };
     // Verify correct data return in console
-    console.log("exerciseCardData from Detail.jsx line 44: ", initialExerciseCardData);
+    console.log("initialExerciseCardData from Detail.jsx line 45: ", initialExerciseCardData);
     console.log("user from Detail.jsx line 40: ", userInfo);
     console.log("user from Detail.jsx line 40: ", user);
-    console.log("user.userId from Detail.jsx line 45: ", user.userId);
-    console.log("exercise from Detail.jsx line 46: ", exercise);
-    console.log("exercise.id from Detail.jsx line 47: ", id);
+    console.log("user.userId from Detail.jsx line 46: ", user.userId);
+    console.log("exercise.id from Detail.jsx line 47: ", exercise);
   
     // Use a state variable to track exerciseCardData and update it
     const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
@@ -98,7 +96,6 @@ const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
       setExerciseCardData({
         userId: user.userId,
         exercise: exercise,
-        exerciseId: exercise.id,
       });
     }, [workout, exercise, inWorkout, user]);
 
