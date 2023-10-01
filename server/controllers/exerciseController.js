@@ -19,13 +19,15 @@ const saveExercises = asyncHandler (async (request, response) => {
       secondaryMuscles,
     } = request.body.exercise; // Extract exercise details
 
-    console.log("request.body from exerciseController.js",request.body);
+    // Verify correct data return in console
+    console.log("request.body from exerciseController.js ", request.body);
+    console.log("userID from exerciseController.js ", request.user._id);
 
     // Check if the exercise is already saved by the user
     const user = await User.findById(userId);
     if (!user) {
       response.status(401);
-      throw new Error("Unauthorized Access");      
+      throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
     const exercise = await SavedExerciseList.findOne({
@@ -72,12 +74,17 @@ const saveExercises = asyncHandler (async (request, response) => {
 // @route         PUT /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const updateSavedExercises = asyncHandler (async (request, response) => {
+  try {
+    const userId = request.user._id;
 
-  // Check for user credentials with logic in userModel
-  let userId = request.user._id;
-  const user = await User.findById(userId);
-
-  if (user) {
+    // Find the user with authorized credentials
+    const user = await User.findById(userId);
+    if (!user) {
+      response.status(401);
+      throw new Error("Unauthorized Access: User not found or invalid credentials.");
+    }
+    
+    // Extract exercise details to update... CODE NEEDS TO BE UPDATED AND VERIFY. Currently undefined.
     const { totalSets, totalReps } = request.body.exercise;
 
     const filter = { user: userId };
@@ -93,12 +100,16 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
 
     await SavedExerciseList.updateOne(filter, { $set: update });
 
+    // Fetch the user's updated saved exercise list
     const savedExercise = await SavedExerciseList.find({ user: userId });
-    
+
     response.status(200).json({ savedExercise });
-  } else {
-    response.status(401);
-    throw new Error("Unauthorized Access");
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
 
@@ -106,24 +117,28 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
 // @route         GET /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const fetchSavedExercises = asyncHandler (async (request, response) => {
+  try {
+    const userId = request.user._id;
 
-  // Check for user credentials with logic in userModel
-  let userId = request.user._id;
-  const user = await User.findById(userId);
+    // Find the user with authorized credentials
+    const user = await User.findById(userId);
+    if (!user) {
+      response.status(401);
+      throw new Error("Unauthorized Access: User not found or invalid credentials.");
+    }
 
-  if (user) {
-    const userId = request.params._id;
-
+    // Fetch the user's saved exercise list
     if (request.user._id == userId) {
-      const savedExercises = await SavedExerciseList.find({ user: userId }).populate("user");      
+      const savedExercises = await SavedExerciseList.find({ user: userId });
+
       response.status(200).json({ savedExercises });
-      }  else {
-      response.status(403);
-      throw new Error("Forbidden Access");
-    } 
-  } else {
-    response.status(401);
-    throw new Error("Unauthorized Access");
+    }
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
 
@@ -132,23 +147,22 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercises = asyncHandler (async (request, response) => {
   try {
-  const userId = request.body.userId;
-  const exerciseId = (request.body.exerciseId).toString(); // Use request.params to get the execiseId from the URL
+    const userId = request.user._id;
+    const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
+    // console.log("userID at Delete from exerciseController.js ", request.user._id);
 
     // Find the user 
     const user = await User.findById(userId);
     if (!user) {
       response.status(401);
-      throw new Error("Unauthorized Access");
+      throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
-
 
     // Find the saved exercise to delete
     const savedExercise = await SavedExerciseList.findOneAndDelete({ 
       exerciseId: exerciseId,
       user: userId,
-    });
-    
+    });    
 
     if (!savedExercise) {
       response.status(404);
@@ -169,8 +183,7 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
       error: error.message,
     });
   }
-});
-    
+});    
 
 export {
   saveExercises,
