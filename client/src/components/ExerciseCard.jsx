@@ -46,6 +46,7 @@ const ExerciseCard = ({ exercise, workout, setWorkout }) => {
       try {
         // Delete the saved exercise
         console.log("exerciseCardParams: ");
+        console.log(exerciseCardParams)
         await deleteExercise(exerciseCardParams);
         setClicked(false);
         // Verify the exerciseCardData return when clicked

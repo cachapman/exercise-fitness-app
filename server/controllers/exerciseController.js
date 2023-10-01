@@ -132,8 +132,8 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercises = asyncHandler (async (request, response) => {
   try {
-  const userId = request.user._id;
-  const exerciseId = request.params.exerciseId; // Use request.params to get the execiseId from the URL
+  const userId = request.body.userId;
+  const exerciseId = (request.body.exerciseId).toString(); // Use request.params to get the execiseId from the URL
 
     // Find the user 
     const user = await User.findById(userId);
@@ -141,23 +141,22 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
       response.status(401);
       throw new Error("Unauthorized Access");
     }
-    console.log("userId: ", userId);
-    console.log("exerciseId: ", exerciseId);
+
 
     // Find the saved exercise to delete
     const savedExercise = await SavedExerciseList.findOneAndDelete({ 
-      _id: exerciseId,
+      exerciseId: exerciseId,
       user: userId,
     });
-    console.log(savedExercise);
     
+
     if (!savedExercise) {
       response.status(404);
       throw new Error("Saved exercise not found");
     }
 
     // Remove the exercise ID from the user's SavedExerciseLisr
-    user.SavedExerciseList.pull(exerciseId);
+    user.SavedExerciseList.pull(savedExercise._id);
     await user.save();
     
     response.status(200).json({
