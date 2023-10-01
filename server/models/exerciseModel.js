@@ -34,11 +34,10 @@ const SavedExerciseSchema = new Schema({
       type: Array,
       required: true,
     },
-    user: [{ 
+    user: { 
       type: Schema.Types.ObjectId, ref: "User" 
-    }],
-  },
-);
+    },
+  }, { timestamps: true });
 
 const SavedExerciseList = mongoose.model("SavedExerciseList", SavedExerciseSchema);
 

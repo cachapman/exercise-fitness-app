@@ -19,6 +19,8 @@ const saveExercises = asyncHandler (async (request, response) => {
       secondaryMuscles,
     } = request.body.exercise; // Extract exercise details
 
+    console.log("request.body from exerciseController.js",request.body);
+
     // Check if the exercise is already saved by the user
     const user = await User.findById(userId);
     if (!user) {
@@ -139,12 +141,15 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
       response.status(401);
       throw new Error("Unauthorized Access");
     }
+    console.log("userId: ", userId);
+    console.log("exerciseId: ", exerciseId);
 
     // Find the saved exercise to delete
     const savedExercise = await SavedExerciseList.findOneAndDelete({ 
       _id: exerciseId,
       user: userId,
     });
+    console.log(savedExercise);
     
     if (!savedExercise) {
       response.status(404);
@@ -159,6 +164,7 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
       message: "Saved exercise successfully deleted",
     });
   } catch (error) {
+    console.log(error);
     response.status(500).json({
       message: "Internal Server Error",
       error: error.message,
