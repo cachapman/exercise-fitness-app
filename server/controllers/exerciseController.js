@@ -6,51 +6,63 @@ import SavedExerciseList from "../models/exerciseModel.js";
 // @route         POST /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
 const saveExercises = asyncHandler (async (request, response) => {
-
-  // Check for user credentials with logic in userModel
-  let userId = request.user._id;
-  const user = await User.findById(userId);
-
-  if (user) {
+  try {
+    const userId = request.user._id;
     const exerciseId = request.body.exercise.id;
-    const name = request.body.exercise.name;
-    const bodyPart = request.body.exercise.bodyPart;
-    const target = request.body.exercise.target;
-    const secondaryMuscles = request.body.exercise.secondaryMuscles;
-    const equipment = request.body.exercise.equipment;
-    const gifUrl = request.body.exercise.gifUrl;
-    const instructions = request.body.exercise.instructions;
+    const {
+      name,
+      target,
+      gifUrl,
+      bodyPart,
+      equipment,
+      instructions,
+      secondaryMuscles,
+    } = request.body.exercise; // Extract exercise details
 
-    const saveExerciseExist = await SavedExerciseList.findOne({
+    // Check if the exercise is already saved by the user
+    const user = await User.findById(userId);
+    if (!user) {
+      response.status(401);
+      throw new Error("Unauthorized Access");      
+    }
+
+    const exercise = await SavedExerciseList.findOne({
       user: userId,
       exerciseId: exerciseId,
     });
 
-    if (saveExerciseExist === null) {
-      const newSaveExercise = new SavedExerciseList({
-        exerciseId: exerciseId,
-        name: name,
-        bodyPart: bodyPart,
-        target: target,
-        secondaryMuscles: secondaryMuscles,
-        equipment: equipment,
-        gifUrl: gifUrl,
-        instructions: instructions,
-        user: userId,
-      });
-
-      newSaveExercise.save().then(
-        response.status(201).json({
-          message: "New exercise successfully saved",
-        })
-      );
-    } else {
+    if (exercise) {
       response.status(400);
       throw new Error("Exercise is already saved");      
-    } 
-  } else {
-    response.status(401);
-    throw new Error("Unauthorized Access");
+    }
+
+    // Create a new saved exercise
+    const newSaveExercise = new SavedExerciseList({
+      exerciseId: exerciseId,
+      name: name,
+      bodyPart: bodyPart,
+      target: target,
+      secondaryMuscles: secondaryMuscles,
+      equipment: equipment,
+      gifUrl: gifUrl,
+      instructions: instructions,
+      user: userId, // Set the user field to the ObjectId of the user
+    });
+
+    await newSaveExercise.save();
+
+    // Update the user's document to include the saved exercise
+    user.SavedExerciseList.push(newSaveExercise._id);
+    await user.save();
+
+    response.status(201).json({
+      message: "New exercise successfully saved",
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
 
@@ -88,7 +100,7 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can update saved exercise 
+// @description   User can fetch saved exercise 
 // @route         GET /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const fetchSavedExercises = asyncHandler (async (request, response) => {
@@ -98,11 +110,10 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
   const user = await User.findById(userId);
 
   if (user) {
-    const userId = request.params("_id");
+    const userId = request.params._id;
 
     if (request.user._id == userId) {
-      const savedExercises = await SavedExerciseList.find({ user: userId }).sort({ exerciseId: 1 });
-      
+      const savedExercises = await SavedExerciseList.find({ user: userId }).populate("user");      
       response.status(200).json({ savedExercises });
       }  else {
       response.status(403);
@@ -118,30 +129,43 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 // @route         DELETE /api/users/workoutdashboard
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercises = asyncHandler (async (request, response) => {
-  
-  // Check for user credentials with logic in userModel
-  let userId = request.user._id;
-  const user = await User.findById(userId);
+  try {
+  const userId = request.user._id;
+  const exerciseId = request.params.exerciseId; // Use request.params to get the execiseId from the URL
 
-  if (user) {
-    const userId = request.params("_id");
-    const list = await SavedExerciseList.findOne({ user: userId })
+    // Find the user 
+    const user = await User.findById(userId);
+    if (!user) {
+      response.status(401);
+      throw new Error("Unauthorized Access");
+    }
 
-    if (request.user._id == list.user) {
-      await SavedExerciseList.findByIdAndDelete({ exerciseId });
-      
-      response.status(200).json({
-        message: "Saved exercise successfully deleted",
-      });
-      }  else {
-      response.status(403);
-      throw new Error("Forbidden Access");
-    } 
-  } else {
-    response.status(401);
-    throw new Error("Unauthorized Access");
+    // Find the saved exercise to delete
+    const savedExercise = await SavedExerciseList.findOneAndDelete({ 
+      _id: exerciseId,
+      user: userId,
+    });
+    
+    if (!savedExercise) {
+      response.status(404);
+      throw new Error("Saved exercise not found");
+    }
+
+    // Remove the exercise ID from the user's SavedExerciseLisr
+    user.SavedExerciseList.pull(exerciseId);
+    await user.save();
+    
+    response.status(200).json({
+      message: "Saved exercise successfully deleted",
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
+    
 
 export {
   saveExercises,

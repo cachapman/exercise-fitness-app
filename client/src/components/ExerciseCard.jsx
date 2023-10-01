@@ -24,7 +24,15 @@ const ExerciseCard = ({ exercise, workout, setWorkout }) => {
   console.log("user from ExerciseCard.jsx line 13: ", userInfo);
   console.log("user from ExerciseCard.jsx line 14: ", user);
   console.log("user.userId from ExerciseCard.jsx line 19: ", user.userId);
-  console.log("exercise.id from ExerciseCard.jsx line 20: ", exercise);
+  console.log("exercise from ExerciseCard.jsx line 20: ", exercise);
+
+  const exerciseCardParams = {
+    userId: user.userId,
+    exerciseId: exercise.id,
+  };
+    // Verify correct data return in console
+  console.log("user.userId from ExerciseCard.jsx line 30: ", user.userId);
+  console.log("exercise.id from ExerciseCard.jsx line 31: ", exercise.id);
 
   // Use a state variable to track exerciseCardData and update it
   const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
@@ -37,11 +45,11 @@ const ExerciseCard = ({ exercise, workout, setWorkout }) => {
     if (clicked) {
       try {
         // Delete the saved exercise
-        await deleteExercise(exerciseCardData);
+        await deleteExercise(exerciseCardParams);
         setClicked(false);
         // Verify the exerciseCardData return when clicked
-        // console.log("Clicked successful... exerciseCardData deleted:");
-        // console.log(exerciseCardData);
+        console.log("Clicked successful... exerciseCardParams deleted:");
+        console.log(exerciseCardParams);
       } catch (err) {
         toast.error(err?.exerciseCardData?.message || err.error);
       }
