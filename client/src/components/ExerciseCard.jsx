@@ -19,6 +19,7 @@ const ExerciseCard = ({ exercise, workout, setWorkout }) => {
     userId: user.userId,
     exercise: exercise,
   };
+  
   // Verify correct data return in console
   console.log("initialExerciseCardData from ExerciseCard.jsx line 18: ", initialExerciseCardData);
   console.log("user from ExerciseCard.jsx line 13: ", userInfo);
@@ -30,7 +31,8 @@ const ExerciseCard = ({ exercise, workout, setWorkout }) => {
     userId: user.userId,
     exerciseId: exercise.id,
   };
-    // Verify correct data return in console
+  
+  // Verify correct data return in console
   console.log("user.userId from ExerciseCard.jsx line 30: ", user.userId);
   console.log("exercise.id from ExerciseCard.jsx line 31: ", exercise.id);
 

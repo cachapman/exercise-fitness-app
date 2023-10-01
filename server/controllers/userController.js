@@ -23,7 +23,7 @@ const authUser = asyncHandler(async (request, response) => {
     });
   } else {
     response.status(401);
-    throw new Error("Invalid credentials.");
+    throw new Error("Unauthorized Access: User not found or invalid credentials.");
   }
 });
 
@@ -67,7 +67,7 @@ const registerUser = asyncHandler(async (request, response) => {
     });
   } else {
     response.status(401);
-    throw new Error("Invalid user data.");
+    throw new Error("Unauthorized Access: User not found or invalid credentials.");
   }
 }); 
 
