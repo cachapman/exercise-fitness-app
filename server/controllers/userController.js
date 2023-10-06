@@ -19,7 +19,9 @@ const authUser = asyncHandler(async (request, response) => {
       userId: user._id,
       name: user.name,
       email: user.email,
-      SavedExerciseList: [],
+      savedExerciseList: [],
+      workoutList: [],
+      completedWorkoutList: [],
     });
   } else {
     response.status(401);
@@ -52,7 +54,9 @@ const registerUser = asyncHandler(async (request, response) => {
     name,
     email,
     password,
-    SavedExerciseList: [],
+    savedExerciseList: [],
+    workoutList: [],
+    completedWorkoutList: [],
   });
 
   // Generate JWT-cookie along with response
@@ -63,7 +67,9 @@ const registerUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      SavedExerciseList: [],
+      savedExerciseList: [],
+      workoutList: [],
+      completedWorkoutList: [],
     });
   } else {
     response.status(401);
@@ -95,7 +101,9 @@ const getUserProfile = asyncHandler(async (request, response) => {
       _id: request.user._id,
       name: request.user.name,
       email: request.user.email,
-      SavedExerciseList: [],
+      savedExerciseList: [],
+      workoutList: [],
+      completedWorkoutList: [],
     });
 
     // Test return data to confirm in console

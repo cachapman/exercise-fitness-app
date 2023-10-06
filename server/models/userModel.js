@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     type: String, 
     unique: true,
     required: [true, "Username required"],
+    validate: [validator.isAlpha, "Valid username required"],
   },
   email: {
     type: String, 
@@ -20,8 +21,14 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Password required"],
   },
-  SavedExerciseList: [{ 
-    type: Schema.Types.ObjectId, ref: "SavedExerciseList" 
+  savedExerciseList: [{ 
+    type: Schema.Types.ObjectId, ref: "savedExerciseList" 
+  }],
+  workoutList: [{ 
+    type: Schema.Types.ObjectId, ref: "workoutList" 
+  }],
+  completedWorkoutList: [{ 
+    type: Schema.Types.ObjectId, ref: "completedWorkoutList" 
   }],
 }, { timestamps: true });
 

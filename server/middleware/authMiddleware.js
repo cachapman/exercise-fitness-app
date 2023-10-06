@@ -11,18 +11,22 @@ const protectRoute = asyncHandler(async (request, response, next) => {
   if (token) {
     try {
       // Verify token information
+      // decoded will be an object with the id. The id is in the token.
      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
      // Get user information from generated token
      // decoded.keyId must match same variable in generateToken.js
+     // select("-password") will exclude the password from the response.
      request.user = await User.findById(decoded.keyId).select("-password");
 
      next();
     } catch (error) {
+      // Have token, but incorrect
       response.status(401);
-    throw new Error("Not authorized, invalid token!");
+      throw new Error("Not authorized, invalid token!");
     }
   } else {
+    // If no token
     response.status(401);
     throw new Error("Not authorized, no token!");
   }

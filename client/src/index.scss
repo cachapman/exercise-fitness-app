@@ -4,11 +4,6 @@ html {
   width: 100vw;
   scroll-behavior: smooth;
 
-  #name {
-    color: #ff2625;
-    text-decoration: none;
-  }
-
   .navbar.active {
     background: linear-gradient(90deg, #ff2625 0%, #ff2625 100%);
     .menu-icon,

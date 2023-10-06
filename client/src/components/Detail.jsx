@@ -56,6 +56,7 @@ const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
     // Use a state variable to track exerciseCardData and update it
     const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
   
+    // Use Mutation to render data to MongoDB
     const [saveExercise] = useSaveExercisesMutation();
     const [deleteExercise] = useDeleteSavedExercisesMutation();
     

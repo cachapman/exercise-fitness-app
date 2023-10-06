@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
@@ -41,6 +41,7 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
     }
   }, [counter, counterRep, totalSets, totalReps, workout]);
 
+  // Use Mutation to render data to MongoDB
   const [updateSavedExerciseMutation] = useUpdateSavedExercisesMutation();
   const [deleteSavedExerciseMutation] = useDeleteSavedExercisesMutation();
 

@@ -1,11 +1,11 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
-import SavedExerciseList from "../models/exerciseModel.js";
+import savedExerciseList from "../models/exerciseModel.js";
 
 // @description   User can save an exercise to saved exercise list
 // @route         POST /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
-const saveExercises = asyncHandler (async (request, response) => {
+const saveExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     const exerciseId = request.body.exercise.id;
@@ -30,7 +30,7 @@ const saveExercises = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    const exercise = await SavedExerciseList.findOne({
+    const exercise = await savedExerciseList.findOne({
       user: userId,
       exerciseId: exerciseId,
     });
@@ -41,7 +41,7 @@ const saveExercises = asyncHandler (async (request, response) => {
     }
 
     // Create a new saved exercise
-    const newSaveExercise = new SavedExerciseList({
+    const newSaveExercise = new savedExerciseList({
       exerciseId: exerciseId,
       name: name,
       bodyPart: bodyPart,
@@ -56,7 +56,7 @@ const saveExercises = asyncHandler (async (request, response) => {
     await newSaveExercise.save();
 
     // Update the user's document to include the saved exercise
-    user.SavedExerciseList.push(newSaveExercise._id);
+    user.savedExerciseList.push(newSaveExercise._id);
     await user.save();
 
     response.status(201).json({
@@ -71,11 +71,14 @@ const saveExercises = asyncHandler (async (request, response) => {
 });
 
 // @description   User can update saved exercise 
-// @route         PUT /api/users/workoutdashboard
+// @route         PUT /api/users/workoutdashboard/:id
 // @access        Private - can access URL only with token after logging in
-const updateSavedExercises = asyncHandler (async (request, response) => {
+const updateSavedExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
+    const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
+
+    console.log("exerciseID from exerciseController.js ", exerciseId);
 
     // Find the user with authorized credentials
     const user = await User.findById(userId);
@@ -85,7 +88,7 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
     }
     
     // Extract exercise details to update... CODE NEEDS TO BE UPDATED AND VERIFY. Currently undefined.
-    const { totalSets, totalReps } = request.body.exercise;
+    const { totalSets, totalReps } = exerciseId;
 
     const filter = { user: userId };
     const update = {};
@@ -98,10 +101,10 @@ const updateSavedExercises = asyncHandler (async (request, response) => {
       update.totalReps = totalReps;
     }
 
-    await SavedExerciseList.updateOne(filter, { $set: update });
+    await savedExerciseList.findByIdAndUpdate(filter, { $set: update });
 
     // Fetch the user's updated saved exercise list
-    const savedExercise = await SavedExerciseList.find({ user: userId });
+    const savedExercise = await savedExerciseList.find({ user: userId });
 
     response.status(200).json({ savedExercise });
   } catch (error) {
@@ -129,7 +132,7 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 
     // Fetch the user's saved exercise list
     if (request.user._id == userId) {
-      const savedExercises = await SavedExerciseList.find({ user: userId });
+      const savedExercises = await savedExerciseList.find({ user: userId });
 
       response.status(200).json({ savedExercises });
     }
@@ -143,9 +146,9 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 });
 
 // @description   User can delete saved exercise 
-// @route         DELETE /api/users/workoutdashboard
+// @route         DELETE /api/users/workoutdashboard/:id
 // @access        Private - can access URL only with token after logging in
-const deleteSavedExercises = asyncHandler (async (request, response) => {
+const deleteSavedExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
@@ -159,7 +162,7 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
     }
 
     // Find the saved exercise to delete
-    const savedExercise = await SavedExerciseList.findOneAndDelete({ 
+    const savedExercise = await savedExerciseList.findOneAndDelete({ 
       exerciseId: exerciseId,
       user: userId,
     });    
@@ -170,7 +173,7 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
     }
 
     // Remove the exercise ID from the user's SavedExerciseLisr
-    user.SavedExerciseList.pull(savedExercise._id);
+    user.savedExerciseList.pull(savedExercise._id);
     await user.save();
     
     response.status(200).json({
@@ -186,8 +189,8 @@ const deleteSavedExercises = asyncHandler (async (request, response) => {
 });    
 
 export {
-  saveExercises,
-  updateSavedExercises,
+  saveExercise,
+  updateSavedExercise,
   fetchSavedExercises,
-  deleteSavedExercises,
+  deleteSavedExercise,
 };
