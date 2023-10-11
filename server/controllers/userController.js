@@ -19,9 +19,10 @@ const authUser = asyncHandler(async (request, response) => {
       userId: user._id,
       name: user.name,
       email: user.email,
-      savedExerciseList: [],
-      workoutList: [],
-      completedWorkoutList: [],
+      fitnessGoal: user.fitnessGoal,
+      savedExerciseList: user.savedExerciseList,
+      workoutList: user.workoutList,
+      completedWorkoutList: user.completedWorkoutList,
     });
   } else {
     response.status(401);
@@ -33,9 +34,9 @@ const authUser = asyncHandler(async (request, response) => {
 // @route         POST /api/users
 // @access        Public - can access URL without logging in
 const registerUser = asyncHandler(async (request, response) => {
-  const { name, email, password } = request.body;
+  const { name, email, password, fitnessGoal } = request.body;
 
-  if( !name || !email || !password ) {
+  if( !name || !email || !password || !fitnessGoal ) {
     response.status(400);
     throw new Error("Please enter all required information.");
   }
@@ -54,9 +55,7 @@ const registerUser = asyncHandler(async (request, response) => {
     name,
     email,
     password,
-    savedExerciseList: [],
-    workoutList: [],
-    completedWorkoutList: [],
+    fitnessGoal,
   });
 
   // Generate JWT-cookie along with response
@@ -67,9 +66,10 @@ const registerUser = asyncHandler(async (request, response) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      savedExerciseList: [],
-      workoutList: [],
-      completedWorkoutList: [],
+      fitnessGoal: user.fitnessGoal,
+      savedExerciseList: user.savedExerciseList,
+      workoutList: user.workoutList,
+      completedWorkoutList: user.completedWorkoutList,
     });
   } else {
     response.status(401);
@@ -101,20 +101,11 @@ const getUserProfile = asyncHandler(async (request, response) => {
       _id: request.user._id,
       name: request.user.name,
       email: request.user.email,
-      savedExerciseList: [],
-      workoutList: [],
-      completedWorkoutList: [],
+      fitnessGoal: request.user.fitnessGoal,
+      savedExerciseList: request.user.savedExerciseList,
+      workoutList: request.user.workoutList,
+      completedWorkoutList: request.user.completedWorkoutList,
     });
-
-    // Test return data to confirm in console
-    // console.log("request.user._id --- info below");
-    // console.log(request.user._id);
-    // console.log("request.user.id --- info below");
-    // console.log(request.user.id);
-    // console.log("----- user info below");
-    // console.log(user);
-    // console.log("====== done");
-
   } else {
     response.status(404);
     throw new Error("User not found");
@@ -130,6 +121,7 @@ const updateUserProfile = asyncHandler(async (request, response) => {
   if (user) {
     user.name = request.body.name || user.name;
     user.email = request.body.email || user.email;
+    user.fitnessGoal = request.body.fitnessGoal || user.fitnessGoal;
 
     if (request.body.password) {
       user.password = request.body.password;
@@ -141,6 +133,10 @@ const updateUserProfile = asyncHandler(async (request, response) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      fitnessGoal: updatedUser.fitnessGoal,
+      savedExerciseList: updatedUser.savedExerciseList,
+      workoutList: updatedUser.workoutList,
+      completedWorkoutList: updatedUser.completedWorkoutList,
     });
   } else {
     response.status(404);

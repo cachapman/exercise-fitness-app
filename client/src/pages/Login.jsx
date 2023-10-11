@@ -20,9 +20,6 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
-  // Verify correct data return in console
-  // console.log("user in Login.jsx line 7: ", user);
-  console.log("userInfo in Login.jsx line 22: ", userInfo);
 
   // Navigates to dashboard page if login successful
   useEffect(() => {

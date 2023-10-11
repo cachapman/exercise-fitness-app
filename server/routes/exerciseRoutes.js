@@ -7,7 +7,7 @@ const router = express.Router();
 // Logged in users can add, update, view, delete saved exercise list
 router.get("/workoutdashboard", protectRoute, fetchSavedExercises);
 router.post("/workoutdashboard", protectRoute, saveExercise);
-router.put("/workoutdashboard/:id", protectRoute, updateSavedExercise);
-router.delete("/workoutdashboard/:id", protectRoute, deleteSavedExercise);
+router.put("/workoutdashboard/", protectRoute, updateSavedExercise);
+router.delete("/workoutdashboard/", protectRoute, deleteSavedExercise);
 
 export default router;

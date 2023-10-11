@@ -56,7 +56,7 @@ const saveExercise = asyncHandler (async (request, response) => {
     await newSaveExercise.save();
 
     // Update the user's document to include the saved exercise
-    user.savedExerciseList.push(newSaveExercise._id);
+    user.savedExerciseList.push(newSaveExercise);
     await user.save();
 
     response.status(201).json({
@@ -71,21 +71,28 @@ const saveExercise = asyncHandler (async (request, response) => {
 });
 
 // @description   User can update saved exercise 
-// @route         PUT /api/users/workoutdashboard/:id
+// @route         PUT /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
 const updateSavedExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
-    const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
+    // const updateExercise = request.savedExerciseList;
+    const exerciseId = savedExerciseList.findById(request.params.id);
 
-    console.log("exerciseID from exerciseController.js ", exerciseId);
+    // console.log("exerciseID from exerciseController.js ", exerciseId);
 
     // Find the user with authorized credentials
     const user = await User.findById(userId);
     if (!user) {
       response.status(401);
-      throw new Error("Unauthorized Access: User not found or invalid credentials.");
+      throw new Error("Unauthorized Access: User not found.");
     }
+
+    // Make sure the logged in user matches the savedExercises user
+    // if (savedExerciseList.user.toString() !== user._id) {
+    //   response.status(401);
+    //   throw new Error("Unauthorized Access: invalid credentials.");
+    // }
     
     // Extract exercise details to update... CODE NEEDS TO BE UPDATED AND VERIFY. Currently undefined.
     const { totalSets, totalReps } = exerciseId;
@@ -146,7 +153,7 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 });
 
 // @description   User can delete saved exercise 
-// @route         DELETE /api/users/workoutdashboard/:id
+// @route         DELETE /api/users/workoutdashboard/
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercise = asyncHandler (async (request, response) => {
   try {

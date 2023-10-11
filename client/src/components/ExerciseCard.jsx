@@ -7,124 +7,81 @@ import CheckIcon from "@mui/icons-material/Check";
 import "../index.scss";
 import { toast } from "react-toastify";
 import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
-import {
-  savingExerciseToListStarted,
-  savingExerciseToListCompleted,
-  deletingExerciseToListStarted,
-  deletingExerciseToListCompleted,
-  saveExerciseToList,
-  deleteExerciseToList,
-} from "../slices/authSlice";
+import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 
 const ExerciseCard = ({ exercise, workoutList, setWorkout }) => {
   // Get logged in authorized user information
   const { userInfo } = useSelector((state) => state.auth);
   const user = userInfo;
-  const dispatch = useDispatch();
 
-  const [clicked, setClicked] = useState(false);
-  // Use a state variable to track exerciseCardData and update it
-  const [exerciseCardData, setExerciseCardData] = useState({
+  // State to track whether the exercise is saved
+  const [isSaved, setIsSaved] = useState(false);
+
+  // Data for the current exercise card
+  const exerciseCardData = {
     userId: user.userId,
     exercise: exercise,
-  });
+  };
   
+  // Parameters for the exercise
   const exerciseCardParams = {
     userId: user.userId,
     exerciseId: exercise.id,
   };
 
-  // Verify correct data return in console
-  console.log("userInfo from ExerciseCard.jsx line 21: ", userInfo);
-  console.log("user from ExerciseCard.jsx line 22: ", user);
-  console.log("user.userId from ExerciseCard.jsx line 28: ", user.userId);
-  console.log("exercise from ExerciseCard.jsx line 29: ", exercise);
-  console.log("exerciseCardParams from ExerciseCard.jsx line 32: ", exerciseCardParams);
-  console.log("user.userId from ExerciseCard.jsx line 33: ", user.userId);
-  console.log("exercise.id from ExerciseCard.jsx line 34: ", exercise.id);
+  // Initialize useDispatch to dispatch the save exercise action
+  const dispatch = useDispatch();
 
   // Use Mutation to render data to MongoDB
   const [saveExercise] = useSaveExercisesMutation();
   const [deleteExercise] = useDeleteSavedExercisesMutation();
   
   // Define the function to handle the click event
-  const handleClick = async (exerciseCardData) => {
-    if (clicked) {
-      try {
-        // Dispatch action: deleting exercise started
-        dispatch(deletingExerciseToListStarted());
-
-        // Delete the saved exercise
-        console.log("exerciseCardParams: ");
-        console.log(exerciseCardParams)
-
-        const response = await deleteExercise(exerciseCardParams);
-
-        if (response.data) {
-          // The API call was successful, and valid data received. 
-          console.log("before clicked? line 69 ", response.data);
-          // Update Redux state with new savedExerciseList
-          dispatch(deleteExerciseToList(exerciseCardParams.exerciseId));
-          setClicked(false);
-          toast.success("Exercise removed successfully!");
-          // Verify the exerciseCardData return when clicked
-          console.log("Clicked successful... exerciseCardParams deleted:");
-          console.log(exerciseCardParams);
-          console.log(exerciseCardParams.exerciseId);
-          console.log("Clicked successful... response.data deleted:");
-          console.log(response.data);
-        }
-
-        // Dispatch action: deleting exercise completed
-        dispatch(deletingExerciseToListCompleted());
-      } catch (err) {
-        toast.error(err?.exerciseCardData?.message || err.error);
-        // Handle error and dispatch action: show current savedExerciseList
-        dispatch(deleteExerciseToList());
+  const handleExerciseClick = async () => {
+    try {
+      if (isSaved) {
+        await handleRemoveExercise(exerciseCardParams);
+      } else {
+        await handleSaveExercise(exerciseCardData);
       }
-    } else {
-      try {
-        // Dispatch action: saving exercise started
-        dispatch(savingExerciseToListStarted());
-
-        // Save the exercise
-        const response = await saveExercise(exerciseCardData);
-
-        if (response.data) {
-          // Update Redux state with new savedExerciseList
-          dispatch(saveExerciseToList(exerciseCardData.exercise));
-          setClicked(true);
-          toast.success("New exercise saved successfully!");
-          // Verify the exerciseCardData return when clicked
-          console.log("Clicked successful... exerciseCardData saved:");
-          console.log(exerciseCardData);
-          console.log("Clicked successful... response.data saved:");
-          console.log(response.data);
-          console.log("current user state info: ", user);
-        }
-
-        // Dispatch action: saving exercise completed
-        dispatch(savingExerciseToListCompleted());
-      } catch (err) {
-        toast.error(err?.exerciseCardData?.message || err.error);
-        // Handle error and dispatch action: show current savedExerciseList
-        dispatch(saveExerciseToList());
-      }
+    } catch (err) {
+      toast.error(err?.exerciseCardData?.message || err.error);
     }
   };
-  
+
+  const handleSaveExercise = async (exerciseCardData) => {
+    await saveExercise(exerciseCardData);
+    setIsSaved(true);
+    // Dispatch the action to add the exercise to savedExericseList
+    dispatch(addSavedExerciseToList(exercise));
+    // Verify the exerciseCardData return when clicked
+    console.log("Clicked successful... exerciseCardData saved from ExerciseCard.jsx line 54: ", exerciseCardData);
+    console.log("Clicked successful... exercise saved from ExerciseCard.jsx line 57: ", exercise);
+  };
+
+  const handleRemoveExercise = async (exerciseCardParams) => {
+    await deleteExercise(exerciseCardParams);
+    setIsSaved(false);
+    // Dispatch the action to add the exercise to savedExericseList
+    dispatch(removeSavedExerciseFromList(exercise));
+    // Verify the exerciseCardParams return when clicked
+    console.log("Clicked successful... exerciseCardParams removed from ExerciseCard.jsx line 63: ", exerciseCardParams);
+    console.log("Clicked successful... exercise saved from ExerciseCard.jsx line 66: ", exercise);
+  };
+
+  // Determine if the exercise is in the userInfo workout list
   const inWorkoutList = workoutList?.find(element => element.exerciseId === exercise.id);
 
   useEffect(() => {
-    // Set the initial click state based on whether the exercise is in the workoutList
-    setClicked(!!inWorkoutList);
+    // Set the initial saved state based on whether the exercise is in the workoutList
+    setIsSaved(!!inWorkoutList);
 
     // Update exerciseCardData whenever the user or exercise props change
-    setExerciseCardData({
-      userId: user.userId,
-      exercise: exercise,
-    });
-  }, [workoutList, exercise, inWorkoutList, user]);
+    // setExerciseCardData({
+    //   userId: user.userId,
+    //   exercise: exercise,
+    // });
+  }, [workoutList, exercise, inWorkoutList]);
 
   return (
     <Box className="exercise-card">
@@ -141,20 +98,13 @@ const ExerciseCard = ({ exercise, workoutList, setWorkout }) => {
         <Button className="exercise-card-btn" sx={{ ml: "21px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
           {exercise.equipment}
         </Button>
-          {user &&
-            (clicked ?
-              <Tooltip title="Click to REMOVE exercise from workout list">
-                <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
-                  <CheckIcon fontSize="large" />
+          {user && (
+              <Tooltip title={`Click to ${isSaved ? "REMOVE" : "ADD"} exercise ${isSaved ? "from" : "to"} your saved exercise list`}>
+                <Button onClick={handleExerciseClick}  className={`exercise-card-${isSaved ? "check" : "add"}-btn`}>
+                  {isSaved ? <CheckIcon fontSize="large" /> : <AddIcon fontSize="large" />}
                 </Button>
-              </Tooltip> :
-
-              <Tooltip title="Click to ADD exercise to workout list">
-                <Button onClick={() => {handleClick(exerciseCardData); }} className="exercise-card-add-btn" >
-                  <AddIcon fontSize="large" />
-                </Button>
-              </Tooltip>)
-          }
+              </Tooltip>
+          )}
       </Stack>
       <Link className="exercise-card-name" to={`/exercise/${exercise.id}`}>
         <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }} >

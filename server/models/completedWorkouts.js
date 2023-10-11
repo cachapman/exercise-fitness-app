@@ -6,10 +6,9 @@ const CompletedWorkoutsSchema = new Schema({
     type: String,
     required: true,
   },
-  workouts: {
-    type: Array,
-    required: true,
-  },
+  workouts: [{
+    type: Schema.Types.ObjectId, ref: "workoutList"
+  }],
   user: { 
     type: Schema.Types.ObjectId, ref: "User" 
   },

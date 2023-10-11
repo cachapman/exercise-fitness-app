@@ -7,8 +7,8 @@ const ProtectedUserRoute = () => {
   const user = userInfo;
 
   // Verify correct data return in console
-  console.log("user in ProtectedUserRoute.jsx line 7: ", user);
-  console.log("userInfo in ProtectedUserRoute.jsx line 7: ", userInfo);
+  // console.log("user in ProtectedUserRoute.jsx line 7: ", user);
+  // console.log("userInfo in ProtectedUserRoute.jsx line 7: ", userInfo);
 
   // If authorized user, continue to Outlet; otherwise redirect to login
   return (

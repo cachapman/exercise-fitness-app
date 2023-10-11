@@ -1,59 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Set user credentials to local storage and remove them when logout
-
 const initialState = {
   userInfo: localStorage.getItem("userInfo") 
-  ? JSON.parse(localStorage.getItem("userInfo")) 
-  : {
-      userId: "",
-      name: "",
-      email: "",
-      savedExerciseList: [], // Initialize the state for saved exercises
-      workoutList: [], // Initialize the state for saved workouts
-      completedWorkoutList: [], // Initialize the state for saved completed workouts
-      savingExercise: false, // Flag to indicate if a save operation is in progress
-      deletingExercise: false, // Flag to indicate if a delete operation is in progress
-    },
+    ? JSON.parse(localStorage.getItem("userInfo")) 
+    : null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    // Action to set userInfo to local storage when logged in
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
+    // Action to remove userInfo from local storage when logged out
     clearCredentials: (state, action) => {
       state.userInfo = null;
       localStorage.removeItem("userInfo");
     },
-    // Action to save an exercise
-    saveExerciseToList: (state, action) => {
+    // Action to add an exercise to the userInfo savedExericseList array
+    addSavedExerciseToList: (state, action) => {
       state.userInfo.savedExerciseList.push(action.payload);
-      console.log("saveExerciseToList: ", action.payload);
+      // Update the saved data in local storage
+      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
     },
-    // Action to delete an exercise
-    deleteExerciseToList: (state, action) => {
-      const exerciseIdToDelete = action.payload;
-      state.userInfo.savedExerciseList = state.userInfo.savedExerciseList.filter((exercise) => exercise.id !== exerciseIdToDelete);
-    },
-    // Action to indicate that saving an exercise has started
-    savingExerciseToListStarted: (state) => {
-      state.userInfo.savingExercise = true;
-    },
-    // Action to indicate that saving an exercise has completed
-    savingExerciseToListCompleted: (state) => {
-      state.userInfo.savingExercise = false;
-    },
-    // Action to indicate that deleting an exercise has started
-    deletingExerciseToListStarted: (state) => {
-      state.userInfo.deletingExercise = true;
-    },
-    // Action to indicate that deleting an exercise has completed
-    deletingExerciseToListCompleted: (state) => {
-      state.userInfo.deletingExercise = false;
+    // Action to remove an exercise from the userInfo savedExericseList array
+    removeSavedExerciseFromList: (state, action) => {
+      state.userInfo.savedExerciseList = state.userInfo.savedExerciseList.filter(
+        (exercise) => exercise.id !== action.payload.id);
+      // Update the saved data in local storage
+      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
     },
   },
 });
@@ -61,12 +39,8 @@ const authSlice = createSlice({
 export const { 
   setCredentials, 
   clearCredentials,
-  saveExerciseToList,
-  deleteExerciseToList,
-  savingExerciseToListStarted,
-  savingExerciseToListCompleted,
-  deletingExerciseToListStarted,
-  deletingExerciseToListCompleted,
+  addSavedExerciseToList,
+  removeSavedExerciseFromList,
  } = authSlice.actions;
 
 export default authSlice.reducer;

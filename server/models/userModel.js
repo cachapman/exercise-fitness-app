@@ -9,7 +9,6 @@ const UserSchema = new Schema({
     type: String, 
     unique: true,
     required: [true, "Username required"],
-    validate: [validator.isAlpha, "Valid username required"],
   },
   email: {
     type: String, 
@@ -20,6 +19,10 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: [true, "Password required"],
+  },
+  fitnessGoal: {
+    type: String,
+    description: "User's fitness goal(s)",
   },
   savedExerciseList: [{ 
     type: Schema.Types.ObjectId, ref: "savedExerciseList" 

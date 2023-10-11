@@ -25,10 +25,12 @@ const DashboardHero = () => {
           Welcome {userInfo && userInfo.name} to your Dashboard!
         </Typography>
         <Typography fontWeight="700" sx={{ fontSize: { lg: "44px", xs: "40px"}}}>
-          Plan your workout and <br /> track your progress!
+          Plan your workout and <br /> 
+          let's accomplish your fitness <br /> 
+          goal to {userInfo && userInfo.fitnessGoal}!
         </Typography>
         <Typography fontSize="22px" lineHeight="35px">
-          Select an exercise and learn how to safely perform them.
+          Search for an exercise and learn how to safely perform it.
         </Typography>
         <Link to="/exercise">
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>

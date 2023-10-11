@@ -17,6 +17,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [fitnessGoal, setFitnessGoal] = useState('');
 
   const [register, { isLoading }] = useRegisterMutation();
 
@@ -42,7 +43,7 @@ const Register = () => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const response = await register({ name, email, password }).unwrap();
+        const response = await register({ name, email, password, fitnessGoal }).unwrap();
         dispatch(setCredentials({...response}));
         navigate("/dashboard");
       } catch (err) {
@@ -69,7 +70,7 @@ const Register = () => {
             </div>
           </div>
           <Form onSubmit={onSubmit}>
-            <FloatingLabel className="my-2" controlId="floatingInput" label="Username">
+            <FloatingLabel className="my-2" controlId="name" label="Username">
               <Form.Control 
                 type="text"
                 value={name}
@@ -102,6 +103,15 @@ const Register = () => {
                 value={passwordConfirm}
                 placeholder="Confirm Password"
                 onChange={(event) => setPasswordConfirm(event.target.value)}
+              ></Form.Control>
+            </FloatingLabel>
+
+            <FloatingLabel className="my-2" controlId="fitnessGoal" label="Fitness Goal">
+              <Form.Control 
+                type="text"
+                value={fitnessGoal}
+                placeholder="Fitness Goal"
+                onChange={(event) => setFitnessGoal(event.target.value)}
               ></Form.Control>
             </FloatingLabel>
 
