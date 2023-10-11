@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { exerciseOptions, fetchData } from "../slices/exerciseSlice";
 import "../index.scss";
-// import HorizontalExerciseScrollbar from "./HorizontalExerciseScrollbar";
+import { useGetAllExercisesQuery } from "../slices/exercisesUserApiSlice";
 
 const SearchExercisesBar = ({ setExercises }) => {
   const [search, setSearch] = useState('');
 
+  const { data: exercisesData = [] } = useGetAllExercisesQuery();
+
   const handleSearch = async () => {
     //Check for non-empty search term
     if(search.trim() !== '') {
-      const exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercises?limit=1500", exerciseOptions);
-
       const searchedExercisesTerm = exercisesData.filter(
         (exercise) => exercise.name?.toLowerCase().includes(search.trim()) 
         || exercise.target?.toLowerCase().includes(search.trim())
@@ -19,17 +18,11 @@ const SearchExercisesBar = ({ setExercises }) => {
         || exercise.bodyPart?.toLowerCase().includes(search.trim())
       );
 
-      // Check console to see the list of exercise data return
-      // console.log("exercisesData from SearchExercisesBar.jsx line 24: ", exercisesData); 
-      // console.log("searchedExercisesTerm from SearchExercisesBar.jsx line 26: ", searchedExercisesTerm);
-
       window.scrollTo({ top: 750, left: 100, behavior: "smooth" });
       setSearch('');
       setExercises(searchedExercisesTerm);
     }
   };
-
-  // console.log("search.trim() from SearchExercisesBar.jsx line 23: ", search.trim());
 
   const handleKeyDown = event => {
     if (event.key === "Enter") {

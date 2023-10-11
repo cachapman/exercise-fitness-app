@@ -39,6 +39,6 @@ const SavedExerciseSchema = new Schema({
     },
   }, { timestamps: true });
 
-const SavedExerciseList = mongoose.model("SavedExerciseList", SavedExerciseSchema);
+const savedExerciseList = mongoose.model("savedExerciseList", SavedExerciseSchema);
 
-export default SavedExerciseList;
+export default savedExerciseList;

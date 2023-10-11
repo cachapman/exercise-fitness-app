@@ -23,7 +23,7 @@ const Exercises = ({
       if(bodyPart === "all") {
         exercisesData = await fetchData(`${exerciseDbUrl}?limit=1500`, exerciseOptions);
       } else {
-        exercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${bodyPart}?limit=1500`, exerciseOptions);
+        exercisesData = await fetchData(`${exerciseDbUrl}/bodyPart/${bodyPart}?limit=500`, exerciseOptions);
       } 
       
       setExercises(exercisesData);
