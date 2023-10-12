@@ -50,13 +50,17 @@ const ExerciseCard = ({ exercise, workoutList, setWorkout }) => {
   };
 
   const handleSaveExercise = async (exerciseCardData) => {
-    await saveExercise(exerciseCardData);
-    setIsSaved(true);
-    // Dispatch the action to add the exercise to savedExericseList
-    dispatch(addSavedExerciseToList(exercise));
-    // Verify the exerciseCardData return when clicked
-    console.log("Clicked successful... exerciseCardData saved from ExerciseCard.jsx line 54: ", exerciseCardData);
-    console.log("Clicked successful... exercise saved from ExerciseCard.jsx line 57: ", exercise);
+    // Check if the exercise is already saved
+    if (userInfo.savedExerciseList.some(savedExercise => savedExercise.exerciseId === exercise.id)) {
+      toast.warning("Exercise is already in your saved exercise list");
+    } else {
+      // Exercise is not in the saved exercise list, can proceed to save it
+      await saveExercise(exerciseCardData);
+      setIsSaved(true);
+      // Dispatch the action to add the exercise to savedExericseList
+      dispatch(addSavedExerciseToList(exercise));
+      toast.success("Exercise added successfully to your saved exercise list");
+    }
   };
 
   const handleRemoveExercise = async (exerciseCardParams) => {
@@ -64,9 +68,7 @@ const ExerciseCard = ({ exercise, workoutList, setWorkout }) => {
     setIsSaved(false);
     // Dispatch the action to add the exercise to savedExericseList
     dispatch(removeSavedExerciseFromList(exercise));
-    // Verify the exerciseCardParams return when clicked
-    console.log("Clicked successful... exerciseCardParams removed from ExerciseCard.jsx line 63: ", exerciseCardParams);
-    console.log("Clicked successful... exercise saved from ExerciseCard.jsx line 66: ", exercise);
+    toast.success("Exercise removed successfully from your saved exercise list");
   };
 
   // Determine if the exercise is in the userInfo workout list
