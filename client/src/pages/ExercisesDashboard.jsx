@@ -1,13 +1,13 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Stack, Typography } from "@mui/material";
+import { useLazyGetAllExercisesQuery } from "../slices/exercisesDBsApiSlice";
+import { setDataFromApiLoading, setPreviousSearchResults, setReduxDataFetched, setReduxExercises } from "../slices/exerciseSlice";
 import SearchExercisesBar from "../components/SearchExercisesBar";
 import HorizontalBodyPartScrollbar from "../components/HorizontalBodyPartScrollbar";
 import ExerciseResultsList from "../components/ExerciseResultsList";
-import { useDispatch, useSelector } from "react-redux";
-import { useLazyGetAllExercisesQuery } from "../slices/exercisesDBsApiSlice";
-import { setDataFromApiLoading, setPreviousSearchResults, setReduxDataFetched, setReduxExercises } from "../slices/exerciseSlice";
 import Loader from "../components/Loader";
-import { useLocation } from "react-router-dom";
 
 /**
  * ExercisesDashboard is the parent component that displays input search bar, horizontal bodyPart scroll bar, and exercises.

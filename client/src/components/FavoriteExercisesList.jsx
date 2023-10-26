@@ -5,15 +5,15 @@ import { Box, Pagination, Stack } from "@mui/material";
 import ExerciseCard from "./ExerciseCard";
 
 /**
- * ExerciseResultsList is the child component of ExercisesDashboard that displays exercise search results list.
+ * FavoriteExercisesList is the child component of FaveExercisesDashboard that displays exercise list.
  * 
- * ExerciseResultsList is the parent component of ExerciseCard that displays exercise search results list.
+ * FavoriteExercisesList is the parent component of ExerciseCard that displays exercise search results list.
  * 
- * @param {Object} props - Props containing currentPage, setCurrentPage, searchedExercisesTerm, selectedBodyPartExercises, and user.
- * @returns {JSX.Element} - A component for organizing the display of the exercise results list.
+ * @param {Object} props - Props containing currentPage, setCurrentPage, and user.
+ * @returns {JSX.Element} - A component for organizing the display of user's favorite exercises list.
  */
 
-const ExerciseResultsList = ({ currentPage, setCurrentPage, searchedExercisesTerm, selectedBodyPartExercises, user }) => {
+const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,24 +21,21 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, searchedExercisesTer
   const [exercisesPerPage] = useState(12);
 
   // Redux setup
-  const previousExercises = useSelector((state) => state.exercisesReduxState.previousSearchResults);
-
-  // Display either previousExercises, search results, or selected bodyPart
-  const exercises = previousExercises.length === 0 ? (searchedExercisesTerm || selectedBodyPartExercises) : previousExercises;
+  const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
 
   // Pagination 
   const indexOfLastExercise = currentPage * exercisesPerPage;
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
 
-  // Memoize the currentExercises array
-  const currentExercises = useMemo(() => {
-    return Array.isArray(exercises) ? exercises.slice(indexOfFirstExercise, indexOfLastExercise) : [];
-  }, [exercises, indexOfFirstExercise, indexOfLastExercise]);
+  // Memoize the currentFavoriteExercisesList array
+  const currentFavoriteExercisesList = useMemo(() => {
+    return Array.isArray(savedFavoriteExercisesList) ? savedFavoriteExercisesList.slice(indexOfFirstExercise, indexOfLastExercise) : [];
+  }, [savedFavoriteExercisesList, indexOfFirstExercise, indexOfLastExercise]);
 
   // Handle pagination change
   const paginate = (event, value) => {
     setCurrentPage(value);
-    console.log("currentPage value at ExerciseResultsList.jsx: ", value);
+    console.log("currentPage value at FavoriteExercisesList.jsx: ", value);
 
     // Update the URL with the current page number
     const searchParams = new URLSearchParams(location.search);
@@ -46,7 +43,7 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, searchedExercisesTer
     navigate(`${location.pathname}?${searchParams.toString()}`);
 
     // Scroll to the top of the exercises container for a smooth transition
-    window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -63,19 +60,19 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, searchedExercisesTer
         justifyContent="center"
       >
         {/* Map and render exercise cards */}
-        {user && currentExercises.map((exercise) => (
+        {user && currentFavoriteExercisesList.map((exercise) => (
           <ExerciseCard key={exercise.id} exercise={exercise} user={user} currentPage={currentPage} />
         ))}
       </Stack>
 
       <Stack mt="100px" paddingBottom="100px" alignItems="center">
-        {exercises && exercises.length > 12 && (
+        {savedFavoriteExercisesList && savedFavoriteExercisesList.length > 12 && (
           // Render pagination controls
           <Pagination 
             color="standard" 
             shape="rounded"
             defaultPage={currentPage}
-            count={Math.ceil(exercises.length / exercisesPerPage)}
+            count={Math.ceil(savedFavoriteExercisesList.length / exercisesPerPage)}
             page={currentPage}
             onChange={paginate}
             size="large"
@@ -86,4 +83,4 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, searchedExercisesTer
   )
 };
 
-export default ExerciseResultsList;
+export default FavoriteExercisesList;

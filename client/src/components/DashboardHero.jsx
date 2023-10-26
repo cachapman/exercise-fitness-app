@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import '@fontsource/roboto/700.css';
 import AnatomyHeroBannerImage from "../assets/icons/anatomy.png";
+import SearchAdd from "../assets/icons/search-add.png";
+import FaveList from "../assets/icons/favorites-list.png";
+import WorkoutImage from "../assets/icons/sport-color.png";
+import CompletedWorkoutImage from "../assets/icons/workout-calendar.png";
 
 /**
  * DashboardHero component to display the dashboard's welcome message and options.
@@ -36,30 +40,64 @@ const DashboardHero = () => {
           goal to {userInfo && userInfo.fitnessGoal}!
         </Typography>
         <Typography fontSize="22px" lineHeight="35px">
-          Search for any exercise and learn how to safely perform it.
+          Search for any exercises and learn how to safely perform them.
         </Typography>
         <Link to="/exercise">
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            Search and save exercises for workout
+          <img 
+              src={SearchAdd} 
+              alt="favorite exercises list" 
+              style={{ 
+                width: "32px", 
+                height: "32px", 
+                verticalAlign: "center",
+                marginRight: "7px",
+              }}
+            /> Search and add exercises to favorites list
           </Button> 
         </Link>
         <br />
-        <Link to="/savedexercisesdashboard">
+        <Link to="/favoriteexercisesdashboard">
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            View your saved favorite exercises list
+            <img 
+              src={FaveList} 
+              alt="favorite exercises list" 
+              style={{ 
+                width: "32px", 
+                height: "32px", 
+                verticalAlign: "center",
+                marginRight: "7px",
+              }}
+            /> View your current favorite exercises list
           </Button> 
         </Link>
         <br />
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            Workouts (Future Feature... stay tuned!)
+            <img 
+              src={WorkoutImage} 
+              alt="favorite exercises list" 
+              style={{ 
+                width: "32px", 
+                height: "32px", 
+                verticalAlign: "center",
+                marginRight: "7px",
+              }}
+            /> Workouts (Future Feature... stay tuned!)
           </Button> 
         <br />
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            View previously completed workouts (Future Feature... stay tuned!)
+            <img 
+              src={CompletedWorkoutImage} 
+              alt="favorite exercises list" 
+              style={{ 
+                width: "32px", 
+                height: "32px", 
+                verticalAlign: "center",
+                marginRight: "7px",
+              }}
+            /> View previously completed workouts (Future Feature... stay tuned!)
           </Button> 
         <br />
-        {/* May switch to another hero image and adjust css positioning accordingly */}
-        {/* <img src={HeroBannerImage} alt="workout-sport" className="hero-banner-img" /> */}
         <img src={AnatomyHeroBannerImage} alt="anatomy-sport" className="hero-banner-img" />
       </Box>
     </>

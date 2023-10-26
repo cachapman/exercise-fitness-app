@@ -5,9 +5,9 @@ import { protectRoute } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // Logged in users can add, update, view, delete saved favorite exercises list
-router.get("/savedexercisesdashboard", protectRoute, fetchSavedExercises);
-router.post("/savedexercisesdashboard", protectRoute, saveExercise);
-router.put("/savedexercisesdashboard/", protectRoute, updateSavedExercise);
-router.delete("/savedexercisesdashboard/", protectRoute, deleteSavedExercise);
+router.get("/favoriteexercisesdashboard", protectRoute, fetchSavedExercises);
+router.post("/favoriteexercisesdashboard", protectRoute, saveExercise);
+router.put("/favoriteexercisesdashboard/", protectRoute, updateSavedExercise);
+router.delete("/favoriteexercisesdashboard/", protectRoute, deleteSavedExercise);
 
 export default router;

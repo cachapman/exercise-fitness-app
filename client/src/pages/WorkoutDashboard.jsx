@@ -5,6 +5,12 @@ import { useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import "../index.scss";
 import { toast } from "react-toastify";
 
+/**
+ * Work in progress...
+ * 
+ * @returns {JSX.Element} - A component for displaying the user's workout.
+ */
+
 const WorkoutDashboard = ({ 
   user, 
   workout, 

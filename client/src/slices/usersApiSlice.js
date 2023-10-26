@@ -38,33 +38,33 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     // Save exercise to Login User Saved Favorite Exercises List
-    saveExercises: builder.mutation({
+    saveExerciseToFaveList: builder.mutation({
       query: (data) => ({
-        url: `${API_URL}/savedexercisesdashboard`,
+        url: `${API_URL}/favoriteexercisesdashboard`,
         method: "POST",
         body: data,
       }),
     }),
     // Update saved exercise from Login User Saved Favorite Exercises List
-    updateSavedExercises: builder.mutation({
+    updateSavedFaveExercise: builder.mutation({
       query: (data) => ({
-        url: `${API_URL}/savedexercisesdashboard`,
+        url: `${API_URL}/favoriteexercisesdashboard`,
         method: "PUT",
         body: data,
       }),
     }),
     // Fetch saved exercise from Login User Saved Favorite Exercises List
-    fetchSavedExercises: builder.query({
+    fetchSavedFaveExercisesList: builder.query({
       query: (data) => ({
-        url: `${API_URL}/savedexercisesdashboard`,
+        url: `${API_URL}/favoriteexercisesdashboard`,
         method: "GET",
         body: data,
       }),
     }),
     // Delete saved exercise from Login User Saved Favorite Exercises List
-    deleteSavedExercises: builder.mutation({
+    deleteSavedExerciseFromList: builder.mutation({
       query: (exerciseId) => ({
-        url: `${API_URL}/savedexercisesdashboard`,
+        url: `${API_URL}/favoriteexercisesdashboard`,
         method: "DELETE",
         body: exerciseId,
       }),
@@ -78,8 +78,8 @@ export const {
   useLogoutMutation, 
   useRegisterMutation, 
   useUpdateUserProfileMutation,
-  useSaveExercisesMutation,
-  useUpdateSavedExercisesMutation,
-  useFetchSavedExercisesQuery,
-  useDeleteSavedExercisesMutation,
+  useSaveExerciseToFaveListMutation,
+  useUpdateSavedFaveExerciseMutation,
+  useFetchSavedFaveExercisesListQuery,
+  useDeleteSavedExerciseFromListMutation,
 } = usersApiSlice;
