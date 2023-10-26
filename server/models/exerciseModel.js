@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const SavedExerciseSchema = new Schema({
+const SavedFavoriteExerciseSchema = new Schema({
     exerciseId: {
       type: String,
       required: true,
@@ -39,6 +39,6 @@ const SavedExerciseSchema = new Schema({
     },
   }, { timestamps: true });
 
-const savedExerciseList = mongoose.model("savedExerciseList", SavedExerciseSchema);
+const savedFavoriteExercisesList = mongoose.model("savedFavoriteExercisesList", SavedFavoriteExerciseSchema);
 
-export default savedExerciseList;
+export default savedFavoriteExercisesList;

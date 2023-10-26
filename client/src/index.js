@@ -13,7 +13,7 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ExercisesDashboard from "./pages/ExercisesDashboard";
 import ExerciseDetailPage from "./pages/ExerciseDetailPage";
-import WorkoutDashboard from "./pages/WorkoutDashboard";
+import FavoriteExercisesDashboard from "./pages/FaveExercisesDashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,7 +27,7 @@ const router = createBrowserRouter(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/exercise" element={<ExercisesDashboard />} />
         <Route path="/exercise/:id" element={<ExerciseDetailPage />} />
-        <Route path="/workoutdashboard" element={<WorkoutDashboard />} />
+        <Route path="/savedexercisesdashboard" element={<FavoriteExercisesDashboard />} /> 
       </Route>
     </Route>
   )

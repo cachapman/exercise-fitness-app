@@ -10,6 +10,7 @@ import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 
 const Register = () => {
+  // Redux setup
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +22,7 @@ const Register = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
 
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
   // Navigates to dashboard page if login successful
@@ -106,7 +108,7 @@ const Register = () => {
               ></Form.Control>
             </FloatingLabel>
 
-            <FloatingLabel className="my-2" controlId="fitnessGoal" label="Fitness Goal">
+            <FloatingLabel className="my-2" controlId="fitnessGoal" label="My Fitness Goal is to:">
               <Form.Control 
                 type="text"
                 value={fitnessGoal}

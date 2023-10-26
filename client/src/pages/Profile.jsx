@@ -10,6 +10,7 @@ import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 
 const Profile = () => {
+  // Redux setup
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ const Profile = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [fitnessGoal, setFitnessGoal] = useState('');
 
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
   const [updateProfile, { isLoading }] = useUpdateUserProfileMutation();
@@ -112,7 +114,7 @@ const Profile = () => {
               ></Form.Control>
             </FloatingLabel>
 
-            <FloatingLabel className="my-2" controlId="fitnessGoal" label="Fitness Goal">
+            <FloatingLabel className="my-2" controlId="fitnessGoal" label="My Fitness Goal is to:">
               <Form.Control 
                 type="text"
                 value={fitnessGoal}

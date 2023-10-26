@@ -1,5 +1,5 @@
 // fetchBaseQuery is the function that will allow requests to the backend api
-// This is basically the parent to other Api slices
+// This is basically the parent to user Api slice
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // production: 
@@ -10,7 +10,8 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const apiSlice = createApi({
+  reducerPath: "userApi",
   baseQuery,
-  tagTypes: ["User"],
+  tagTypes: ["User", "exercises", "bodyPart"],
   endpoints: (builder) => ({})
 });

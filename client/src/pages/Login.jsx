@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 
 const Login = () => {
+  // Redux setup
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ const Login = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
   // Navigates to dashboard page if login successful
@@ -42,6 +44,7 @@ const Login = () => {
       dispatch(setCredentials({...response}));
       navigate("/dashboard");
     } catch (err) {
+      console.log(err);
       toast.error(err?.data?.message || err.error);
     }
   }

@@ -1,5 +1,13 @@
+/* Supports weights 100-900 */
+@import "@fontsource/raleway";
+@import "@fontsource/roboto";
+/* Supports weights 100-700 */
+@import "@fontsource/josefin-sans";
+
 body,
 html {
+  font-family: "Raleway", "Josefin Sans", "Roboto", "Verdana", "Geneva",
+    "Tahoma", sans-serif;
   // overflow-x: hidden;
   width: 100vw;
   scroll-behavior: smooth;
