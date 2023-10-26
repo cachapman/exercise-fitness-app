@@ -2,11 +2,17 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import '@fontsource/roboto/700.css';
-// import HeroBannerImage from "../assets/icons/sport.png";
 import AnatomyHeroBannerImage from "../assets/icons/anatomy.png";
+
+/**
+ * DashboardHero component to display the dashboard's welcome message and options.
+ *
+ * @returns {JSX.Element} - A child component for the Dashboard's welcome message and options.
+ */
 
 const DashboardHero = () => {
 
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
   return (
@@ -30,7 +36,7 @@ const DashboardHero = () => {
           goal to {userInfo && userInfo.fitnessGoal}!
         </Typography>
         <Typography fontSize="22px" lineHeight="35px">
-          Search for an exercise and learn how to safely perform it.
+          Search for any exercise and learn how to safely perform it.
         </Typography>
         <Link to="/exercise">
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
@@ -38,14 +44,18 @@ const DashboardHero = () => {
           </Button> 
         </Link>
         <br />
-        <Link to="/workoutdashboard">
+        <Link to="/savedexercisesdashboard">
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            Start workout with the saved exercises
+            View your saved favorite exercises list
           </Button> 
         </Link>
         <br />
           <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
-            View previously completed workouts (Maybe?)
+            Workouts (Future Feature... stay tuned!)
+          </Button> 
+        <br />
+          <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}}>
+            View previously completed workouts (Future Feature... stay tuned!)
           </Button> 
         <br />
         {/* May switch to another hero image and adjust css positioning accordingly */}

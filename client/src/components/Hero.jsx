@@ -1,6 +1,12 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
+/**
+ * Hero component to display the HomePage's welcome message and options.
+ *
+ * @returns {JSX.Element} - A child component for the HomePage's welcome message and options.
+ */
+
 const Hero = () => {
   return (
     <div className="py-5 mt-5">

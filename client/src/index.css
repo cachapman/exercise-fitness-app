@@ -1,5 +1,13 @@
-body {
-  font-family: "Roboto", "Verdana", "Geneva", "Tahoma", sans-serif;
+/* Supports weights 100-900 */
+@import "@fontsource/raleway";
+@import "@fontsource/roboto";
+/* Supports weights 100-700 */
+@import "@fontsource/josefin-sans";
+
+body,
+html {
+  font-family: "Raleway", "Josefin Sans", "Roboto", "Verdana", "Geneva",
+    "Tahoma", sans-serif;
   background-color: #f5f5f5;
 }
 
@@ -26,7 +34,7 @@ body {
   position: absolute;
   right: 40px;
   top: 0px;
-  width: 450px;
+  width: 555px;
   height: auto;
   /* margin-top: -15px; */
   padding-left: 50px;

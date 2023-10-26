@@ -20,7 +20,7 @@ const authUser = asyncHandler(async (request, response) => {
       name: user.name,
       email: user.email,
       fitnessGoal: user.fitnessGoal,
-      savedExerciseList: user.savedExerciseList,
+      savedFavoriteExercisesList: user.savedFavoriteExercisesList,
       workoutList: user.workoutList,
       completedWorkoutList: user.completedWorkoutList,
     });
@@ -67,7 +67,7 @@ const registerUser = asyncHandler(async (request, response) => {
       name: user.name,
       email: user.email,
       fitnessGoal: user.fitnessGoal,
-      savedExerciseList: user.savedExerciseList,
+      savedFavoriteExercisesList: user.savedFavoriteExercisesList,
       workoutList: user.workoutList,
       completedWorkoutList: user.completedWorkoutList,
     });
@@ -102,7 +102,7 @@ const getUserProfile = asyncHandler(async (request, response) => {
       name: request.user.name,
       email: request.user.email,
       fitnessGoal: request.user.fitnessGoal,
-      savedExerciseList: request.user.savedExerciseList,
+      savedFavoriteExercisesList: request.user.savedFavoriteExercisesList,
       workoutList: request.user.workoutList,
       completedWorkoutList: request.user.completedWorkoutList,
     });
@@ -134,7 +134,7 @@ const updateUserProfile = asyncHandler(async (request, response) => {
       name: updatedUser.name,
       email: updatedUser.email,
       fitnessGoal: updatedUser.fitnessGoal,
-      savedExerciseList: updatedUser.savedExerciseList,
+      savedFavoriteExercisesList: updatedUser.savedFavoriteExercisesList,
       workoutList: updatedUser.workoutList,
       completedWorkoutList: updatedUser.completedWorkoutList,
     });

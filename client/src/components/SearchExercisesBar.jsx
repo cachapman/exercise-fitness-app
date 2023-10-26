@@ -1,29 +1,24 @@
 import { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import '@fontsource/roboto/700.css';
 import "../index.scss";
-import { useGetAllExercisesQuery } from "../slices/exercisesUserApiSlice";
 
-const SearchExercisesBar = ({ setExercises }) => {
+/**
+ * SearchExercisesBar is the child component of ExercisesDashboard that should only handle the search input and call the onSearch function provided by its parent component.
+ *
+ * @returns {JSX.Element} - A component for displaying the search input options.
+ */
+
+const SearchExercisesBar = ({ onSearch }) => {
+  // Using local state to track 
   const [search, setSearch] = useState('');
-
-  const { data: exercisesData = [] } = useGetAllExercisesQuery();
-
-  const handleSearch = async () => {
-    //Check for non-empty search term
-    if(search.trim() !== '') {
-      const searchedExercisesTerm = exercisesData.filter(
-        (exercise) => exercise.name?.toLowerCase().includes(search.trim()) 
-        || exercise.target?.toLowerCase().includes(search.trim())
-        || exercise.equipment?.toLowerCase().includes(search.trim())
-        || exercise.bodyPart?.toLowerCase().includes(search.trim())
-      );
-
-      window.scrollTo({ top: 750, left: 100, behavior: "smooth" });
-      setSearch('');
-      setExercises(searchedExercisesTerm);
-    }
+  
+  const handleSearch = () => {
+    onSearch(search);
+    setSearch('');
   };
 
+  // Handle key press, triggering search on Enter key
   const handleKeyDown = event => {
     if (event.key === "Enter") {
       handleSearch();
@@ -68,7 +63,7 @@ const SearchExercisesBar = ({ setExercises }) => {
         </Button>
       </Box>
     </Stack>
-  )
+  );
 };
 
 export default SearchExercisesBar;

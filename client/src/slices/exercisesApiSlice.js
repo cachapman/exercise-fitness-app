@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
+// fetchBaseQuery is the function that will allow requests to the API
+// This is basically the parent to exercises user Api slice
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://exercisedb.p.rapidapi.com",
   headers: {
@@ -9,7 +11,9 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const exercisesApiSlice = createApi({
+  reducerPath: "exercisesApi",
   baseQuery,
-  tagTypes: ["Exercise"],
+  tagTypes: ["exercises"],
+  keepUnusedDataFor: 60 * 60 * 24 * 30,
   endpoints: (builder) => ({})
 });

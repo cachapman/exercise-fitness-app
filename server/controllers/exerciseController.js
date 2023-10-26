@@ -1,9 +1,9 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
-import savedExerciseList from "../models/exerciseModel.js";
+import savedFavoriteExercisesList from "../models/exerciseModel.js";
 
-// @description   User can save an exercise to saved exercise list
-// @route         POST /api/users/workoutdashboard/
+// @description   User can save an exercise to favorite exercises list
+// @route         POST /api/users/savedexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
 const saveExercise = asyncHandler (async (request, response) => {
   try {
@@ -30,7 +30,7 @@ const saveExercise = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    const exercise = await savedExerciseList.findOne({
+    const exercise = await savedFavoriteExercisesList.findOne({
       user: userId,
       exerciseId: exerciseId,
     });
@@ -41,7 +41,7 @@ const saveExercise = asyncHandler (async (request, response) => {
     }
 
     // Create a new saved exercise
-    const newSaveExercise = new savedExerciseList({
+    const newSaveExercise = new savedFavoriteExercisesList({
       exerciseId: exerciseId,
       name: name,
       bodyPart: bodyPart,
@@ -56,7 +56,7 @@ const saveExercise = asyncHandler (async (request, response) => {
     await newSaveExercise.save();
 
     // Update the user's document to include the saved exercise
-    user.savedExerciseList.push(newSaveExercise);
+    user.savedFavoriteExercisesList.push(newSaveExercise);
     await user.save();
 
     response.status(201).json({
@@ -70,14 +70,14 @@ const saveExercise = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can update saved exercise 
-// @route         PUT /api/users/workoutdashboard/
+// @description   User can update saved favorite exercise 
+// @route         PUT /api/users/savedexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
 const updateSavedExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
-    // const updateExercise = request.savedExerciseList;
-    const exerciseId = savedExerciseList.findById(request.params.id);
+    // const updateExercise = request.savedFavoriteExercisesList;
+    const exerciseId = savedFavoriteExercisesList.findById(request.params.id);
 
     // console.log("exerciseID from exerciseController.js ", exerciseId);
 
@@ -89,7 +89,7 @@ const updateSavedExercise = asyncHandler (async (request, response) => {
     }
 
     // Make sure the logged in user matches the savedExercises user
-    // if (savedExerciseList.user.toString() !== user._id) {
+    // if (savedFavoriteExercisesList.user.toString() !== user._id) {
     //   response.status(401);
     //   throw new Error("Unauthorized Access: invalid credentials.");
     // }
@@ -108,10 +108,10 @@ const updateSavedExercise = asyncHandler (async (request, response) => {
       update.totalReps = totalReps;
     }
 
-    await savedExerciseList.findByIdAndUpdate(filter, { $set: update });
+    await savedFavoriteExercisesList.findByIdAndUpdate(filter, { $set: update });
 
-    // Fetch the user's updated saved exercise list
-    const savedExercise = await savedExerciseList.find({ user: userId });
+    // Fetch the user's updated saved favorite exercises list
+    const savedExercise = await savedFavoriteExercisesList.find({ user: userId });
 
     response.status(200).json({ savedExercise });
   } catch (error) {
@@ -123,8 +123,8 @@ const updateSavedExercise = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can fetch saved exercise 
-// @route         GET /api/users/workoutdashboard
+// @description   User can fetch saved favorite exercise 
+// @route         GET /api/users/savedexercisesdashboard
 // @access        Private - can access URL only with token after logging in
 const fetchSavedExercises = asyncHandler (async (request, response) => {
   try {
@@ -137,9 +137,9 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    // Fetch the user's saved exercise list
+    // Fetch the user's saved favorite exercises list
     if (request.user._id == userId) {
-      const savedExercises = await savedExerciseList.find({ user: userId });
+      const savedExercises = await savedFavoriteExercisesList.find({ user: userId });
 
       response.status(200).json({ savedExercises });
     }
@@ -152,8 +152,8 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can delete saved exercise 
-// @route         DELETE /api/users/workoutdashboard/
+// @description   User can delete saved favorite exercise 
+// @route         DELETE /api/users/savedexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExercise = asyncHandler (async (request, response) => {
   try {
@@ -168,23 +168,23 @@ const deleteSavedExercise = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    // Find the saved exercise to delete
-    const savedExercise = await savedExerciseList.findOneAndDelete({ 
+    // Find the saved favorite exercise to delete
+    const savedExercise = await savedFavoriteExercisesList.findOneAndDelete({ 
       exerciseId: exerciseId,
       user: userId,
     });    
 
     if (!savedExercise) {
       response.status(404);
-      throw new Error("Saved exercise not found");
+      throw new Error("Saved favorite exercise not found");
     }
 
     // Remove the exercise ID from the user's SavedExerciseLisr
-    user.savedExerciseList.pull(savedExercise._id);
+    user.savedFavoriteExercisesList.pull(savedExercise._id);
     await user.save();
     
     response.status(200).json({
-      message: "Saved exercise successfully deleted",
+      message: "Saved favorite exercise successfully deleted",
     });
   } catch (error) {
     console.log(error);

@@ -20,22 +20,30 @@ const authSlice = createSlice({
       state.userInfo = null;
       localStorage.removeItem("userInfo");
     },
-    // Action to add an exercise to the userInfo savedExericseList array
+    // Action to add an exercise to the userInfo savedFavoriteExericsesList array
     addSavedExerciseToList: (state, action) => {
-      state.userInfo.savedExerciseList.push(action.payload);
-      // Update the saved data in local storage
-      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+      // Check if the exercise is already in the savedFavoriteExercisesList
+      if (
+        !state.userInfo.savedFavoriteExercisesList.some(
+          (exercise) => exercise.id === action.payload.id
+        )
+      ) {
+        state.userInfo.savedFavoriteExercisesList.push(action.payload);
+        // Update the saved data in local storage
+        localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+      }
     },
-    // Action to remove an exercise from the userInfo savedExericseList array
+    // Action to remove an exercise from the userInfo savedFavoriteExericsesList array
     removeSavedExerciseFromList: (state, action) => {
-      state.userInfo.savedExerciseList = state.userInfo.savedExerciseList.filter(
+      state.userInfo.savedFavoriteExercisesList = state.userInfo.savedFavoriteExercisesList.filter(
         (exercise) => exercise.id !== action.payload.id);
       // Update the saved data in local storage
       localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
-    },
+    }
   },
 });
 
+// Destructure the action creators
 export const { 
   setCredentials, 
   clearCredentials,

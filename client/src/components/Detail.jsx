@@ -1,25 +1,37 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Stack, Tooltip, Typography } from "@mui/material";
 import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
 import TargetImageIcon from "../assets/icons/body-target.png";
 import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
 import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
+import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 
-const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
+/**
+ * Detail component displays details about a specific exercise.
+ *
+ * @param {Object} props - Props containing exerciseDetailToDisplay.
+ * @returns {JSX.Element} - A component for displaying details about a specific exercise.
+ */
+
+const Detail = ({ exerciseDetailToDisplay, user }) => {
   const { 
     bodyPart, 
     equipment, 
-    gifUrl,
-    id, 
+    gifUrl, 
     name, 
     target, 
     secondaryMuscles, 
     instructions,
    } = exerciseDetailToDisplay;
+
+   if (exerciseDetailToDisplay) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const extraExerciseDetailToDisplay = [
     {
@@ -36,69 +48,74 @@ const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
     },
   ];
 
-    // Get logged in authorized user information
-    const { userInfo } = useSelector((state) => state.auth);
-    const user = userInfo;
+  // Get logged-in user information from Redux store
+  // Initialize useDispatch to dispatch the save exercise action
+  const dispatch = useDispatch();
+  const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
+
+  // Local state to track and initialize isLoading state
+  const [isLoading, setIsLoading] = useState(false);
   
-    const [clicked, setClicked] = useState(false);
+  // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
+  const isExerciseSaved = () => {
+    return savedFavoriteExercisesList.some((savedFavoriteExercise) => savedFavoriteExercise.id === exerciseDetailToDisplay.id);
+  };
+
+  // Parameters for saving and removing the exercise
+  const exerciseToBeSavedData = {
+    userId: user._id,
+    exercise: exerciseDetailToDisplay,
+  };
+  const removeExerciseParams = {
+    userId: user._id,
+    exerciseId: exerciseDetailToDisplay.id,
+  };
+
+  // Use Mutation to interact with MongoDB
+  const [saveExercise] = useSaveExercisesMutation();
+  const [deleteExercise] = useDeleteSavedExercisesMutation();
   
-    const initialExerciseCardData = {
-      userId: user.userId,
-      exercise: exercise,
-    };
-    // Verify correct data return in console
-    console.log("initialExerciseCardData from Detail.jsx line 45: ", initialExerciseCardData);
-    console.log("user from Detail.jsx line 40: ", userInfo);
-    console.log("user from Detail.jsx line 40: ", user);
-    console.log("user.userId from Detail.jsx line 46: ", user.userId);
-    console.log("exercise.id from Detail.jsx line 47: ", exercise);
-  
-    // Use a state variable to track exerciseCardData and update it
-    const [exerciseCardData, setExerciseCardData] = useState(initialExerciseCardData);
-  
-    // Use Mutation to render data to MongoDB
-    const [saveExercise] = useSaveExercisesMutation();
-    const [deleteExercise] = useDeleteSavedExercisesMutation();
-    
-    // Define the function to handle the click event
-    const handleClick = async (exerciseCardData) => {
-      if (clicked) {
-        try {
-          // Delete the saved exercise
-          await deleteExercise(exerciseCardData);
-          setClicked(false);
-          // Verify the exerciseCardData return when clicked
-          console.log("Clicked successful... exerciseCardData deleted:");
-          console.log(exerciseCardData);
-        } catch (err) {
-          toast.error(err?.exerciseCardData?.message || err.error);
-        }
+  // Define the function to handle the click event when adding or removing the exercise
+  const handleExerciseClick = async () => {
+    // Start loading
+    setIsLoading(true);
+
+    try {
+      if (isExerciseSaved()) {
+        // Remove the saved exercise from saved favorite exercises list
+        await removeExerciseFromSavedExerciseList(removeExerciseParams);
       } else {
-        try {
-          // Save the exercise
-          await saveExercise(exerciseCardData);
-          setClicked(true);
-          // Verify the exerciseCardData return when clicked
-          console.log("Clicked successful... exerciseCardData saved:");
-          console.log(exerciseCardData);
-        } catch (err) {
-          toast.error(err?.exerciseCardData?.message || err.error);
-        }
+        // Add the exercise to saved favorite exercises list
+        await addExerciseToSavedExerciseList(exerciseToBeSavedData);
       }
-    };
-    
-    const inWorkout = Array.isArray(workout) ? workout.find(element => element.exerciseid === id) : null;
-  
-    useEffect(() => {
-      // Set the initial click state based on whether the exercise is in the workout
-      setClicked(!!inWorkout);
-  
-      // Update exerciseCardData whenever the user or exercise props change
-      setExerciseCardData({
-        userId: user.userId,
-        exercise: exercise,
-      });
-    }, [workout, exercise, inWorkout, user]);
+    } catch (err) {
+      toast.error(err?.exerciseToBeSavedData?.message || err.error);
+    } finally {
+      // Always stop loading after the action, whether it succeeded or failed
+      setIsLoading(false);
+    }
+  };
+
+  const addExerciseToSavedExerciseList = async (exerciseToBeSavedData) => {
+    // Check if the exercise is already saved
+    if (isExerciseSaved()) {
+      toast.warning("Exercise is already in your saved favorite exercises list");
+    } else {
+      // Exercise is not in the saved favorite exercises list, can proceed to add it
+      await saveExercise(exerciseToBeSavedData);
+      // Dispatch the action to add the exercise to savedExericseList
+      dispatch(addSavedExerciseToList(exerciseDetailToDisplay));
+      toast.success("Exercise added successfully to your saved favorite exercises list");
+    }
+  };
+
+  const removeExerciseFromSavedExerciseList = async (removeExerciseParams) => {
+    // Remove the saved exercise from saved favorite exercises list
+    await deleteExercise(removeExerciseParams);
+    // Dispatch the action to remove the exercise from savedExericseList
+    dispatch(removeSavedExerciseFromList(exerciseDetailToDisplay));
+    toast.success("Exercise removed successfully from your saved favorite exercises list");
+  };
 
   return (
     <Stack gap="60px" sx={{flexDirection: { lg: "row" }, pt: "25px", alignItems: "center"}}>
@@ -124,19 +141,13 @@ const Detail = ({ exerciseDetailToDisplay, exercise, workout }) => {
             <Typography variant="h5" textTransform="capitalize">
               {iconList.name}
             </Typography>
-            {user &&
-            (clicked ?
-              <Tooltip title="Click to REMOVE exercise from workout list">
-                <Button onClick={() => {handleClick(exerciseCardData); }}  className="exercise-card-check-btn" >
-                  <CheckIcon fontSize="large" />
+            {user && (
+              <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`}>
+                <Button onClick={handleExerciseClick}  className={`exercise-card-${isExerciseSaved() ? "check" : "add"}-btn`}>
+                  {isLoading ? (<Loader />) : isExerciseSaved() ? <CheckIcon fontSize="large" /> : <AddIcon fontSize="large" />}
                 </Button>
-              </Tooltip> :
-
-              <Tooltip title="Click to ADD exercise to workout list">
-                <Button onClick={() => {handleClick(exerciseCardData); }} className="exercise-card-add-btn" >
-                  <AddIcon fontSize="large" />
-                </Button>
-              </Tooltip>)}
+              </Tooltip>
+            )}
           </Stack>
         ))}
       </Stack>

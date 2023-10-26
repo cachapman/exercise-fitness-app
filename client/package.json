@@ -5,6 +5,8 @@
   "private": true,
   "dependencies": {
     "@emotion/styled": "^11.11.0",
+    "@fontsource/josefin-sans": "^5.0.16",
+    "@fontsource/raleway": "^5.0.14",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.8",

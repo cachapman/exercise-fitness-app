@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../assets/images/dumbbell-health-logo.png";
 
 const Header = () => {
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
+  // Redux setup
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -50,10 +52,10 @@ const Header = () => {
                     </NavDropdown.Item>
                   </NavDropdown> 
                   <span className="mx-auto">
-                  <LinkContainer to="/workoutdashboard">
+                  <LinkContainer to="/savedexercisesdashboard">
                     <Nav.Link>
                       <Navbar.Text>
-                        Start Workout
+                        Favorite Exercises
                       </Navbar.Text>
                     </Nav.Link>
                   </LinkContainer>

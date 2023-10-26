@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedUserRoute = () => {
-  // Get logged in authorized user information
+  // Get logged-in user information from Redux store
   const { userInfo } = useSelector((state) => state.auth);
   const user = userInfo;
 
