@@ -6,6 +6,7 @@ import { useLogoutMutation } from "../slices/usersApiSlice";
 import { clearCredentials } from "../slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/images/dumbbell-health-logo.png";
+import FaveList from "../assets/icons/favorites-list.png";
 
 const Header = () => {
   // Get logged-in user information from Redux store
@@ -45,17 +46,20 @@ const Header = () => {
                 <>
                   <NavDropdown title={userInfo.name} id="username">
                     <LinkContainer to="/profile">
-                      <NavDropdown.Item><FaUserCheck />Profile</NavDropdown.Item>
+                      <NavDropdown.Item>
+                        <FaUserCheck /> Profile 
+                      </NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Item onClick={logoutHandler}>
                       <FaSignOutAlt /> Logout
                     </NavDropdown.Item>
                   </NavDropdown> 
                   <span className="mx-auto">
-                  <LinkContainer to="/savedexercisesdashboard">
+                  <LinkContainer to="/favoriteexercisesdashboard">
                     <Nav.Link>
                       <Navbar.Text>
-                        Favorite Exercises
+                        Favorite Exercises <img src={FaveList} alt="favorite exercises list" 
+              style={{width: "22px", height: "22px", margin: "0 5px"}}/>
                       </Navbar.Text>
                     </Nav.Link>
                   </LinkContainer>

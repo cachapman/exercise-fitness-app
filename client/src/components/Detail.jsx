@@ -4,7 +4,7 @@ import { Button, Stack, Tooltip, Typography } from "@mui/material";
 import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
 import TargetImageIcon from "../assets/icons/body-target.png";
 import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
-import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
+import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
@@ -12,9 +12,9 @@ import { toast } from "react-toastify";
 import Loader from "./Loader";
 
 /**
- * Detail component displays details about a specific exercise.
+ * Detail component display details about a specific exercise.
  *
- * @param {Object} props - Props containing exerciseDetailToDisplay.
+ * @param {Object} props - Props containing exerciseDetailToDisplay and user.
  * @returns {JSX.Element} - A component for displaying details about a specific exercise.
  */
 
@@ -72,8 +72,8 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
   };
 
   // Use Mutation to interact with MongoDB
-  const [saveExercise] = useSaveExercisesMutation();
-  const [deleteExercise] = useDeleteSavedExercisesMutation();
+  const [saveExercise] = useSaveExerciseToFaveListMutation();
+  const [deleteExercise] = useDeleteSavedExerciseFromListMutation();
   
   // Define the function to handle the click event when adding or removing the exercise
   const handleExerciseClick = async () => {
@@ -142,7 +142,7 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
               {iconList.name}
             </Typography>
             {user && (
-              <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`}>
+              <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`.toUpperCase()} arrow>
                 <Button onClick={handleExerciseClick}  className={`exercise-card-${isExerciseSaved() ? "check" : "add"}-btn`}>
                   {isLoading ? (<Loader />) : isExerciseSaved() ? <CheckIcon fontSize="large" /> : <AddIcon fontSize="large" />}
                 </Button>

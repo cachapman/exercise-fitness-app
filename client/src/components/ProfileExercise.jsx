@@ -8,6 +8,13 @@ import ToggleButton from "@mui/material/ToggleButton";
 import { useUpdateSavedExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
 
+/**
+ * Work in progress...
+ * 
+ * @param {Object} props - Props containing setProgress, workout, setWorkout, exerciseId, bodyPart, equipment, exerciseName, gifUrl, userId, totalReps, and totalSets.
+ * @returns {JSX.Element} - A component for organizing the display of user's favorite exercises list.
+ */
+
 const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPart, equipment, exerciseName, gifUrl, userId, totalReps, totalSets }) => {
   const [counter, setCounter] = useState(totalSets);
   const [counterRep, setCounterRep] = useState(totalReps);

@@ -6,6 +6,7 @@ import "../index.scss";
 /**
  * SearchExercisesBar is the child component of ExercisesDashboard that should only handle the search input and call the onSearch function provided by its parent component.
  *
+ * @param {Object} props - Prop containing onSearch.
  * @returns {JSX.Element} - A component for displaying the search input options.
  */
 

@@ -21,6 +21,7 @@ import LowerLegs from "../assets/gifs/jumprope.gif";
 /**
  * HorizontalExerciseScrollbar is the child component of ExercisesDashboard that displays horizontal bodyPart scroll bar.
  *
+ * @param {Object} props - Props containing setCurrentPage and onSelectBodyPart.
  * @returns {JSX.Element} - A component for displaying the input for bodyPart search options.
  */
 

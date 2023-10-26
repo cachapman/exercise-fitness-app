@@ -3,9 +3,9 @@ import User from "../models/userModel.js";
 import savedFavoriteExercisesList from "../models/exerciseModel.js";
 
 // @description   User can save an exercise to favorite exercises list
-// @route         POST /api/users/savedexercisesdashboard/
+// @route         POST /api/users/favoriteexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
-const saveExercise = asyncHandler (async (request, response) => {
+const saveExerciseToFaveList = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     const exerciseId = request.body.exercise.id;
@@ -71,9 +71,9 @@ const saveExercise = asyncHandler (async (request, response) => {
 });
 
 // @description   User can update saved favorite exercise 
-// @route         PUT /api/users/savedexercisesdashboard/
+// @route         PUT /api/users/favoriteexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
-const updateSavedExercise = asyncHandler (async (request, response) => {
+const updateSavedFaveExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     // const updateExercise = request.savedFavoriteExercisesList;
@@ -124,9 +124,9 @@ const updateSavedExercise = asyncHandler (async (request, response) => {
 });
 
 // @description   User can fetch saved favorite exercise 
-// @route         GET /api/users/savedexercisesdashboard
+// @route         GET /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
-const fetchSavedExercises = asyncHandler (async (request, response) => {
+const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
 
@@ -153,9 +153,9 @@ const fetchSavedExercises = asyncHandler (async (request, response) => {
 });
 
 // @description   User can delete saved favorite exercise 
-// @route         DELETE /api/users/savedexercisesdashboard/
+// @route         DELETE /api/users/favoriteexercisesdashboard/
 // @access        Private - can access URL only with token after logging in
-const deleteSavedExercise = asyncHandler (async (request, response) => {
+const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
@@ -196,8 +196,8 @@ const deleteSavedExercise = asyncHandler (async (request, response) => {
 });    
 
 export {
-  saveExercise,
-  updateSavedExercise,
-  fetchSavedExercises,
-  deleteSavedExercise,
+  saveExerciseToFaveList,
+  updateSavedFaveExercise,
+  fetchSavedFaveExercisesList,
+  deleteSavedExerciseFromList,
 };

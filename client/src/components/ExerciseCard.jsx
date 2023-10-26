@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import '@fontsource/roboto/700.css';
 import "../index.scss";
-import { useSaveExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
+import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
@@ -12,11 +12,12 @@ import { toast } from "react-toastify";
 import Loader from "./Loader";
 
 /**
- * ExerciseCard is the child component of ExerciseResultsList that sets the parameters for displaying exercises results.
+ * ExerciseCard is the child component of ExerciseResultsList and FavoriteExercisesList that sets the parameters for displaying exercise data.
  * 
- * ExerciseCard is the grandchild component of ExercisesDashboard that displays exercise search inputs and results.
+ * ExerciseCard is the grandchild component of ExercisesDashboard and FaveExercisesDashboard.
  * 
- * @returns {JSX.Element} - A component for displaying the exercise card results parameters.
+ * @param {Object} props - Props containing currentPage, exercise, and user.
+ * @returns {JSX.Element} - A component for displaying the exercise card parameters.
  */
 
 const ExerciseCard = ({ currentPage, exercise, user }) => {
@@ -52,8 +53,8 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
   };
 
   // Use Mutation to interact with MongoDB
-  const [saveExercise] = useSaveExercisesMutation();
-  const [deleteExercise] = useDeleteSavedExercisesMutation();
+  const [saveExercise] = useSaveExerciseToFaveListMutation();
+  const [deleteExercise] = useDeleteSavedExerciseFromListMutation();
 
   // Define the function to handle the click event when adding or removing the exercise
   const handleExerciseClick = async () => {
@@ -100,7 +101,7 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
   return (
     <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
       <Box className="exercise-card">
-        <Tooltip title="Click for exercise instructions">
+        <Tooltip title={"Click for exercise instructions".toUpperCase()}>
           <img src={exercise.gifUrl} alt={exercise.name} loading="lazy" onClick={handleExerciseCardCurrentPageClick}/>
         </Tooltip>
       <Stack direction="row" alignItems="center" justifyContent="center">
@@ -114,14 +115,14 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
           {exercise.equipment}
         </Button>
         {user && (
-          <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`}>
+          <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`.toUpperCase()} arrow>
             <Button onClick={handleExerciseClick} className={`exercise-card-${isExerciseSaved() ? "check" : "add"}-btn`}>
               {isLoading ? (<Loader />) : isExerciseSaved() ? <CheckIcon fontSize="large" /> : <AddIcon fontSize="large" />}
             </Button>
           </Tooltip>
         )}
       </Stack>
-        <Tooltip title="Click for exercise instructions">
+        <Tooltip title={"Click for exercise instructions".toUpperCase()}>
           <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}  onClick={handleExerciseCardCurrentPageClick}>
             {exercise.name}
           </Typography>
