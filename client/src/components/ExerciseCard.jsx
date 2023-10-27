@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
-import '@fontsource/roboto/700.css';
-import "../index.scss";
 import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -99,19 +97,20 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
   };
 
   return (
-    <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
-      <Box className="exercise-card">
+    <Box className="exercise-card-box">
+      <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
         <Tooltip title={"Click for exercise instructions".toUpperCase()}>
           <img src={exercise.gifUrl} alt={exercise.name} loading="lazy" onClick={handleExerciseCardCurrentPageClick}/>
         </Tooltip>
+      </Link>
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <Button className="exercise-card-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.target}
         </Button>
-        <Button className="exercise-card-btn" sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.bodyPart}
         </Button>
-        <Button className="exercise-card-btn" sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
+        <Button className="exercise-card-category-btn" sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
           {exercise.equipment}
         </Button>
         {user && (
@@ -122,13 +121,14 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
           </Tooltip>
         )}
       </Stack>
+      <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
         <Tooltip title={"Click for exercise instructions".toUpperCase()}>
           <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}  onClick={handleExerciseCardCurrentPageClick}>
             {exercise.name}
           </Typography>
         </Tooltip>
-      </Box>
-    </Link>
+      </Link>
+    </Box>
   )
 };
 

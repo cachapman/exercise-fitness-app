@@ -32,7 +32,7 @@ const DashboardHero = () => {
         marginTop="50px"
       >
         <Typography color="#ff2625" fontWeight="700" fontSize="36px">
-          Welcome {userInfo && userInfo.name} to your Dashboard!
+          {userInfo && userInfo.name}, welcome to your dashboard!
         </Typography>
         <Typography fontWeight="700" sx={{ fontSize: { lg: "44px", xs: "40px"}}}>
           Plan your workout and <br /> 

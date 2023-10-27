@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useLazyGetAllExercisesQuery } from "../slices/exercisesDBsApiSlice";
 import { setDataFromApiLoading, setPreviousSearchResults, setReduxDataFetched, setReduxExercises } from "../slices/exerciseSlice";
 import SearchExercisesBar from "../components/SearchExercisesBar";
@@ -48,38 +48,6 @@ const ExercisesDashboard = () => {
     return exercises;
   };
 
-  // Function to handle the search 
-  const handleSearch = async (search) => {
-    //Check for non-empty search term
-    if(search.trim() !== '') {
-      // Start by setting loading state to true immediately
-      dispatch(setDataFromApiLoading(true));
-      
-      // If data is not available in the Redux store, fetch it from the API
-      if (exercises.length === 0) {
-        await fetchAndStoreExercises();
-      } 
-
-      // Introduce a delay, only for rendering, without delaying the data fetching
-      setTimeout(() => {
-        let searchedExercisesTerm = exercises;
-        // Check if data is already available in the Redux store, filter and display it
-        searchedExercisesTerm = filterExercises(search.trim());
-        dispatch(setPreviousSearchResults((searchedExercisesTerm)));
-        // Update the UI without further delay
-        window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
-        setSearchedExercisesTerm(searchedExercisesTerm);
-        setCurrentPage(1);
-        // Set loading state to false after fetching
-        dispatch(setDataFromApiLoading(false));
-        // Check console to see the list of exercise data return
-        console.log("search.trim from ExercisesDashboard.jsx line 57: ", search.trim()); 
-        console.log("searchedExercisesTerm from ExercisesDashboard.jsx lines 60: ", searchedExercisesTerm);
-        return searchedExercisesTerm;
-      }, 2000); // Adjust as needed, currently set to 2 seconds
-    }
-  };
-
   // Function to filter the list of exercises based on the search term.
   // Return an array of exercises matching the filtering criteria.
   const filterExercises = (term) => {
@@ -94,37 +62,51 @@ const ExercisesDashboard = () => {
     });
   };
 
-  // Function to handle bodyPart selection
-  const handleBodyPartSelection = async (selectedBodyPart) => {
-    // Start by setting loading state to true immediately
-    dispatch(setDataFromApiLoading(true));
-    
-    // If data is not available in the Redux store, fetch it from the API
-    if (exercises.length === 0) {
-      await fetchAndStoreExercises();
-    }
-    
-    // Introduce a delay, only for rendering, without delaying the data fetching
-    setTimeout(() => {
-      let selectedBodyPartExercises = exercises;
-      // If data is already available in the Redux store 
-      // Filter exercises based on the selected bodyPart and set results to Redux store
-      if (selectedBodyPart !== "all") {
-        selectedBodyPartExercises = filterExercisesByBodyPart(selectedBodyPart);
-      }
-  
-      dispatch(setPreviousSearchResults((selectedBodyPartExercises)));
+  // Function to handle the search 
+  const handleSearch = async (search) => {
+    //Check for non-empty search term
+    if(search.trim() !== '') {
+      // Start by setting loading state to true immediately
+      dispatch(setDataFromApiLoading(true));
+      
+      // If data is not available in the Redux store, fetch it from the API
+      if (exercises.length === 0) {
+        // Call the fetchAndStoreExercises function and set searchedExercisesTerm
+        const fetchSearchedExercises = await fetchAndStoreExercises();
+        setSearchedExercisesTerm(fetchSearchedExercises);
+      } 
+
+      // Introduce a delay, only for rendering, without delaying the data fetching
+      setTimeout(() => {
+        // Filter and display it
+        let filteredExercises = filterExercises(search.trim());
+        dispatch(setPreviousSearchResults((filteredExercises)));
+        // Update the UI without further delay
+        window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
+        setSearchedExercisesTerm(filteredExercises);
+        setCurrentPage(1);
+        // Set loading state to false after fetching
+        dispatch(setDataFromApiLoading(false));
+        // Check console to see the list of exercise data return
+        console.log("search.trim from ExercisesDashboard.jsx line 68: ", search.trim()); 
+        console.log("searchedExercisesTerm from ExercisesDashboard.jsx lines 68: ", filteredExercises);
+        return searchedExercisesTerm;
+      }, 3000); // Adjust as needed, currently set to 3 seconds
+    } else {
+      // If data is already available in the Redux store
+      // You can skip fetching and set searchedExercisesTerm directly
+      let filteredExercises = filterExercises(search.trim());
+      dispatch(setPreviousSearchResults(filteredExercises));
       // Update the UI without further delay
       window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
-      setSelectedBodyPartExercises(selectedBodyPartExercises);
+      setSearchedExercisesTerm(filteredExercises);
       setCurrentPage(1);
-      // Set loading state to false after fetching
+      // Set the loading state to false
       dispatch(setDataFromApiLoading(false));
-      // Check console to see the list of exercise data return
-      console.log("selectedBodyPart from ExercisesDashboard.jsx line 84: ", selectedBodyPart); 
-      console.log("selectedBodyPartExercises from ExercisesDashboard.jsx lines 101: ", selectedBodyPartExercises);
-      return selectedBodyPartExercises;
-    }, 2000); // Adjust as needed, currently set to 2 seconds
+      // Check the console to see the list of exercise data returned
+      console.log("search.trim from ExercisesDashboard.jsx line 84: ", search.trim()); 
+      console.log("searchedExercisesTerm from ExercisesDashboard.jsx lines 84: ", filteredExercises);
+    }
   };
 
   // Function to filter the list of exercises based on the selected BodyPart.
@@ -137,22 +119,76 @@ const ExercisesDashboard = () => {
       );
     });
   };
+
+  // Function to handle bodyPart selection
+  const handleBodyPartSelection = async (selectedBodyPart) => {
+    // Start by setting loading state to true immediately
+    dispatch(setDataFromApiLoading(true));
+    
+    // If data is not available in the Redux store, fetch it from the API
+    if (exercises.length === 0) {
+      const fetchExercises = await fetchAndStoreExercises();
+
+      // Update the selectedBodyPartExercises
+      let updatedSelectBodyPartExercises = fetchExercises;
+
+      // Filter exercises based on selected bodyPart if it's not "all"
+      if (selectedBodyPart !== "all") {
+        updatedSelectBodyPartExercises = filterExercisesByBodyPart(selectedBodyPart, fetchExercises);
+      }
+
+      dispatch(setPreviousSearchResults(updatedSelectBodyPartExercises));
+      // Update the UI without further delay
+      window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
+      setSelectedBodyPartExercises(updatedSelectBodyPartExercises);
+      setCurrentPage(1);
+      // Set loading state to false after fetching
+      dispatch(setDataFromApiLoading(false));
+      // Check console to see the list of exercise data return
+      console.log("selectedBodyPart from ExercisesDashboard.jsx line 84: ", selectedBodyPart); 
+      console.log("updatedSelectBodyPartExercises from ExercisesDashboard.jsx lines 101: ", updatedSelectBodyPartExercises);
+      return updatedSelectBodyPartExercises;
+    }
+    
+    // If data is already available in the Redux store
+    // Introduce a delay, only for rendering, without delaying the data fetching
+    setTimeout(() => {
+      let updatedSelectBodyPartExercises = exercises;
+      // If data is already available in the Redux store 
+      // Filter exercises based on the selected bodyPart and set results to Redux store
+      if (selectedBodyPart !== "all") {
+        updatedSelectBodyPartExercises = filterExercisesByBodyPart(selectedBodyPart, exercises);
+      }
+  
+      dispatch(setPreviousSearchResults((updatedSelectBodyPartExercises)));
+      // Update the UI without further delay
+      window.scrollTo({ top: 550, left: 0, behavior: "smooth" });
+      setSelectedBodyPartExercises(updatedSelectBodyPartExercises);
+      setCurrentPage(1);
+      // Set loading state to false after fetching
+      dispatch(setDataFromApiLoading(false));
+      // Check console to see the list of exercise data return
+      console.log("selectedBodyPart from ExercisesDashboard.jsx line 84: ", selectedBodyPart); 
+      console.log("updatedSelectBodyPartExercises from ExercisesDashboard.jsx lines 101: ", updatedSelectBodyPartExercises);
+      return updatedSelectBodyPartExercises;
+    }, 3000); // Adjust as needed, currently set to 3 seconds
+  };
   
   return (
     <Box>
       <SearchExercisesBar onSearch={handleSearch} />
       <HorizontalBodyPartScrollbar setCurrentPage={setCurrentPage} onSelectBodyPart={handleBodyPartSelection} />
       {exercises.length === 0 && !fetchingAllExercises ? (
-        <Stack 
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
-          <Typography fontWeight="700" sx={{ fontSize: { lg: "33px", xs: "22px"}}} paddingTop="20px">Start a search</Typography>
-          <Typography fontWeight="700" sx={{ fontSize: { lg: "33px", xs: "22px"}}}>or</Typography>
-          <Typography fontWeight="700" sx={{ fontSize: { lg: "33px", xs: "22px"}}}>Select a body part to explore the database</Typography>
-          <Typography fontWeight="700" sx={{ fontSize: { lg: "33px", xs: "22px"}}}>Results will load below...</Typography>
-        </Stack>
+        <Typography 
+          fontWeight="700" 
+          sx={{ 
+            fontSize: { lg: "33px", xs: "22px"},
+            paddingTop: "20px",
+            textAlign: "center",
+          }}
+        > 
+          Start a search or select a body part to explore the database...
+        </Typography>
       ) : null}
       {fetchingAllExercises ? (<Loader />
       ) : null}

@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import '@fontsource/roboto/700.css';
-import "../index.scss";
 
 /**
  * SearchExercisesBar is the child component of ExercisesDashboard that should only handle the search input and call the onSearch function provided by its parent component.
