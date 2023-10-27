@@ -2,8 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToggleButton, Typography } from "@mui/material";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import { setReduxBodyPart } from "../slices/exerciseSlice";
-import '@fontsource/roboto/700.css';
-import "../index.scss";
 
 // Import the body part GIF images
 import All from "../assets/gifs/all-workout.gif";

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material"
 import ProfileExercise from "../components/ProfileExercise";
 import { useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
-import "../index.scss";
 import { toast } from "react-toastify";
 
 /**
