@@ -22,24 +22,25 @@ const authSlice = createSlice({
     },
     // Action to add an exercise to the userInfo savedFavoriteExericsesList array
     addSavedExerciseToList: (state, action) => {
+      const { exerciseId, exercise } = action.payload;
+
       // Check if the exercise is already in the savedFavoriteExercisesList
-      if (
-        !state.userInfo.savedFavoriteExercisesList.some(
-          (exercise) => exercise.id === action.payload.id
-        )
-      ) {
-        state.userInfo.savedFavoriteExercisesList.push(action.payload);
-        // Update the saved data in local storage
+      if (!state.userInfo.savedFavoriteExercisesList.find((item) => item.id === exerciseId)) {
+        // Add the new exercise to the list
+        state.userInfo.savedFavoriteExercisesList.push({ exerciseId: exerciseId, exercise });
+        // Update the data in local storage
         localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
       }
     },
     // Action to remove an exercise from the userInfo savedFavoriteExericsesList array
     removeSavedExerciseFromList: (state, action) => {
+      const { exerciseId } = action.payload;
       state.userInfo.savedFavoriteExercisesList = state.userInfo.savedFavoriteExercisesList.filter(
-        (exercise) => exercise.id !== action.payload.id);
-      // Update the saved data in local storage
+        (item) => item.exerciseId !== exerciseId
+      );
+      // Update the data in local storage
       localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
-    }
+    },
   },
 });
 

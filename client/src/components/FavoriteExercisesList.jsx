@@ -35,7 +35,6 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
   // Handle pagination change
   const paginate = (event, value) => {
     setCurrentPage(value);
-    console.log("currentPage value at FavoriteExercisesList.jsx: ", value);
 
     // Update the URL with the current page number
     const searchParams = new URLSearchParams(location.search);
@@ -61,11 +60,11 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
       >
         {/* Map and render exercise cards */}
         {user && currentFavoriteExercisesList.map((exercise) => (
-          <ExerciseCard key={exercise.id} exercise={exercise} user={user} currentPage={currentPage} />
+          <ExerciseCard key={exercise.exerciseId} exerciseId={exercise.exercise.id} user={user} currentPage={currentPage} />
         ))}
       </Stack>
 
-      <Stack mt="100px" paddingBottom="100px" alignItems="center">
+      <Stack mt="20px" paddingBottom="50px" alignItems="center">
         {savedFavoriteExercisesList && savedFavoriteExercisesList.length > 12 && (
           // Render pagination controls
           <Pagination 

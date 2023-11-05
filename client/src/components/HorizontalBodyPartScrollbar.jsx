@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ToggleButton, Typography } from "@mui/material";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
-import { setReduxBodyPart } from "../slices/exerciseSlice";
+import { selectBodyPart, setReduxBodyPart } from "../slices/exerciseSlice";
 
 // Import the body part GIF images
 import All from "../assets/gifs/all-workout.gif";
@@ -26,7 +26,7 @@ import LowerLegs from "../assets/gifs/jumprope.gif";
 const HorizontalBodyPartScrollbar = ({ setCurrentPage, onSelectBodyPart }) => {
   // Redux setup
   const dispatch =  useDispatch();
-  const bodyPart = useSelector((state) => state.exercisesReduxState.bodyPart);
+  const bodyPart = useSelector(selectBodyPart);
 
   // List of body parts to display in the scroll menu.
   const bodyPartListImages = {
@@ -63,7 +63,7 @@ const HorizontalBodyPartScrollbar = ({ setCurrentPage, onSelectBodyPart }) => {
         name={oneBodyPart}
         value={oneBodyPart}
         sx={{
-          background: bodyPartListImages[oneBodyPart] || "",
+          background: bodyPartListImages[oneBodyPart] || '',
           // Add active styling for the selected body part
           "&.Mui-selected": {
             borderColor: "#ff2625",

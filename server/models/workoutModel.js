@@ -18,6 +18,9 @@ const WorkoutSchema = new Schema({
     type: String,
     required: true,
   },
+  exercise: [{
+    type: Schema.Types.ObjectId, ref: "savedFavoriteExercisesList" 
+  }],
   user: { 
     type: Schema.Types.ObjectId, ref: "User" 
   },

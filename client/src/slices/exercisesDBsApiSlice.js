@@ -15,70 +15,21 @@ export const exerciseDBsApiSlice = exercisesApiSlice.injectEndpoints({
     // Fetch all the exercises
     getAllExercises: builder.query(createExerciseQuery("?limit=1500"), {
       providesTags: ["exercises"],
+      transformResponse: (response) => {
+        // Normalize the data
+        const normalizedExercises = response.exercises.reduce((accumulator, exercise) => {
+          // Normalize and store by exercise.id
+          accumulator[exercise.id] = exercise;
+          return accumulator;
+        }, {});
+
+        return normalizedExercises;
+      },
     }),
-
-    // Fetch single exercise details
-    getOneExerciseDetail: builder.query(
-      (id) => createExerciseQuery(`/exercise/${id}`), {
-        providesTags: ["exercises", "ExerciseDetail"]
-      } 
-    ),
-
-    // Fetch specific bodyPart exercises
-    getSpecificBodyPartExercises: builder.query(
-      (bodyPart) => 
-        createExerciseQuery(`bodyPart/${bodyPart}?limit=900`), {
-          providesTags: ["exercises", "BodyPartExercises"]
-        }
-    ),
-
-    // Fetch specific equipment exercises
-    getSpecificEquipmentExercises: builder.query(
-      (equipment) => 
-        createExerciseQuery(`/equipment/${equipment}?limit=900`), {
-          providesTags: ["exercises", "EquipmentExercises"]
-        }
-    ),
-
-    // Fetch specific target muscle exercises
-    getSpecificTargetMuscleExercises: builder.query(
-      (target) => 
-        createExerciseQuery(`/target/${target}?limit=900`), {
-          providesTags: ["exercises", "TargetMuscleExercises"]
-        }
-    ),
-
-    // Fetch bodyPart exercise list
-    getBodyPartList: builder.query(
-      createExerciseQuery("/bodyPartList"), {
-        providesTags: ["exercises", "BodyPartList"]
-      }
-    ),
-
-    // Fetch equipment exercise list
-    getEquipmentList: builder.query(
-      createExerciseQuery("/equipmentList"), {
-        providesTags: ["exercises", "EquipmentList"]
-      }
-    ),
-
-    // Fetch target muscle exercise list
-    getTargetMuscleList: builder.query(
-      createExerciseQuery("/targetList"), {
-        providesTags: ["exercises", "TargetMuscleList"]
-      }
-    ),
   }),
 });
 
 // Destructure the action creators
 export const {
   useLazyGetAllExercisesQuery,
-  useLazyGetOneExerciseDetailQuery,
-  useLazyGetSpecificBodyPartExercisesQuery,
-  useLazyGetSpecificEquipmentExercisesQuery,
-  useLazyGetSpecificTargetMuscleExercisesQuery,
-  useLazyGetBodyPartListQuery,
-  useLazyGetEquipmentListQuery,
-  useLazyGetTargetMuscleListQuery,
 } = exerciseDBsApiSlice;

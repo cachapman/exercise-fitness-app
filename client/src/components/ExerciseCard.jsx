@@ -4,25 +4,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
+import { selectExercises } from "../slices/exerciseSlice";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 
 /**
- * ExerciseCard is the child component of ExerciseResultsList and FavoriteExercisesList that sets the parameters for displaying exercise data.
+ * ExerciseCard is the child component of ExerciseResultsList and FavoriteExercisesList.
  * 
  * ExerciseCard is the grandchild component of ExercisesDashboard and FaveExercisesDashboard.
  * 
- * @param {Object} props - Props containing currentPage, exercise, and user.
- * @returns {JSX.Element} - A component for displaying the exercise card parameters.
+ * @param {Object} props - Props containing currentPage, exerciseId, and user.
+ * @returns {JSX.Element} - A component for that sets the parameters for displaying the exercise card template.
  */
 
-const ExerciseCard = ({ currentPage, exercise, user }) => {
+const ExerciseCard = ({ currentPage, exerciseId, user }) => {
   // Get logged-in user information from Redux store
   // Initialize useDispatch to dispatch the save exercise action
   const dispatch = useDispatch();
   const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
+  const exercises = useSelector(selectExercises);
+  const exercise = exercises[exerciseId];
 
   // Local state to track and initialize isLoading state
   const [isLoading, setIsLoading] = useState(false);
@@ -37,17 +40,7 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
 
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((savedFavoriteExercise) => savedFavoriteExercise.id === exercise.id);
-  };
-
-  // Parameters for saving and removing the exercise
-  const exerciseToBeSavedData = {
-    userId: user._id,
-    exercise: exercise,
-  };
-  const removeExerciseParams = {
-    userId: user._id,
-    exerciseId: exercise.id,
+    return savedFavoriteExercisesList.some((item) => item.exercise.id === exercise.id);
   };
 
   // Use Mutation to interact with MongoDB
@@ -62,10 +55,10 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
     try {
       if (isExerciseSaved()) {
         // Remove the saved exercise from saved favorite exercises list
-        await removeExerciseFromSavedExerciseList(removeExerciseParams);
+        await removeExerciseFromSavedExerciseList(exerciseId);
       } else {
         // Add the exercise to saved favorite exercises list
-        await addExerciseToSavedExerciseList(exerciseToBeSavedData);
+        await addExerciseToSavedExerciseList(exerciseId, exercise);
       }
     } catch (err) {
       toast.error(err?.exerciseToBeSavedData?.message || err.error);
@@ -75,24 +68,28 @@ const ExerciseCard = ({ currentPage, exercise, user }) => {
     }
   };
 
-  const addExerciseToSavedExerciseList = async (exerciseToBeSavedData) => {
+  const addExerciseToSavedExerciseList = async (exerciseId, exercise) => {
     // Check if the exercise is already saved
     if (isExerciseSaved()) {
       toast.warning("Exercise is already in your saved favorite exercises list");
     } else {
       // Exercise is not in the saved favorite exercises list, can proceed to add it
-      await saveExercise(exerciseToBeSavedData);
+      await saveExercise({ 
+        userId: user.id, 
+        exerciseId: exerciseId.toString(), 
+        exercise: exercise,
+      });
       // Dispatch the action to add the exercise to savedExericseList
-      dispatch(addSavedExerciseToList(exercise));
+      dispatch(addSavedExerciseToList({exerciseId: exerciseId, exercise: exercise }));
       toast.success("Exercise added successfully to your saved favorite exercises list");
     }
   };
 
-  const removeExerciseFromSavedExerciseList = async (removeExerciseParams) => {
+  const removeExerciseFromSavedExerciseList = async (exerciseId) => {
     // Remove the saved exercise from saved favorite exercises list
-    await deleteExercise(removeExerciseParams);
+    await deleteExercise({ userId: user.id, exerciseId });
     // Dispatch the action to remove the exercise from savedExericseList
-    dispatch(removeSavedExerciseFromList(exercise));
+    dispatch(removeSavedExerciseFromList({ exerciseId: exerciseId }));
     toast.success("Exercise removed successfully from your saved favorite exercises list");
   };
 

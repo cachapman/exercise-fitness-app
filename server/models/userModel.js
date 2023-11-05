@@ -25,7 +25,14 @@ const UserSchema = new Schema({
     description: "User's fitness goal(s)",
   },
   savedFavoriteExercisesList: [{ 
-    type: Schema.Types.ObjectId, ref: "savedFavoriteExercisesList" 
+    exercise: {
+      type: Schema.Types.ObjectId, 
+      ref: "savedFavoriteExercisesList",
+    },
+    exerciseId: {
+      type: String,
+      unique: true,
+    },
   }],
   workoutList: [{ 
     type: Schema.Types.ObjectId, ref: "workoutList" 
