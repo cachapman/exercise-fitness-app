@@ -19,10 +19,6 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
       secondaryMuscles,
     } = request.body.exercise; // Extract exercise details
 
-    // Verify correct data return in console
-    console.log("request.body from exerciseController.js ", request.body);
-    console.log("userID from exerciseController.js ", request.user._id);
-
     // Check if the exercise is already saved by the user
     const user = await User.findById(userId);
     if (!user) {
@@ -76,10 +72,7 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
 const updateSavedFaveExercise = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
-    // const updateExercise = request.savedFavoriteExercisesList;
-    const exerciseId = savedFavoriteExercisesList.findById(request.params.id);
-
-    // console.log("exerciseID from exerciseController.js ", exerciseId);
+    const exerciseId = request.body.id; // Exercise ID to update
 
     // Find the user with authorized credentials
     const user = await User.findById(userId);
@@ -88,32 +81,27 @@ const updateSavedFaveExercise = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found.");
     }
 
-    // Make sure the logged in user matches the savedExercises user
-    // if (savedFavoriteExercisesList.user.toString() !== user._id) {
-    //   response.status(401);
-    //   throw new Error("Unauthorized Access: invalid credentials.");
-    // }
-    
-    // Extract exercise details to update... CODE NEEDS TO BE UPDATED AND VERIFY. Currently undefined.
-    const { totalSets, totalReps } = exerciseId;
-
-    const filter = { user: userId };
-    const update = {};
-
-    if (totalSets !== undefined) {
-      update.totalSets = totalSets;
+    // Check if the exercise exists in the user's savedFavoriteExercisesList
+    if (!user.savedFavoriteExercisesList[exerciseId]) {
+      response.status(404);
+      throw new Error("Saved favorite exercise not found");
     }
 
-    if (totalReps !== undefined) {
-      update.totalReps = totalReps;
+    const exerciseData = request.body; // Exercise data to update
+
+    if (exerciseData.totalSets !== undefined) {
+      user.savedFavoriteExercisesList[exerciseId].totalSets = exerciseData.totalSets;
     }
 
-    await savedFavoriteExercisesList.findByIdAndUpdate(filter, { $set: update });
+    if (exerciseData.totalReps !== undefined) {
+      user.savedFavoriteExercisesList[exerciseId].totalReps = exerciseData.totalReps;
+    }
 
-    // Fetch the user's updated saved favorite exercises list
-    const savedExercise = await savedFavoriteExercisesList.find({ user: userId });
+    await user.save();
 
-    response.status(200).json({ savedExercise });
+    response.status(200).json({
+      message: "Saved favorite exercise successfully updated",
+    });
   } catch (error) {
     console.log(error);
     response.status(500).json({
@@ -139,7 +127,7 @@ const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
 
     // Fetch the user's saved favorite exercises list
     if (request.user._id == userId) {
-      const savedExercises = await savedFavoriteExercisesList.find({ user: userId });
+      const savedExercises = user.savedFavoriteExercisesList;
 
       response.status(200).json({ savedExercises });
     }
@@ -158,8 +146,7 @@ const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
 const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
-    const exerciseId = (request.body.exerciseId).toString(); // Use request.body toString() get the execiseId
-    // console.log("userID at Delete from exerciseController.js ", request.user._id);
+    const exerciseId = request.body.exerciseId.toString(); // Use request.body toString() get the exerciseId
 
     // Find the user 
     const user = await User.findById(userId);
@@ -168,20 +155,17 @@ const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    // Find the saved favorite exercise to delete
-    const savedExercise = await savedFavoriteExercisesList.findOneAndDelete({ 
-      exerciseId: exerciseId,
-      user: userId,
-    });    
-
-    if (!savedExercise) {
-      response.status(404);
-      throw new Error("Saved favorite exercise not found");
-    }
-
-    // Remove the exercise ID from the user's SavedExerciseLisr
-    user.savedFavoriteExercisesList.pull(savedExercise._id);
+    
+    // Filter to remove the exercise from the user's savedFavoriteExercisesList
+    user.savedFavoriteExercisesList = user.savedFavoriteExercisesList.filter(
+      (item) => item.exerciseId !== exerciseId
+    );
+    
+    // Save the updated user object to the database
     await user.save();
+
+    // Remove the exercise from the savedFavoriteExercisesList database
+    await savedFavoriteExercisesList.deleteOne({ exerciseId: exerciseId });
     
     response.status(200).json({
       message: "Saved favorite exercise successfully deleted",
@@ -193,7 +177,7 @@ const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
       error: error.message,
     });
   }
-});    
+});
 
 export {
   saveExerciseToFaveList,

@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { selectExercises } from "../slices/exerciseSlice";
+import { scrollToTop } from "../utilities/scrollUtils";
 import { Box, Button } from "@mui/material";
 import Detail from "../components/Detail";
-import { scrollToTop } from "../utilities/scrollUtils";
+import MoreExercises from "../components/MoreExercises";
 /**
- * ExerciseDetailPage is the parent component.
+ * ExerciseDetailPage is the parent component of Detail and MoreExercises.
  *
  * @returns {JSX.Element} - A component for displaying exercise details and instructions.
  */
@@ -22,14 +24,19 @@ const ExerciseDetailPage = () => {
 
   // Select exercise details directly from the Redux store data
   const user = useSelector((state) => state.auth.userInfo);
-  const exercises = useSelector((state) => state.exercisesReduxState.exercises);
+  const exercises = useSelector(selectExercises);
 
   // Find the exercise to display based on the 'id' params
-  const exerciseDetailToDisplay = exercises.find(exercise => exercise.id === id);
+  const exerciseDetailToDisplay = exercises[id];
 
   // Use navigate to go back to the previous page (ExercisesDashboard.jsx)
-  const goBack = () => {
+  const goBackToResults = () => {
     navigate(`/exercise?page=${currentPage}`);
+  };
+
+  // Use navigate to go back to the previous page (ExercisesDashboard.jsx)
+  const goBackToFavorites = () => {
+    navigate(`/favoriteexercisesdashboard?page=${currentPage}`);
   };
   
   // use the useEffect hook to scroll to the top after rendering
@@ -43,17 +50,21 @@ const ExerciseDetailPage = () => {
     <Box paddingTop="50px">
       {/* Children components */}
       {user && <Detail exerciseDetailToDisplay={exerciseDetailToDisplay} user={user} />}
+      <MoreExercises />
       <Box 
         sx={{ 
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-evenly",
           alignItems: "center", 
           paddingTop: "20px",
           paddingBottom: "110px",
         }}
       >
-        <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}} onClick={goBack}>
-          Back to previous search results 
+        <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}} onClick={goBackToResults}>
+          Back to Previous Search Results 
+        </Button>
+        <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}} onClick={goBackToFavorites}>
+          Back to Previous Favorites List 
         </Button>
       </Box>
     </Box>

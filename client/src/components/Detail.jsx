@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import Loader from "./Loader";
 
 /**
- * Detail component display details about a specific exercise.
+ * Detail is the child component of ExerciseDetailPage that displays information about a specific exercise.
  *
  * @param {Object} props - Props containing exerciseDetailToDisplay and user.
  * @returns {JSX.Element} - A component for displaying details about a specific exercise.
@@ -20,6 +20,7 @@ import Loader from "./Loader";
 
 const Detail = ({ exerciseDetailToDisplay, user }) => {
   const { 
+    id,
     bodyPart, 
     equipment, 
     gifUrl, 
@@ -58,17 +59,7 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
   
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((savedFavoriteExercise) => savedFavoriteExercise.id === exerciseDetailToDisplay.id);
-  };
-
-  // Parameters for saving and removing the exercise
-  const exerciseToBeSavedData = {
-    userId: user._id,
-    exercise: exerciseDetailToDisplay,
-  };
-  const removeExerciseParams = {
-    userId: user._id,
-    exerciseId: exerciseDetailToDisplay.id,
+    return savedFavoriteExercisesList.some((item) => item.exercise.id === id);
   };
 
   // Use Mutation to interact with MongoDB
@@ -83,10 +74,10 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
     try {
       if (isExerciseSaved()) {
         // Remove the saved exercise from saved favorite exercises list
-        await removeExerciseFromSavedExerciseList(removeExerciseParams);
+        await removeExerciseFromSavedExerciseList(id);
       } else {
         // Add the exercise to saved favorite exercises list
-        await addExerciseToSavedExerciseList(exerciseToBeSavedData);
+        await addExerciseToSavedExerciseList(id, exerciseDetailToDisplay);
       }
     } catch (err) {
       toast.error(err?.exerciseToBeSavedData?.message || err.error);
@@ -96,24 +87,28 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
     }
   };
 
-  const addExerciseToSavedExerciseList = async (exerciseToBeSavedData) => {
+  const addExerciseToSavedExerciseList = async (exerciseId, exercise) => {
     // Check if the exercise is already saved
     if (isExerciseSaved()) {
       toast.warning("Exercise is already in your saved favorite exercises list");
     } else {
       // Exercise is not in the saved favorite exercises list, can proceed to add it
-      await saveExercise(exerciseToBeSavedData);
+      await saveExercise({
+        userId: user.id,
+        exerciseId: exerciseId.toString(),
+        exercise: exercise,
+      });
       // Dispatch the action to add the exercise to savedExericseList
-      dispatch(addSavedExerciseToList(exerciseDetailToDisplay));
+      dispatch(addSavedExerciseToList({ exerciseId: exerciseId, exercise: exercise }));
       toast.success("Exercise added successfully to your saved favorite exercises list");
     }
   };
 
-  const removeExerciseFromSavedExerciseList = async (removeExerciseParams) => {
+  const removeExerciseFromSavedExerciseList = async (exerciseId) => {
     // Remove the saved exercise from saved favorite exercises list
-    await deleteExercise(removeExerciseParams);
+    await deleteExercise({ userId: user.id, exerciseId });
     // Dispatch the action to remove the exercise from savedExericseList
-    dispatch(removeSavedExerciseFromList(exerciseDetailToDisplay));
+    dispatch(removeSavedExerciseFromList({ exerciseId: exerciseId }));
     toast.success("Exercise removed successfully from your saved favorite exercises list");
   };
 
@@ -125,7 +120,7 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
           {name}
         </Typography>
         <Typography variant="h6">
-          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your intensity with reps and sets performed! Some of the muscles worked include your {secondaryMuscles ? secondaryMuscles.join(', ') : ''}, and {target}.
+          is a great exercise for your {bodyPart}. The {name} is an amazing exercise that builds stamina, cardiovascular endurance, muscular endurance, and even strength depending on your training intensity! Some of the muscles worked include your {secondaryMuscles ? secondaryMuscles.join(', ') : ''}, and {target}.
         </Typography>
         <Typography variant="h4">
           Exercise instructions:
