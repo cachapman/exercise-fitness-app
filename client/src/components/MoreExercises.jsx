@@ -26,8 +26,8 @@ const MoreExercises = () => {
   const randomExerciseIds = getRandomExerciseIds(exerciseIds, 12);
 
   return (
-    <Box paddingBottom="55px" sx={{ mt: "100px", xs: "0" }}>
-      <Typography variant="h3" mt="-65px">
+    <Box paddingBottom="55px" sx={{ mt: "50px", xs: "0" }}>
+      <Typography variant="h3" mt="-35px">
         Here are some more great exercises:
       </Typography>
       <Stack direction="row" sx={{ p: "2", position: "relative" }}>
