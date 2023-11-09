@@ -56,7 +56,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     // Fetch saved exercise from Login User Saved Favorite Exercises List
     fetchSavedFaveExercisesList: builder.query({
       query: (data) => ({
-        url: `${API_URL}/favoriteexercisesdashboard`,
+        url: `${API_URL}/favoriteexercisesdashboard/`,
         method: "GET",
         body: data,
       }),
@@ -83,3 +83,12 @@ export const {
   useFetchSavedFaveExercisesListQuery,
   useDeleteSavedExerciseFromListMutation,
 } = usersApiSlice;
+
+// New selector function to access MongoDB 'savedFavoriteExercisesList'
+export const selectSavedFavoriteExercisesList = (state) => {
+  const queryData = state.userApi.queries["fetchSavedFaveExercisesList(undefined)"];
+  if (queryData?.data) {
+    return queryData.data.savedFavoriteExercisesList;
+  }
+  return [];
+};

@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import savedFavoriteExercisesList from "../models/exerciseModel.js";
 
 // @description   User can save an exercise to favorite exercises list
-// @route         POST /api/users/favoriteexercisesdashboard/
+// @route         POST /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
 const saveExerciseToFaveList = asyncHandler (async (request, response) => {
   try {
@@ -67,7 +67,7 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
 });
 
 // @description   User can update saved favorite exercise 
-// @route         PUT /api/users/favoriteexercisesdashboard/
+// @route         PUT /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
 const updateSavedFaveExercise = asyncHandler (async (request, response) => {
   try {
@@ -125,11 +125,11 @@ const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found or invalid credentials.");
     }
 
-    // Fetch the user's saved favorite exercises list
+    // Fetch exercise details from the 'savedfavoriteexerciseslists' collection
     if (request.user._id == userId) {
-      const savedExercises = user.savedFavoriteExercisesList;
+      const exercises = await savedFavoriteExercisesList.find({ user: userId });
 
-      response.status(200).json({ savedExercises });
+      response.status(200).json({ savedFavoriteExercisesList: exercises });
     }
   } catch (error) {
     console.log(error);
@@ -141,7 +141,7 @@ const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
 });
 
 // @description   User can delete saved favorite exercise 
-// @route         DELETE /api/users/favoriteexercisesdashboard/
+// @route         DELETE /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
 const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
   try {

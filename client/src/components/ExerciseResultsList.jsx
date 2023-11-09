@@ -3,12 +3,12 @@ import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Pagination, Stack } from "@mui/material";
 import { selectPreviousSearchResults } from "../slices/exerciseSlice";
-import ExerciseCard from "./ExerciseCard";
+import ExerciseTemplateCard from "./ExerciseTemplateCard";
 
 /**
  * ExerciseResultsList is the child component of ExercisesDashboard that displays exercise search results list.
  * 
- * ExerciseResultsList is the parent component of ExerciseCard that displays exercise search results list.
+ * ExerciseResultsList is the parent component of ExerciseTemplateCard that displays exercise search results list.
  * 
  * @param {Object} props - Props containing currentPage, setCurrentPage, and user.
  * @returns {JSX.Element} - A component for organizing the display of the exercise results list.
@@ -66,7 +66,7 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, user }) => {
       >
         {/* Map and render exercise cards */}
         {user && currentExerciseResultsIds.map((exerciseId) => (
-          <ExerciseCard key={exerciseId} exerciseId={exerciseId} user={user} currentPage={currentPage} />
+          <ExerciseTemplateCard key={exerciseId} exerciseId={exerciseId} user={user} currentPage={currentPage} />
         ))}
       </Stack>
 

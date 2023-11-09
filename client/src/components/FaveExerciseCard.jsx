@@ -1,31 +1,30 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
-import { selectExercises } from "../slices/exerciseSlice";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 
 /**
- * ExerciseCard is the child component of ExerciseResultsList and FavoriteExercisesList.
+ * FaveExerciseCard is the child component of FavoriteExercisesList.
  * 
- * ExerciseCard is the grandchild component of ExercisesDashboard and FaveExercisesDashboard.
+ * FaveExerciseCard is the grandchild component of FaveExercisesDashboard.
  * 
  * @param {Object} props - Props containing currentPage, exerciseId, and user.
  * @returns {JSX.Element} - A component for that sets the parameters for displaying the exercise card template.
  */
 
-const ExerciseCard = ({ currentPage, exerciseId, user }) => {
+const FaveExerciseCard = ({ currentPage, exercise, user }) => {
   // Get logged-in user information from Redux store
   // Initialize useDispatch to dispatch the save exercise action
   const dispatch = useDispatch();
   const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
-  const exercises = useSelector(selectExercises);
-  const exercise = exercises[exerciseId];
+  const exerciseId = exercise.exerciseId;
+  console.log("exercise at FaveExerciseCard.jsx: ", exercise);
 
   // Local state to track and initialize isLoading state
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +39,7 @@ const ExerciseCard = ({ currentPage, exerciseId, user }) => {
 
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((item) => item.exercise.id === exercise.id);
+    return savedFavoriteExercisesList.some((item) => item.exerciseId === exerciseId);
   };
 
   // Use Mutation to interact with MongoDB
@@ -95,11 +94,12 @@ const ExerciseCard = ({ currentPage, exerciseId, user }) => {
 
   return (
     <Box className="exercise-card-box">
-      <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
-        <Tooltip title={"Click for exercise instructions".toUpperCase()}>
-          <img src={exercise.gifUrl} alt={exercise.name} loading="lazy" onClick={handleExerciseCardCurrentPageClick}/>
-        </Tooltip>
-      </Link>
+      <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}  onClick={handleExerciseCardCurrentPageClick}>
+            {exercise.name}
+      </Typography>
+      <Typography variant="h7">
+          {exercise.instructions ? exercise.instructions.join(' ') : ''}
+        </Typography>
       <Stack direction="row" alignItems="center" justifyContent="center">
         <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.target}
@@ -118,15 +118,8 @@ const ExerciseCard = ({ currentPage, exerciseId, user }) => {
           </Tooltip>
         )}
       </Stack>
-      <Link className="exercise-card" to={`/exercise/${exercise.id}?page=${currentPage}`}>
-        <Tooltip title={"Click for exercise instructions".toUpperCase()}>
-          <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}  onClick={handleExerciseCardCurrentPageClick}>
-            {exercise.name}
-          </Typography>
-        </Tooltip>
-      </Link>
     </Box>
   )
 };
 
-export default ExerciseCard;
+export default FaveExerciseCard;

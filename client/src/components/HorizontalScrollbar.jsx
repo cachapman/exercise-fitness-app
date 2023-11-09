@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
-import ExerciseCard from "./ExerciseCard";
+import ExerciseTemplateCard from "./ExerciseTemplateCard";
 
 /**
  * HorizontalScrollbar is the child component of MoreExercises to display a horizontal scrollbar of exercise cards.
@@ -20,7 +20,7 @@ const HorizontalScrollbar = ({ exerciseIds }) => {
             m="0 30px"
             pt="15px"
           >
-            <ExerciseCard exerciseId={exerciseId} />
+            <ExerciseTemplateCard exerciseId={exerciseId} />
           </Box>
         )
       )}

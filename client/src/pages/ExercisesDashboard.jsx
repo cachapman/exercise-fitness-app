@@ -168,8 +168,8 @@ const ExercisesDashboard = () => {
         > 
           Start a search or select a body part to explore the database...
         </Typography>
-      ) : null}
-      {fetchingAllExercises ? (<Loader />
+      ) : fetchingAllExercises ? (
+        <Loader />
       ) : null}
       {dataFetched && <ExerciseResultsList 
         currentPage={currentPage} 
