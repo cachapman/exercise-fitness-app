@@ -143,10 +143,6 @@ html {
     transform: scale(1.1, 1.1);
   }
 
-  .bodyPart-card:hover {
-    transform: scale(1.1, 1.1);
-  }
-
   .exercise-card-name {
     text-align: center;
     color: #ff2625;
@@ -154,14 +150,30 @@ html {
     padding-bottom: 5px;
     text-transform: capitalize;
     text-decoration: none;
-    cursor: pointer;
     pointer-events: all;
     height: 82px;
     align-items: center;
   }
 
-  .exercise-card-category-btn {
+  .exercise-card-template-category-btn {
     pointer-events: none;
+  }
+
+  .exercise-card-category-btn {
+    background-color: #ff2625;
+    margin-left: 5px;
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 5px;
+    min-width: min-content;
+    &:hover {
+      color: #ff2625;
+      border: 2px solid #ff2625;
+      padding: 4px 6px;
+    }
+    &:active {
+      transform: scale(1.1, 1.1);
+    }
   }
 
   .exercise-card-add-btn {

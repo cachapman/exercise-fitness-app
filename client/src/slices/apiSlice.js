@@ -13,6 +13,5 @@ export const apiSlice = createApi({
   reducerPath: "userApi",
   baseQuery,
   tagTypes: ["User", "exercises", "bodyPart"],
-  keepUnusedDataFor: 60 * 60 * 24 * 30,
   endpoints: (builder) => ({})
 });

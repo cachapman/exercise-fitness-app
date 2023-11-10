@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
-import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
-import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
-import AddIcon from "@mui/icons-material/Add";
+import { useDispatch } from "react-redux";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Tooltip, Typography } from "@mui/material";
+import { useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
+import { removeSavedExerciseFromList } from "../slices/authSlice";
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
@@ -14,106 +12,125 @@ import Loader from "./Loader";
  * 
  * FaveExerciseCard is the grandchild component of FaveExercisesDashboard.
  * 
- * @param {Object} props - Props containing currentPage, exerciseId, and user.
+ * @param {Object} props - Props containing exercise, user, and onFilterAndSortChange.
  * @returns {JSX.Element} - A component for that sets the parameters for displaying the exercise card template.
  */
 
-const FaveExerciseCard = ({ currentPage, exercise, user }) => {
+const FaveExerciseCard = ({ exercise, user, onFilterAndSortChange, onRemoveSavedExercise }) => {
   // Get logged-in user information from Redux store
   // Initialize useDispatch to dispatch the save exercise action
   const dispatch = useDispatch();
-  const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
   const exerciseId = exercise.exerciseId;
-  console.log("exercise at FaveExerciseCard.jsx: ", exercise);
+  console.log("exerciseId at FaveExerciseCard.jsx: ", exercise.exerciseId);
 
-  // Local state to track and initialize isLoading state
+  // Local state to track and initialize isLoading and visibility of the confirmation dialog state
   const [isLoading, setIsLoading] = useState(false);
-
-  // Get the navigation function
-  const navigate = useNavigate();
-
-  // Handle the exercise card click to navigate with the currentPage parameter
-  const handleExerciseCardCurrentPageClick = () => {
-    navigate(`/exercise/${exercise.id}?page=${currentPage}`);
-  };
-
-  // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
-  const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((item) => item.exerciseId === exerciseId);
-  };
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
 
   // Use Mutation to interact with MongoDB
-  const [saveExercise] = useSaveExerciseToFaveListMutation();
   const [deleteExercise] = useDeleteSavedExerciseFromListMutation();
 
-  // Define the function to handle the click event when adding or removing the exercise
-  const handleExerciseClick = async () => {
-    // Start loading
-    setIsLoading(true);
+  // Functions to display the confirmation dialog
+  const handleConfirmationDialogOpen = () => {
+    setIsConfirmationDialogOpen(true);
+  };
+  const handleConfirmationDialogClose = () => {
+    setIsConfirmationDialogOpen(false);
+  };
 
+  // Define the function to handle the click event when removing the exercise
+  const handleExerciseClick = async () => {
+    // Only open the confirmation dialog when the check icon is clicked to remove the exercise
+    handleConfirmationDialogOpen();
+  };
+
+  const removeExerciseFromSavedExerciseList = async (exerciseId) => {
+    setIsLoading(true);
+    // Remove the saved exercise from saved favorite exercises list
     try {
-      if (isExerciseSaved()) {
-        // Remove the saved exercise from saved favorite exercises list
-        await removeExerciseFromSavedExerciseList(exerciseId);
-      } else {
-        // Add the exercise to saved favorite exercises list
-        await addExerciseToSavedExerciseList(exerciseId, exercise);
-      }
+      await deleteExercise({ userId: user.id, exerciseId });
+      // Dispatch the action to remove the exercise from savedExericseList
+      dispatch(removeSavedExerciseFromList({ exerciseId: exerciseId }));
+      // Call the callback function to remove the exercise from the local state in parent component
+      onRemoveSavedExercise(exerciseId);
+      toast.success("Exercise removed successfully from your saved favorite exercises list");
     } catch (err) {
-      toast.error(err?.exerciseToBeSavedData?.message || err.error);
+      toast.error(err.error);
     } finally {
-      // Always stop loading after the action, whether it succeeded or failed
       setIsLoading(false);
     }
   };
 
-  const addExerciseToSavedExerciseList = async (exerciseId, exercise) => {
-    // Check if the exercise is already saved
-    if (isExerciseSaved()) {
-      toast.warning("Exercise is already in your saved favorite exercises list");
-    } else {
-      // Exercise is not in the saved favorite exercises list, can proceed to add it
-      await saveExercise({ 
-        userId: user.id, 
-        exerciseId: exerciseId.toString(), 
-        exercise: exercise,
-      });
-      // Dispatch the action to add the exercise to savedExericseList
-      dispatch(addSavedExerciseToList({exerciseId: exerciseId, exercise: exercise }));
-      toast.success("Exercise added successfully to your saved favorite exercises list");
-    }
-  };
-
-  const removeExerciseFromSavedExerciseList = async (exerciseId) => {
-    // Remove the saved exercise from saved favorite exercises list
-    await deleteExercise({ userId: user.id, exerciseId });
-    // Dispatch the action to remove the exercise from savedExericseList
-    dispatch(removeSavedExerciseFromList({ exerciseId: exerciseId }));
-    toast.success("Exercise removed successfully from your saved favorite exercises list");
+  const filterAndSort = (value) => {
+    onFilterAndSortChange({ target: { value } });
   };
 
   return (
     <Box className="exercise-card-box">
-      <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}  onClick={handleExerciseCardCurrentPageClick}>
+      <Dialog 
+        open={isConfirmationDialogOpen}
+        onClose={handleConfirmationDialogClose}
+      >
+        <DialogTitle>Confirm Removal</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Remove {exercise.name} from your list?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => {
+              // Close the dialog and execute the removal
+              handleConfirmationDialogClose();
+              removeExerciseFromSavedExerciseList(exerciseId);
+            }} 
+            color="primary"
+          >
+            Yes
+          </Button>
+          <Button onClick={handleConfirmationDialogClose} color="error">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Typography className="exercise-card-name" sx={{ fontSize: { lg: "24px", xs: "16px" } }}>
             {exercise.name}
       </Typography>
-      <Typography variant="h7">
+      <Typography variant="body1">
           {exercise.instructions ? exercise.instructions.join(' ') : ''}
         </Typography>
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
-          {exercise.target}
-        </Button>
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
-          {exercise.bodyPart}
-        </Button>
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
-          {exercise.equipment}
-        </Button>
+        <Tooltip title={"Sort by target muscle".toUpperCase()} arrow>
+          <Button 
+            onClick={() => filterAndSort("target")}
+            className="exercise-card-category-btn" 
+            sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}
+          >
+            {exercise.target}
+          </Button>
+        </Tooltip>
+        <Tooltip title={"Sort by body part".toUpperCase()} arrow>
+          <Button 
+            onClick={() => filterAndSort("bodyPart")}
+            className="exercise-card-category-btn" 
+            sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}
+          >
+            {exercise.bodyPart}
+          </Button>
+        </Tooltip>
+        <Tooltip title={"Sort by equipment".toUpperCase()} arrow>
+          <Button 
+            onClick={() => filterAndSort("equipment")}
+            className="exercise-card-category-btn" 
+            sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}
+          >
+            {exercise.equipment}
+          </Button>
+        </Tooltip>
         {user && (
-          <Tooltip title={`Click to ${isExerciseSaved() ? "REMOVE" : "ADD"} exercise ${isExerciseSaved() ? "from" : "to"} your saved favorite exercises list`.toUpperCase()} arrow>
-            <Button onClick={handleExerciseClick} className={`exercise-card-${isExerciseSaved() ? "check" : "add"}-btn`}>
-              {isLoading ? (<Loader />) : isExerciseSaved() ? <CheckIcon fontSize="large" /> : <AddIcon fontSize="large" />}
+          <Tooltip title={"Click to REMOVE exercise from your saved favorite exercises list".toUpperCase()} arrow>
+            <Button onClick={handleExerciseClick} className="exercise-card-check-btn">
+              {isLoading ? (<Loader />) : <CheckIcon fontSize="large" />}
             </Button>
           </Tooltip>
         )}

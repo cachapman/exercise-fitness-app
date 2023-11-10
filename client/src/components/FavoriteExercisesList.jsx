@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { selectSavedFavoriteExercisesList, useFetchSavedFaveExercisesListQuery } from "../slices/usersApiSlice";
+import { selectSavedFavoriteExercisesList, useFetchSavedFaveExercisesListQuery, useUpdateSavedFaveExercisesListMutation } from "../slices/usersApiSlice";
 import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from "@mui/material";
 import { scrollToTop } from "../utilities/scrollUtils";
 import FaveExerciseCard from "./FaveExerciseCard";
@@ -23,8 +23,8 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
 
   // Using local state to track pagination variable, selected filter and exercises
   const [exercisesPerPage] = useState(12);
-  const [selectedFilter, setSelectedFilter] = useState("name"); // Default filter currently set by name
-  const [filterExercises, setFilterExercises] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("mostRecentToOldest"); // Default filter currently set by name
+  const [filterExercises, setFilterExercises] = useState([]); // State to manage the list of saved exercises
   const [isLoadingData, setIsLoadingData] = useState(true);
   
   // Trigger the query to fetch the saved exercises data
@@ -32,6 +32,7 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
   
   // Use the selector to access the Redux store userApi query savedFavoriteExercisesList
   const savedFavoriteExercisesListFromMongoDB = useSelector(selectSavedFavoriteExercisesList);
+  console.log("savedFavoriteExercisesListFromMongoDB at FavoriteExercisesList.jsx: ", savedFavoriteExercisesListFromMongoDB);
 
   // Handle the filter change event
   const handleFilterChange = (event) => {
@@ -39,12 +40,17 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
     setSelectedFilter(event.target.value);
   };
 
+  // Use the mutation hook for updating the saved exercises list
+  const [updateSavedExercisesList] = useUpdateSavedFaveExercisesListMutation();
+
   useEffect(() => {
     // Check if data is being fetched, if so, return
     if (isFetching || isLoading || !fetchedSavedExercisesDataFromMongoDB) {
+      console.log("Data is being fetched or is loading. Skipping update at FavoriteExercisesList.jsx.");
       setIsLoadingData(true);
       return;
     }
+    console.log("fetchedSavedExercisesDataFromMongoDB data at FavoriteExercisesList.jsx: ", fetchedSavedExercisesDataFromMongoDB);
 
     // Sort and filter the exercises based on the selected criteria
     const filterAndSortExercises = () => {
@@ -75,11 +81,18 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
       // Update the filtered exercises state
       setFilterExercises(copySavedFavoriteExercisesListFromMongoDB);
       setIsLoadingData(false);
+      // Update Redux store with the filtered and sorted list
+      updateSavedExercisesList({
+        userId: user.id,
+        savedFavoriteExercisesList: copySavedFavoriteExercisesListFromMongoDB,
+      });
     };
-
     // Call the filter and sort function whenever the selected filter or exercises change
+    console.log("Calling filterAndSortExercises...");
     filterAndSortExercises();
-  }, [dispatch, savedFavoriteExercisesListFromMongoDB, selectedFilter, fetchedSavedExercisesDataFromMongoDB, isFetching, isLoading]);
+  }, [dispatch, savedFavoriteExercisesListFromMongoDB, selectedFilter, fetchedSavedExercisesDataFromMongoDB, isFetching, isLoading, user.id, updateSavedExercisesList]);
+
+  console.log("filterExercises at FavoriteExercisesList.jsx: ", filterExercises);
 
   // Handle pagination change
   const paginate = (event, value) => {
@@ -93,9 +106,6 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
     // Scroll to the top of the exercises container for a smooth transition
     scrollToTop();
   };
-
-  console.log("selectedFilter", selectedFilter);
-  console.log("filterExercises", filterExercises);
 
   return (
     <Box id="show-exercises" sx={{mt: { lg: "50px" }}} mt="25px" p="20px">
@@ -131,11 +141,18 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user }) => {
             justifyContent="center"
           >
             {/* Map and render exercise cards */}
-            {user && filterExercises
-              .slice((currentPage - 1) * exercisesPerPage, currentPage * exercisesPerPage)
-              .map((exercise) => (
-              <FaveExerciseCard key={exercise.id} exercise={exercise} user={user} currentPage={currentPage} />
-            ))}
+            {user && 
+              filterExercises
+                .slice((currentPage - 1) * exercisesPerPage, currentPage * exercisesPerPage)
+                .map((exercise) => (
+                  <FaveExerciseCard 
+                    key={exercise.exerciseId} 
+                    exercise={exercise} 
+                    user={user} 
+                    onFilterAndSortChange={handleFilterChange}
+                    onRemoveSavedExercise={updateSavedExercisesList}
+                  />
+              ))}
           </Stack>
 
           <Stack mt="20px" paddingBottom="50px" alignItems="center">
