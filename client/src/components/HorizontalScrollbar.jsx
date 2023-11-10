@@ -15,7 +15,7 @@ const HorizontalScrollbar = ({ exerciseIds }) => {
       {exerciseIds.map((exerciseId) => (
           <Box 
             key={exerciseId}
-            moreInfo={exerciseId}
+            more={exerciseId}
             title={exerciseId}
             m="0 30px"
             pt="15px"

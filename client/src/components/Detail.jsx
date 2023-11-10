@@ -59,7 +59,16 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
   
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((item) => item.exercise.id === id);
+    if (!exerciseDetailToDisplay || typeof exerciseDetailToDisplay.id === 'undefined' || !savedFavoriteExercisesList) {
+      console.error("Exercise, exercise id, or savedFavoriteExercisesList is not defined");
+      return false;
+    }
+  
+    const isSaved = savedFavoriteExercisesList.some((item) => item.exercise && item.exercise.id === exerciseDetailToDisplay.id.toString());
+  
+    console.log("isExerciseSaved:", isSaved);
+  
+    return isSaved;
   };
 
   // Use Mutation to interact with MongoDB

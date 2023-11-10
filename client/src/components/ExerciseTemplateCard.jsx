@@ -27,6 +27,11 @@ const ExerciseTemplateCard = ({ currentPage, exerciseId, user }) => {
   const exercises = useSelector(selectExercises);
   const exercise = exercises[exerciseId];
 
+  console.log("exerciseId:", exerciseId);
+  console.log("exercises:", exercises);
+  console.log("exercise:", exercise);
+  console.log("savedFavoriteExercisesList:", savedFavoriteExercisesList);
+
   // Local state to track and initialize isLoading state
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,9 +45,18 @@ const ExerciseTemplateCard = ({ currentPage, exerciseId, user }) => {
 
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
-    return savedFavoriteExercisesList.some((item) => item.exercise.id === exercise.id);
+    if (!exercise || typeof exercise.id === 'undefined' || !savedFavoriteExercisesList) {
+      console.error("Exercise, exercise id, or savedFavoriteExercisesList is not defined");
+      return false;
+    }
+  
+    const isSaved = savedFavoriteExercisesList.some((item) => item.exercise && item.exercise.id === exercise.id.toString());
+  
+    console.log("isExerciseSaved:", isSaved);
+  
+    return isSaved;
   };
-
+  
   // Use Mutation to interact with MongoDB
   const [saveExercise] = useSaveExerciseToFaveListMutation();
   const [deleteExercise] = useDeleteSavedExerciseFromListMutation();
@@ -101,13 +115,13 @@ const ExerciseTemplateCard = ({ currentPage, exerciseId, user }) => {
         </Tooltip>
       </Link>
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+        <Button className="exercise-card-template-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff2a2a", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.target}
         </Button>
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
+        <Button className="exercise-card-template-category-btn" sx={{ ml: "10px", color: "#fff", background: "#ff5d5d", fontSize: "14px", borderRadius: "20px",    textTransform: "capitalize"}}>
           {exercise.bodyPart}
         </Button>
-        <Button className="exercise-card-category-btn" sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
+        <Button className="exercise-card-template-category-btn" sx={{ ml: "10px", mr: "10px", color: "#fff", background: "#ff9090", fontSize: "14px", borderRadius: "20px", textTransform: "capitalize"}}>
           {exercise.equipment}
         </Button>
         {user && (

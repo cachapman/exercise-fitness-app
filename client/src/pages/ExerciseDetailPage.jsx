@@ -33,11 +33,6 @@ const ExerciseDetailPage = () => {
   const goBackToResults = () => {
     navigate(`/exercise?page=${currentPage}`);
   };
-
-  // Use navigate to go back to the previous page (ExercisesDashboard.jsx)
-  const goBackToFavorites = () => {
-    navigate(`/favoriteexercisesdashboard?page=${currentPage}`);
-  };
   
   // use the useEffect hook to scroll to the top after rendering
   useEffect(() => {
@@ -54,7 +49,7 @@ const ExerciseDetailPage = () => {
       <Box 
         sx={{ 
           display: "flex",
-          justifyContent: "space-evenly",
+          justifyContent: "center",
           alignItems: "center", 
           paddingTop: "20px",
           paddingBottom: "110px",
@@ -62,9 +57,6 @@ const ExerciseDetailPage = () => {
       >
         <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}} onClick={goBackToResults}>
           Back to Previous Search Results 
-        </Button>
-        <Button variant="contained" color="error" sx={{ mt: "10px", padding: "15px"}} onClick={goBackToFavorites}>
-          Back to Previous Favorites List 
         </Button>
       </Box>
     </Box>

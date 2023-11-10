@@ -66,13 +66,12 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can update saved favorite exercise 
+// @description   User can update saved favorite exercise list
 // @route         PUT /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
-const updateSavedFaveExercise = asyncHandler (async (request, response) => {
+const updateSavedFaveExercisesListAfterRemoval = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
-    const exerciseId = request.body.id; // Exercise ID to update
 
     // Find the user with authorized credentials
     const user = await User.findById(userId);
@@ -81,27 +80,12 @@ const updateSavedFaveExercise = asyncHandler (async (request, response) => {
       throw new Error("Unauthorized Access: User not found.");
     }
 
-    // Check if the exercise exists in the user's savedFavoriteExercisesList
-    if (!user.savedFavoriteExercisesList[exerciseId]) {
-      response.status(404);
-      throw new Error("Saved favorite exercise not found");
+    // Fetch exercise details from the 'savedfavoriteexerciseslists' collection
+    if (request.user._id == userId) {
+      const exercises = await savedFavoriteExercisesList.find({ user: userId });
+
+    response.status(200).json({ savedFavoriteExercisesList: exercises });
     }
-
-    const exerciseData = request.body; // Exercise data to update
-
-    if (exerciseData.totalSets !== undefined) {
-      user.savedFavoriteExercisesList[exerciseId].totalSets = exerciseData.totalSets;
-    }
-
-    if (exerciseData.totalReps !== undefined) {
-      user.savedFavoriteExercisesList[exerciseId].totalReps = exerciseData.totalReps;
-    }
-
-    await user.save();
-
-    response.status(200).json({
-      message: "Saved favorite exercise successfully updated",
-    });
   } catch (error) {
     console.log(error);
     response.status(500).json({
@@ -111,7 +95,7 @@ const updateSavedFaveExercise = asyncHandler (async (request, response) => {
   }
 });
 
-// @description   User can fetch saved favorite exercise 
+// @description   User can fetch saved favorite exercise list
 // @route         GET /api/users/favoriteexercisesdashboard
 // @access        Private - can access URL only with token after logging in
 const fetchSavedFaveExercisesList = asyncHandler (async (request, response) => {
@@ -181,7 +165,7 @@ const deleteSavedExerciseFromList = asyncHandler (async (request, response) => {
 
 export {
   saveExerciseToFaveList,
-  updateSavedFaveExercise,
+  updateSavedFaveExercisesListAfterRemoval,
   fetchSavedFaveExercisesList,
   deleteSavedExerciseFromList,
 };
