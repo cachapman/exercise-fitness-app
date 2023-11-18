@@ -36,6 +36,12 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
   const handleSortExercisesByDisplayChange = (event) => {
     // Update the selected sort by criteria
     setSelectedSortBy(event.target.value);
+    // Reset to load on page one
+    setCurrentPage(1);
+    // Update the URL with the current page number
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", 1);
+    navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
   useEffect(() => {
