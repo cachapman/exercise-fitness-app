@@ -1,12 +1,13 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { useFetchSavedFaveExercisesListQuery } from "../slices/usersApiSlice";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import FavoriteExercisesList from "../components/FavoriteExercisesList";
 import SearchAdd from "../assets/icons/search-add.png";
 import WorkoutImage from "../assets/icons/sport-color.png";
 import CompletedWorkoutImage from "../assets/icons/workout-calendar.png";
 import VerticalLine from "../assets/icons/line.png";
-import { useState } from "react";
 
 /**
  * FaveExercisesDashboard is the parent component that displays user's favorite exercises.
@@ -17,6 +18,10 @@ import { useState } from "react";
 const FaveExercisesDashboard = () => {
   // Get logged-in user information from Redux store
   const user = useSelector((state) => state.auth.userInfo);
+
+  // Use query hook to fetch saved exercises data
+  const { data: fetchedSavedExercisesListDataFromMongoDB, isFetching, isLoading } = useFetchSavedFaveExercisesListQuery();
+  console.log("fetchedSavedExercisesListDataFromMongoDB at FaveExercisesDashboard.jsx: ", fetchedSavedExercisesListDataFromMongoDB);
 
   // Initialize currentPage from the URL
   const location = useLocation();
@@ -36,6 +41,9 @@ const FaveExercisesDashboard = () => {
         user={user} 
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        fetchedSavedExercisesListDataFromMongoDB={fetchedSavedExercisesListDataFromMongoDB}
+        isFetching={isFetching}
+        isLoading={isLoading}
       />
       <Box className="button-group">
         <Link to="/exercise">

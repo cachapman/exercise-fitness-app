@@ -1,5 +1,4 @@
 import { apiSlice } from "./apiSlice";
-import { createSelector } from "reselect";
 
 const API_URL = "/api/users";
 
@@ -84,19 +83,3 @@ export const {
   useFetchSavedFaveExercisesListQuery,
   useUpdateSavedFaveExercisesListMutation,
 } = usersApiSlice;
-
-// Original selector function to access MongoDB 'savedFavoriteExercisesList'
-export const selectSavedFavoriteExercisesListData = (state) => {
-  const queryData = state.userApi.queries["fetchSavedFaveExercisesList(undefined)"];
-  if (queryData?.data) {
-    return queryData.data.savedFavoriteExercisesList;
-  }
-  return [];
-};
-
-// Create a memoized selector using reselect
-// Memoized selector will memoized the output to reduce unnecessary re-renders.
-export const selectSavedFavoriteExercisesList = createSelector(
-  [selectSavedFavoriteExercisesListData], // List of input selectors
-  (savedFavoriteExercisesList) => savedFavoriteExercisesList // Output selector function
-);
