@@ -12,6 +12,12 @@ import Loader from "./Loader";
  * FavoriteExercisesList is the parent component of FaveExerciseCard that displays favorite exercises list.
  * 
  * @param {Object} props - Props containing currentPage, setCurrentPage, user, fetchedSavedExercisesListDataFromMongoDB, isFetching, and isLoading.
+ *    - currentPage: The current page number.
+ *    - setCurrentPage: Function to set the current page.
+ *    - user: Object representing the logged-in user information.
+ *    - fetchedSavedExercisesListDataFromMongoDB: Data fetched from MongoDB containing saved exercises.
+ *    - isFetching: Boolean indicating whether data is currently being fetched.
+ *    - isLoading: Boolean indicating whether the component is in a loading state.
  * @returns {JSX.Element} - A component for organizing the display of user's favorite exercises list.
  */
 
@@ -30,7 +36,6 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
   const savedFavoriteExercisesListFromMongoDB = useMemo(() => {
     return fetchedSavedExercisesListDataFromMongoDB?.savedFavoriteExercisesList || [];
   }, [fetchedSavedExercisesListDataFromMongoDB]);
-  console.log("savedFavoriteExercisesListFromMongoDB at FavoriteExercisesList.jsx: ", savedFavoriteExercisesListFromMongoDB);
 
   // Handle the exercises sort by criteria change event
   const handleSortExercisesByDisplayChange = (event) => {
@@ -45,20 +50,16 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
   };
 
   useEffect(() => {
-    console.log("Inside useEffect at FavoriteExercisesList.jsx, at the start... ready, set, go!");
     // Check if data is being fetched, if so, return
     if (isFetching || isLoading) {
-      console.log("Data is being fetched or is loading at FavoriteExercisesList.jsx.");
       setIsLoadingData(true);
       return;
     }
-    console.log("Just outside first if statement at FavoriteExercisesList.jsx: ");
 
     // Sort the exercises based on the selected criteria
     const sortExercisesBy = async () => {
       // Create a copy of the originial exercises to avoid modifying the state directly
       const copySavedFavoriteExercisesListFromMongoDB = [...savedFavoriteExercisesListFromMongoDB];
-      console.log("Length during declaration start, copySavedFavoriteExercisesListFromMongoDB data at FavoriteExercisesList.jsx: ", copySavedFavoriteExercisesListFromMongoDB);
 
       // Sort the exercises based on the selected sort criteria
       copySavedFavoriteExercisesListFromMongoDB.sort((a, b) => {
@@ -68,8 +69,6 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
           return a.bodyPart.localeCompare(b.bodyPart);
         } else if (selectedSortBy === "target") {
           return a.target.localeCompare(b.target);
-        } else if (selectedSortBy === "secondaryMuscles") {
-          return a.secondaryMuscles[0].localeCompare(b.secondaryMuscles[0]);
         } else if (selectedSortBy === "equipment") {
           return a.equipment.localeCompare(b.equipment);
         } else if (selectedSortBy === "mostRecentToOldest") {
@@ -86,12 +85,8 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
       setIsLoadingData(false);
     };
     // Call the sortExercisesBy function whenever the selected sort by criteria changes
-    console.log("Calling sortExercisesBy...");
     sortExercisesBy();
-    console.log("Inside useEffect, component re-rendered successfully!");
   }, [dispatch, savedFavoriteExercisesListFromMongoDB, isFetching, isLoading, selectedSortBy, user]);
-
-  console.log("just outside useEffect, sortExercisesList at FavoriteExercisesList.jsx: ", sortExercisesList);
 
   // Handle pagination change
   const paginate = (event, value) => {
@@ -121,7 +116,6 @@ const FavoriteExercisesList = ({ currentPage, setCurrentPage, user, fetchedSaved
           <MenuItem value="name">Name</MenuItem>
           <MenuItem value="bodyPart">Body Part</MenuItem>
           <MenuItem value="target">Target Muscle</MenuItem>
-          <MenuItem value="secondaryMuscles">Secondary Muscles</MenuItem>
           <MenuItem value="equipment">Equipment</MenuItem>
           <MenuItem value="mostRecentToOldest">Date Added (Newest First)</MenuItem>
           <MenuItem value="oldestToMostRecent">Date Added (Oldest First)</MenuItem>

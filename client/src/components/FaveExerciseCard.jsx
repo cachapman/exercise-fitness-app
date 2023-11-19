@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Tooltip, Typography } from "@mui/material";
 import { useDeleteSavedExerciseFromListMutation, useFetchSavedFaveExercisesListQuery, useUpdateSavedFaveExercisesListMutation } from "../slices/usersApiSlice";
 import { removeSavedExerciseFromList } from "../slices/authSlice";
-import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
+import CheckIcon from "@mui/icons-material/Check";
 import Loader from "./Loader";
 
 /**
@@ -13,6 +13,9 @@ import Loader from "./Loader";
  * FaveExerciseCard is the grandchild component of FaveExercisesDashboard.
  * 
  * @param {Object} props - Props containing exercise, user, and onSortDisplayChange.
+ *    - exercise: Object representing the details of the exercise.
+ *    - user: Object representing the logged-in user information.
+ *    - onSortDisplayChange: Function to handle the sort order change.
  * @returns {JSX.Element} - A component for that sets the parameters for displaying the favorite exercise card template.
  */
 
@@ -31,7 +34,7 @@ const FaveExerciseCard = ({ exercise, user, onSortDisplayChange }) => {
   const [updateSavedExercisesList] = useUpdateSavedFaveExercisesListMutation();
   const { refetch } = useFetchSavedFaveExercisesListQuery();
 
-  // Functions to display the confirmation dialog
+  // Functions to display the confirmation dialog popup message
   const handleConfirmationDialogOpen = () => {
     setIsConfirmationDialogOpen(true);
   };
@@ -40,14 +43,12 @@ const FaveExerciseCard = ({ exercise, user, onSortDisplayChange }) => {
   };
 
   // Define the function to handle the click event when removing the exercise
-  const handleExerciseClick = async () => {
+  const handleRemoveExerciseClick = async () => {
     // Only open the confirmation dialog when the check icon is clicked to remove the exercise
     handleConfirmationDialogOpen();
   };
 
   const removeExerciseFromSavedExerciseList = async (exerciseId) => {
-    console.log("Removing exercise started... at FaveExerciseCard.jsx");
-    
     // Remove the saved exercise from saved favorite exercises list in MongoDB database
     setIsLoading(true);
     try {
@@ -56,9 +57,8 @@ const FaveExerciseCard = ({ exercise, user, onSortDisplayChange }) => {
       dispatch(removeSavedExerciseFromList({ exerciseId: exerciseId }));
       // Update the saved favorite exercises list
       await updateSavedExercisesList();
-      // Manually refetch the data
+      // Refetch the updated data
       refetch();
-      console.log("at FaveExerciseCard.jsx exercise ID remove:", exerciseId)
       toast.success("Exercise removed successfully from your saved favorite exercises list");
     } catch (err) {
       toast.error(`Failed to remove exercise: ${err.error}`);
@@ -135,7 +135,7 @@ const FaveExerciseCard = ({ exercise, user, onSortDisplayChange }) => {
         </Tooltip>
         {user && (
           <Tooltip title={"Click to REMOVE exercise from your saved favorite exercises list".toUpperCase()} arrow>
-            <Button onClick={handleExerciseClick} className="exercise-card-check-btn">
+            <Button onClick={handleRemoveExerciseClick} className="exercise-card-check-btn">
               {isLoading ? (<Loader />) : <CheckIcon fontSize="large" />}
             </Button>
           </Tooltip>

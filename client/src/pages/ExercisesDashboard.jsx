@@ -16,7 +16,7 @@ import Loader from "../components/Loader";
  */
 
 const ExercisesDashboard = () => {
-  // Initialize currentPage from the URL
+  // Get the current location to parse and initialize the currentPage from the URL
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const currentPageFromURL = searchParams.get("page");
@@ -47,6 +47,7 @@ const ExercisesDashboard = () => {
     } catch (error) {
       console.error("Failed to fetch and store exercises to the Redux store: ", error);
     } finally {
+      // Set loading state to false after fetching
       dispatch(setDataFromApiLoading(false));
     }
   }, [dispatch, getAllExercises]);

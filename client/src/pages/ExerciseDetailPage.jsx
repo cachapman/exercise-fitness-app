@@ -15,7 +15,7 @@ import MoreExercises from "../components/MoreExercises";
 const ExerciseDetailPage = () => {
   // Extract exercise ID from the URL
   const { id } = useParams();
-  // Initialize currentPage from the URL
+  // Get the current location to parse and initialize the currentPage from the URL
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get("page");

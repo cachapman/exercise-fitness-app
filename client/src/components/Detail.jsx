@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Stack, Tooltip, Typography } from "@mui/material";
-import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
-import TargetImageIcon from "../assets/icons/body-target.png";
-import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
 import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
-import AddIcon from "@mui/icons-material/Add";
-import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
+import BodyPartImageIcon from "../assets/icons/bodyPart-target.png";
+import EquipmentImageIcon from "../assets/icons/fitness-equipment.png";
+import TargetImageIcon from "../assets/icons/body-target.png";
+import CheckIcon from "@mui/icons-material/Check";
+import AddIcon from "@mui/icons-material/Add";
 import Loader from "./Loader";
 
 /**
  * Detail is the child component of ExerciseDetailPage that displays information about a specific exercise.
  *
  * @param {Object} props - Props containing exerciseDetailToDisplay and user.
+ *    - exerciseDetailToDisplay: Object representing the details of the exercise to display.
+ *    - user: Object representing the logged-in user information.
  * @returns {JSX.Element} - A component for displaying details about a specific exercise.
  */
 
@@ -34,6 +36,7 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Additional exercise details to display
   const extraExerciseDetailToDisplay = [
     {
       icon: BodyPartImageIcon,
@@ -65,8 +68,6 @@ const Detail = ({ exerciseDetailToDisplay, user }) => {
     }
   
     const isSaved = savedFavoriteExercisesList.some((item) => item.exercise && item.exercise.id === exerciseDetailToDisplay.id.toString());
-  
-    console.log("isExerciseSaved:", isSaved);
   
     return isSaved;
   };

@@ -1,17 +1,28 @@
 import { useState, useEffect } from "react";
 import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
+import { useUpdateSavedExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
+import { toast } from "react-toastify";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ToggleButton from "@mui/material/ToggleButton";
-import { useUpdateSavedExercisesMutation, useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
-import { toast } from "react-toastify";
 
 /**
  * Work in progress...
  * 
  * @param {Object} props - Props containing setProgress, workout, setWorkout, exerciseId, bodyPart, equipment, exerciseName, gifUrl, userId, totalReps, and totalSets.
+ *    - setProgress: Function to update the overall progress counter.
+ *    - workout: Current state of the workout.
+ *    - setWorkout: Function to update the workout state.
+ *    - exerciseId: Unique identifier for the exercise.
+ *    - bodyPart: Body part associated with the exercise.
+ *    - equipment: Equipment required for the exercise.
+ *    - exerciseName: Name of the exercise.
+ *    - gifUrl: URL of the exercise demonstration GIF.
+ *    - userId: Unique identifier for the user.
+ *    - totalReps: Total number of repetitions for the exercise.
+ *    - totalSets: Total number of sets for the exercise.
  * @returns {JSX.Element} - A component for organizing the display of user's favorite exercises list.
  */
 
@@ -22,6 +33,7 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
   const [showSetSaveButton, setShowSetSaveButton] = useState(false);
   const [showRepSaveButton, setShowRepSaveButton] = useState(false);
 
+  // Toggle the completion status of the exercise and update the overall progress
   const changeProgress = () => {
     if(selected) {
       setProgress(previous => previous - 1);
@@ -32,6 +44,7 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
     setSelected(!selected) 
   };
 
+  // Show save buttons when the user changes the number of sets or reps
   useEffect(() => {
     if (totalSets !== counter) {
       setShowSetSaveButton(true)
@@ -59,8 +72,6 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
       totalSets: counter,
       totalReps: counterRep,
     };
-    // Verify correct data return in console
-    // console.log("workoutData from ProfileExercise.jsx line 48: ", workoutData);
 
     try { 
       // Call the mutation to update the saved exercise
@@ -76,8 +87,6 @@ const ProfileExercise = ({ setProgress, workout, setWorkout, exerciseId, bodyPar
       userId: userId,
       exerciseId: exerciseId,
     };
-    // Verify correct data return in console
-    // console.log("workoutParams from ProfileExercise.jsx line 67: ", workoutParams);
 
     try {
       // Call the mutation to delete the saved exercise

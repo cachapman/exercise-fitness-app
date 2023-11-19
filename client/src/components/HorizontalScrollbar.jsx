@@ -5,7 +5,8 @@ import ExerciseTemplateCard from "./ExerciseTemplateCard";
 /**
  * HorizontalScrollbar is the child component of MoreExercises to display a horizontal scrollbar of exercise cards.
  * 
- * @param {Array} - An array of exercise data from MoreExercises to be displayed in the horizontal scrollbar.
+ * @param {Object} - Exercise object data from MoreExercises to be displayed in the horizontal scrollbar.
+ *    - exerciseId: The ID of the exercise to be displayed.
  * @returns {JSX.Element} - A component displaying exercise cards in a horizontal scrollbar.
  */
 

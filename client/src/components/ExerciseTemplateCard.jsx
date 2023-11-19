@@ -5,9 +5,9 @@ import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import { useSaveExerciseToFaveListMutation, useDeleteSavedExerciseFromListMutation } from "../slices/usersApiSlice";
 import { addSavedExerciseToList, removeSavedExerciseFromList } from "../slices/authSlice";
 import { selectExercises } from "../slices/exerciseSlice";
-import AddIcon from "@mui/icons-material/Add";
-import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
+import CheckIcon from "@mui/icons-material/Check";
+import AddIcon from "@mui/icons-material/Add";
 import Loader from "./Loader";
 
 /**
@@ -16,6 +16,9 @@ import Loader from "./Loader";
  * ExerciseTemplateCard is the grandchild component of ExercisesDashboard.
  * 
  * @param {Object} props - Props containing currentPage, exerciseId, and user.
+ *    - currentPage: The current page number.
+ *    - exerciseId: The ID of the exercise to be displayed.
+ *    - user: Object representing the logged-in user information.
  * @returns {JSX.Element} - A component for that sets the parameters for displaying the exercise card template.
  */
 
@@ -26,11 +29,6 @@ const ExerciseTemplateCard = ({ currentPage, exerciseId, user }) => {
   const savedFavoriteExercisesList = useSelector((state) => state.auth.userInfo.savedFavoriteExercisesList);
   const exercises = useSelector(selectExercises);
   const exercise = exercises[exerciseId];
-
-  console.log("exerciseId:", exerciseId);
-  console.log("exercises:", exercises);
-  console.log("exercise:", exercise);
-  console.log("savedFavoriteExercisesList:", savedFavoriteExercisesList);
 
   // Local state to track and initialize isLoading state
   const [isLoading, setIsLoading] = useState(false);
@@ -46,13 +44,10 @@ const ExerciseTemplateCard = ({ currentPage, exerciseId, user }) => {
   // Function to check if the exercise is saved in the user's saved favorite exercises list Redux state
   const isExerciseSaved = () => {
     if (!exercise || typeof exercise.id === 'undefined' || !savedFavoriteExercisesList) {
-      console.error("Exercise, exercise id, or savedFavoriteExercisesList is not defined");
       return false;
     }
   
     const isSaved = savedFavoriteExercisesList.some((item) => item.exercise && item.exercise.id === exercise.id.toString());
-  
-    console.log("isExerciseSaved:", isSaved);
   
     return isSaved;
   };

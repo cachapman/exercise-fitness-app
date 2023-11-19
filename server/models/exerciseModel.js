@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
+/**
+ * Mongoose Schema for Saved Favorite Exercises List
+ * Defines the structure of documents stored in the 'savedfavoriteexerciseslists' collection.
+ */
+
 const SavedFavoriteExerciseSchema = new Schema({
   exerciseId: {
     type: String,

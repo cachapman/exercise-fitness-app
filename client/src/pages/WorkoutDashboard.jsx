@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material"
-import ProfileExercise from "../components/ProfileExercise";
 import { useDeleteSavedExercisesMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
+import ProfileExercise from "../components/ProfileExercise";
 
 /**
  * Work in progress...
@@ -30,21 +30,12 @@ const WorkoutDashboard = ({
     const params = {
       userId: user?.userId,
     };
-    // Verify correct data return in console
-    // console.log("deleteAllExercises from Workout9shboard.jsx line 14: ", deleteAllExercises);
-    // console.log("user from WorkoutDashboard.jsx line 9: ", user);
-    // console.log("params from WorkoutDashboard.jsx line 25: ", params);
-    // console.log("user?.userId from WorkoutDashboard.jsx line 26: ", user?.userId);
 
     try {
       // Call the mutation to delete all the saved exercises
       const response = await deleteSavedExercisesMutation(params).unwrap();
-      // Verify correct response data return in console
-      // console.log("params from WorkoutDashboard.jsx line 25: ", response);
       setProgress(0);
       setWorkout(response.workout);
-      // Verify correct response data return in console
-      // console.log("params from WorkoutDashboard.jsx line 25: ", response.workout);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
