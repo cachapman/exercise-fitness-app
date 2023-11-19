@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useFetchSavedFaveExercisesListQuery } from "../slices/usersApiSlice";
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
-import FavoriteExercisesList from "../components/FavoriteExercisesList";
 import SearchAdd from "../assets/icons/search-add.png";
 import WorkoutImage from "../assets/icons/sport-color.png";
 import CompletedWorkoutImage from "../assets/icons/workout-calendar.png";
 import VerticalLine from "../assets/icons/line.png";
+import FavoriteExercisesList from "../components/FavoriteExercisesList";
 
 /**
  * FaveExercisesDashboard is the parent component that displays user's favorite exercises.
@@ -21,9 +21,8 @@ const FaveExercisesDashboard = () => {
 
   // Use query hook to fetch saved exercises data
   const { data: fetchedSavedExercisesListDataFromMongoDB, isFetching, isLoading } = useFetchSavedFaveExercisesListQuery();
-  console.log("fetchedSavedExercisesListDataFromMongoDB at FaveExercisesDashboard.jsx: ", fetchedSavedExercisesListDataFromMongoDB);
 
-  // Initialize currentPage from the URL
+  // Get the current location to parse and initialize the currentPage from the URL
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const currentPageFromURL = searchParams.get("page");

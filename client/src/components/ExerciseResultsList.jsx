@@ -11,6 +11,9 @@ import ExerciseTemplateCard from "./ExerciseTemplateCard";
  * ExerciseResultsList is the parent component of ExerciseTemplateCard that displays exercise search results list.
  * 
  * @param {Object} props - Props containing currentPage, setCurrentPage, and user.
+ *    - currentPage: The current page number.
+ *    - setCurrentPage: Function to set the current page.
+ *    - user: Object representing the logged-in user information.
  * @returns {JSX.Element} - A component for organizing the display of the exercise results list.
  */
 
@@ -28,7 +31,7 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, user }) => {
   const exerciseResultsIds = Object.keys(exercises); // Get an array of exercise IDs
   const totalExercisesToDisplay = exerciseResultsIds.length;
 
-  // Memoize the current display exercises array
+  // Memoize the current display exercises array to avoid unnecessary computations on each render
   const currentExerciseResultsIds = useMemo(() => {
     // Calculate the range of exercises to display on the current page
     const startIndex = (currentPage - 1) * exercisesPerPage;
@@ -42,7 +45,7 @@ const ExerciseResultsList = ({ currentPage, setCurrentPage, user }) => {
   const paginate = (event, value) => {
     setCurrentPage(value);
 
-    // Update the URL with the current page number
+    // Update the URL with the current page number for navigation
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", value);
     navigate(`${location.pathname}?${searchParams.toString()}`);

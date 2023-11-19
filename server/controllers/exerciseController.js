@@ -9,6 +9,7 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
   try {
     const userId = request.user._id;
     const exerciseId = request.body.exercise.id;
+    // Extract exercise details
     const {
       name,
       target,
@@ -17,7 +18,7 @@ const saveExerciseToFaveList = asyncHandler (async (request, response) => {
       equipment,
       instructions,
       secondaryMuscles,
-    } = request.body.exercise; // Extract exercise details
+    } = request.body.exercise; 
 
     // Check if the exercise is already saved by the user
     const user = await User.findById(userId);

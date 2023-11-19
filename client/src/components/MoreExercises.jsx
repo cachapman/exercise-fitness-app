@@ -11,6 +11,7 @@ import { selectExercises } from "../slices/exerciseSlice";
  */
 
 const MoreExercises = () => {
+  // Fetch exercise IDs from the Redux store
   const exercises = useSelector(selectExercises);
   const exerciseIds = Object.keys(exercises);
 
