@@ -30,9 +30,9 @@ app.use("/api/users", exerciseRoutes);
 // If in production mode 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, "client/build")));
+  app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
-  app.get("*", (request, response) => response.sendFile(path.resolve(__dirname, "client", "build", "index.html")));
+  app.get("*", (request, response) => response.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html")));
 } else {
   // If not in production mode
   app.get("/", (request, response) => response.send("Server is ready"));
