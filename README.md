@@ -47,7 +47,7 @@ The Exercise Fitness App is a full-stack MERN web application with CRUD function
 
 ## Getting Started
 
-#Running the Project Locally:
+Running the Project Locally:
 
 1. **Clone the Repository:**
 
