@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "https://exercise-fitness-app-m3fr.onrender.com",
+  "proxy": "https://exercise-fitness-app-backend.onrender.com",
   "private": true,
   "dependencies": {
     "@emotion/styled": "^11.11.0",
