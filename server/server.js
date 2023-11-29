@@ -1,6 +1,7 @@
 import path from "path";
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
@@ -14,8 +15,10 @@ connectMongoDB();
 const app = express();
 
 // Server setup
-const port = process.env.port || 6000;
+const port = process.env.port || 8080;
 app.listen(port, () => console.log(`Server started and is listening on port: ${port}`));
+
+app.use(cors())
 
 // Add middleware to access body data
 app.use(express.json());

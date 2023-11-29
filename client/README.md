@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
+
+## Setup
+
+You need a .`env` file with
+
+```
+REACT_APP_RAPID_API_EXERCISE_KEY=yourKeyHere
+REACT_APP_BACKEND_API_URL=yourAPIServiceHere
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
